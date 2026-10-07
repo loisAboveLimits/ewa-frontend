@@ -352,3 +352,9 @@ section .box-mixed{
 .gallery-swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active{
   background-color: rgba(19, 154, 157, 1);
 }
+
+.framed{
+  border: 25px solid #fff;
+  border-radius: 4rem;
+  background-color: #fff;
+}

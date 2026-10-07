@@ -27,77 +27,110 @@ export default function Home(){
 
         <div className="container mx-auto px-4">
           
-          <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row items-stretch">
 
-            <div className="md:w-1/2 gap-6 p-8">
+          {/* LEFT */}
+          <div className="md:w-1/2 p-8 flex flex-col">
 
-              <div className="box box-green gap-6 px-8 py-12">
-                <h3 className="font-bold sub-title">About EWA</h3>
-                <h2 className="font-bold title">Academy for Quality</h2>
-
-                <div className="spacer-40"></div>
-
-                <p className="text-justify">We Are a Non-Profit Training Academy That Offers High-Quality Technical Training and Vocational Education Focused on Water, Energy and Other Related Industrial Fields.</p>
-
-                <div className="spacer-40"></div>
-
-                <div className="flex justify-start">
-                  <Link href="" className="btn btn-transparent font-bold remPad">
-                    Learn More
-                    <Image src="/imgs/icons/icon-send-green.png" alt="EWA" width={30} height={30} className="mar-left-5"/>
-                  </Link>
-                </div>
-              </div>
+            <div className="box box-green px-8 py-12">
+              <h3 className="font-bold sub-title">About EWA</h3>
+              <h2 className="font-bold title">Academy for Quality</h2>
 
               <div className="spacer-40"></div>
 
-              <div className="box box-orange gap-6 px-8 py-12">
-                <h2 className="font-bold title">Success Partner</h2>
-                <div className="spacer-40"></div>
-                <p>Leading the Way in Training and Developing Our National Workforce</p>
+              <p className="text-justify">
+                We Are a Non-Profit Training Academy That Offers High-Quality
+                Technical Training and Vocational Education Focused on Water,
+                Energy and Other Related Industrial Fields.
+              </p>
 
-                <div className="spacer-40"></div>
+              <div className="spacer-40"></div>
 
-                <div className="flex justify-end">
-                 <Link href="" className="ml-auto btn btn-transparent font-bold remPad">
-                  Send a Request
-                  <Image src="/imgs/icons/icon-send-orange.png" alt="EWA" width={30} height={30} className="mar-left-5"/>
+              <div className="flex justify-start">
+                <Link
+                  href=""
+                  className="btn btn-transparent font-bold remPad"
+                >
+                  Learn More
+
+                  <Image
+                    src="/imgs/icons/icon-send-green.png"
+                    alt="EWA"
+                    width={30}
+                    height={30}
+                    className="mar-left-5"
+                  />
                 </Link>
+              </div>
+            </div>
+
+            <div className="spacer-40"></div>
+
+            <div className="box box-orange px-8 py-12">
+              <h2 className="font-bold title">
+                Success Partner
+              </h2>
+
+              <div className="spacer-40"></div>
+
+              <p>
+                Leading the Way in Training and Developing Our National Workforce
+              </p>
+
+              <div className="spacer-40"></div>
+
+              <div className="flex justify-end">
+                <Link
+                  href=""
+                  className="ml-auto btn btn-transparent font-bold remPad"
+                >
+                  Send a Request
+
+                  <Image
+                    src="/imgs/icons/icon-send-orange.png"
+                    alt="EWA"
+                    width={30}
+                    height={30}
+                    className="mar-left-5"
+                  />
+                </Link>
+              </div>
+            </div>
+
+          </div>
+
+          {/* RIGHT */}
+          <div className="md:w-1/2 p-8 flex">
+
+            <div className="box box-mixed p-8 bg-[url(/imgs/bgs/home-about-bg.jpg)] bg-cover bg-center w-full flex">
+
+              <div className="flex flex-col md:flex-row w-full">
+
+                <div className="md:w-1/2 prog">
+                  <div className="flex flex-col justify-end h-full text-center">
+                    <p className="counter">20</p>
+                    <p>Diploma Programs</p>
+                  </div>
                 </div>
+
+                <div className="md:w-1/2 prog">
+                  <div className="flex flex-col justify-end h-full text-center">
+                    <p className="counter">70</p>
+                    <p>Sponsorship Partners</p>
+                  </div>
+                </div>
+
               </div>
 
             </div>
 
-            <div className="md:w-1/2 gap-6 p-8">
-
-              <div className="box box-mixed gap-6 p-8 bg-[url(/imgs/bgs/home-about-bg.jpg)] bg-cover bg-center">
-                
-                <div className="flex flex-col min-h-screen md:flex-row">
-
-                  <div className="md:w-1/2 prog">
-                    <div className="flex flex-col justify-end h-full text-center">
-                      <p className="counter">20</p>
-                      <p>Diploma Programs</p>
-                    </div>
-                  </div>
-
-                  <div className="md:w-1/2 prog">
-                    <div className="flex flex-col justify-end h-full text-center">
-                      <p className="counter">70</p>
-                      <p>Sponsorship Partners</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-              
-            </div>            
-
           </div>
 
         </div>
+
+        </div>
  
-        <Image src="/imgs/logos/logo-circle-white.svg" alt="EWA" width={150} height={150} className="h-auto w-auto absolute inset-0 top-2/4 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover items-center justify-center"/>
+        <Image src="/imgs/logos/logo-circle-white.svg" alt="EWA" width={150} height={150} className="h-auto w-auto absolute inset-0 top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover items-center justify-center"/>
 
         <div className="spacer-40"></div>
       </section>

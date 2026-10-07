@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import StoriesCarousel from "@/components/Stories";
 import ContactForm from "@/components/Contact";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default function Home(){
 
@@ -21,6 +22,15 @@ export default function Home(){
           </div>
 
       </section>
+
+      {/*<!--breadcrumps-->*/}
+      <section className="breadcrumps">
+        <div className="spacer-40"></div>
+        <div className="container mx-auto h-full px-4">
+          <Breadcrumbs />
+        </div>
+        <div className="spacer-40"></div>
+      </section>      
 
       {/*<!--section-->*/}
       <section id="" className="relative">
