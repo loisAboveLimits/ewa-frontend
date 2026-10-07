@@ -1,69 +1,277 @@
+import Link from "next/link";
 import Image from "next/image";
+import StoriesCarousel from "@/components/Stories";
+import ContactForm from "@/components/Contact";
 
-export default function Home() {
+export default function Home(){
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+
+    <div className="w-full wrapper bg-white">
+
+      {/*<!--banner-->*/}
+      <section className="banner bg-[url(/imgs/banners/banner-home.jpg)] bg-cover bg-center w-full vh-100">
+
+          <div className="banner-caption top-[40%] -translate-y-1/2 absolute inset-0 vh-100">
+            <div className="container mx-auto h-full px-4">
+              <h1 className="flex h-full items-center fnt-orange banner-title">Empowering Generation<br/>Powering The Nation</h1>
+            </div>
+          </div>
+
+      </section>
+
+      {/*<!--about-->*/}
+      <section id="about" className="relative">
+
+        <div className="spacer-40"></div>
+
+        <div className="container mx-auto px-4">
+          
+          <div className="flex flex-col md:flex-row">
+
+            <div className="md:w-1/2 gap-6 p-8">
+
+              <div className="box box-green gap-6 px-8 py-12">
+                <h3 className="font-bold sub-title">About EWA</h3>
+                <h2 className="font-bold title">Academy for Quality</h2>
+
+                <div className="spacer-40"></div>
+
+                <p className="text-justify">We Are a Non-Profit Training Academy That Offers High-Quality Technical Training and Vocational Education Focused on Water, Energy and Other Related Industrial Fields.</p>
+
+                <div className="spacer-40"></div>
+
+                <div className="flex justify-start">
+                  <Link href="" className="btn btn-transparent font-bold remPad">
+                    Learn More
+                    <Image src="/imgs/icons/icon-send-green.png" alt="EWA" width={30} height={30} className="mar-left-5"/>
+                  </Link>
+                </div>
+              </div>
+
+              <div className="spacer-40"></div>
+
+              <div className="box box-orange gap-6 px-8 py-12">
+                <h2 className="font-bold title">Success Partner</h2>
+                <div className="spacer-40"></div>
+                <p>Leading the Way in Training and Developing Our National Workforce</p>
+
+                <div className="spacer-40"></div>
+
+                <div className="flex justify-end">
+                 <Link href="" className="ml-auto btn btn-transparent font-bold remPad">
+                  Send a Request
+                  <Image src="/imgs/icons/icon-send-orange.png" alt="EWA" width={30} height={30} className="mar-left-5"/>
+                </Link>
+                </div>
+              </div>
+
+            </div>
+
+            <div className="md:w-1/2 gap-6 p-8">
+
+              <div className="box box-mixed gap-6 p-8 bg-[url(/imgs/bgs/home-about-bg.jpg)] bg-cover bg-center">
+                
+                <div className="flex flex-col min-h-screen md:flex-row">
+
+                  <div className="md:w-1/2 prog">
+                    <div className="flex flex-col justify-end h-full text-center">
+                      <p className="counter">20</p>
+                      <p>Diploma Programs</p>
+                    </div>
+                  </div>
+
+                  <div className="md:w-1/2 prog">
+                    <div className="flex flex-col justify-end h-full text-center">
+                      <p className="counter">70</p>
+                      <p>Sponsorship Partners</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              
+            </div>            
+
+          </div>
+
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+ 
+        <Image src="/imgs/logos/logo-circle-white.svg" alt="EWA" width={150} height={150} className="h-auto w-auto absolute inset-0 top-2/4 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover items-center justify-center"/>
+
+        <div className="spacer-40"></div>
+      </section>
+
+      {/*<!--partners-->*/}
+      <section id="partners">
+        <div className="spacer-20"></div>
+
+        <div className="flex flex-wrap">
+          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner1.svg" alt="partner" width={150} height={60} className="w-full"/></div>
+          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner2.svg" alt="partner" width={150} height={60} className="w-full"/></div>
+          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner3.svg" alt="partner" width={150} height={60} className="w-full"/></div>
+          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner4.svg" alt="partner" width={150} height={60} className="w-full"/></div>
+          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner5.svg" alt="partner" width={150} height={60} className="w-full"/></div>
+          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner6.svg" alt="partner" width={150} height={60} className="w-full"/></div>
         </div>
-      </main>
+
+        <div className="spacer-20"></div>
+      </section>
+
+      {/*<!--courses-->*/}
+      <section id="courses">
+        <div className="spacer-20"></div>
+
+        <div className="container mx-auto px-4">
+
+          <div className="box bg-[url(/imgs/bgs/home-courses.jpg)] bg-cover bg-center w-full">
+
+            <div className="spacer-40"></div>
+
+            <div className="flex flex-col h-full md:flex-row">
+
+              <div className="md:w-1/4 gap-6 p-8 mt-auto">
+                <h2 className="font-bold title">EWA<br/>Programs </h2>
+              </div>
+
+              <div className="md:w-1/2 gap-6 p-8">
+
+                <div id="course-lists" className="course-programs">
+
+                  <div className="item text-center">
+                    <p>Short Courses</p>
+                  </div>
+
+                  <div className="item text-center">
+                    <hr />
+                  </div>
+
+                  <div className="item text-center active">
+                    <p>Diploma Programs</p>
+                  </div>
+
+                  <div className="item text-center">
+                    <hr />
+                  </div>                  
+
+                  <div className="item text-center">
+                    <p>Summer Courses</p>
+                  </div>                  
+                  
+                </div>
+
+              </div>
+
+              <div className="md:w-1/4 gap-6 p-8"></div>                            
+
+            </div>
+
+            <div className="spacer-40"></div>
+
+          </div>
+
+        </div>
+
+        <div className="spacer-20"></div>
+      </section>
+
+      {/*<!--stories-->*/}
+      <section id="stories">
+        <div className="spacer-20"></div>
+
+        <div className="container mx-auto px-4">
+
+          <div className="flex sm:flex-row md:flex-row justify-center items-center">
+
+            <div className="sm:w-[5%] text-center">
+              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+            </div>
+          
+            <div className="sm:w-[95%]">
+              <h2 className="font-bold title fnt-green">Success Stories<br />EWA & <font className="fnt-orange">Partners</font></h2>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="spacer-40"></div>
+
+        <div className="">
+          <StoriesCarousel />
+        </div>
+
+
+         <div className="spacer-80"></div>
+      </section>
+
+      {/*<!--testimmonies-->*/}
+      <section id="testimonies">
+        <div className="spacer-20"></div>
+
+        <div className="container mx-auto px-4">
+
+          <div className="flex sm:flex-row md:flex-row justify-center items-center">
+
+            <div className="sm:w-[5%] text-center">
+              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+            </div>
+          
+            <div className="sm:w-[95%]">
+              <h2 className="font-bold title fnt-green">Testimonials<br /> of our <font className="fnt-orange">Sponsors</font> & Alumni</h2>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="spacer-40"></div>
+
+        <div className="flex items-center justify-center h-screen">
+          <Image src="/imgs/logos/logo-circle-white.svg" alt="EWA" width={300} height={300} className="h-auto w-auto"/>
+        </div>
+
+
+         <div className="spacer-80"></div>
+      </section>
+
+
+      {/*<!--contact-->*/}
+      <section id="contact">
+        <div className="spacer-20"></div>
+
+        <div className="container mx-auto px-4">
+
+          <div className="flex sm:flex-row md:flex-row justify-center items-center">
+
+            <div className="sm:w-[5%] text-center">
+              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+            </div>
+          
+            <div className="sm:w-[95%]">
+              <h2 className="font-bold title fnt-green">Contact Us<br /><font className="fnt-orange">Stay Connected</font></h2>
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <div className="spacer-40"></div>
+
+        <div className="contactus-form">
+
+          <ContactForm />
+         
+        </div>
+
+
+         <div className="spacer-80"></div>
+      </section>
+
+
     </div>
+
+
+
+    
   );
 }

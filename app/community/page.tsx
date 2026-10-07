@@ -10,13 +10,13 @@ export default function Home(){
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <section className="banner bg-[url(/imgs/banners/banner-about.png)] bg-cover bg-center w-full vh-100">
+      <section className="banner bg-[url(/imgs/banners/banner-community.png)] bg-cover bg-center w-full vh-100">
 
           <div className="banner-caption top-[20%] -translate-y-1/2 absolute inset-0 vh-100">
             <div className="container mx-auto h-full px-4">
-              <h1 className="flex h-full items-end banner-title">About EWA</h1>
+              <h1 className="flex h-full items-end banner-title">EWA Community</h1>
               <div className="spacer-10"></div>
-              <p className="banner-subtitle">Shaping Tomorrow’s Workforce</p>
+              <p className="banner-subtitle">Harbored By Success</p>
             </div>
           </div>
 
