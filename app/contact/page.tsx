@@ -51,22 +51,22 @@ export default function Home(){
            <div className="spacer-40"></div>
 
            <div className="w-full max-w-4xl mx-auto">
-             <div class="flex sm:flex-row md:flex-row">
+             <div className="flex sm:flex-row md:flex-row">
 
               <div className="md:w-[33.33%]">
-                <p className="fnt-green !text-4xl"><i class="fa-brands fa-square-whatsapp"></i></p>
+                <p className="fnt-green !text-4xl"><i className="fa-brands fa-square-whatsapp"></i></p>
                 <p className="text-black font-bold">Via WhatsApp</p>
                 <p className="text-black">+966 123 456 7890</p>
               </div>
 
               <div className="md:w-[33.33%]">
-                <p className="fnt-green !text-4xl"><i class="fa-solid fa-envelope"></i></p>
+                <p className="fnt-green !text-4xl"><i className="fa-solid fa-envelope"></i></p>
                 <p className="text-black font-bold">Email</p>
                 <p className="text-black">info@ewa.sa</p>
               </div>
 
               <div className="md:w-[33.33%]">
-                <p className="fnt-green !text-4xl"><i class="fa-solid fa-location-dot"></i></p>
+                <p className="fnt-green !text-4xl"><i className="fa-solid fa-location-dot"></i></p>
                 <p className="text-black font-bold">Address</p>
                 <p className="text-black">Kingdom of Saudi Arabia - Rabigh</p>
               </div>                           
