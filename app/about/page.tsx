@@ -56,7 +56,7 @@ export default function Home(){
               
               <div className="spacer-20"></div>  
 
-              <p className="fnt-green text-base! text-justify">The Energy and Water Academy (EWA) was established by ACWA Power under a Strategic Partnership Agreement signed with Technical and Vocational Training Corporation (TVTC) under Council of Ministers Resolution No. 17 dated January 12, 2009. The academy is registered with TVTC to operate as a non-profit organization located in the industrial city of Rabigh, Kingdom of Saudi Arabia that specializes in international standards training for the water and energy industrial sectors. It is one of the strategic partnership institutions in the Kingdom, with accredited programs recognized by the Colleges of Excellence and supported by the Human Resources Development Fund (HRDF).</p>   
+              <p className="fnt-green text-base!">The Energy and Water Academy (EWA) was established by ACWA Power under a Strategic Partnership Agreement signed with Technical and Vocational Training Corporation (TVTC) under Council of Ministers Resolution No. 17 dated January 12, 2009. The academy is registered with TVTC to operate as a non-profit organization located in the industrial city of Rabigh, Kingdom of Saudi Arabia that specializes in international standards training for the water and energy industrial sectors. It is one of the strategic partnership institutions in the Kingdom, with accredited programs recognized by the Colleges of Excellence and supported by the Human Resources Development Fund (HRDF).</p>   
 
               <div className="spacer-20"></div>  
 

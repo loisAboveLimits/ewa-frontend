@@ -366,4 +366,17 @@ section .box-mixed{
   background-color: #fff;
 }
 
+.framed-10{
+  border: 10px solid #fff;
+  border-radius: 2rem;
+  background-color: #fff;
+}
+
+.framed-20{
+  border: 20px solid #fff;
+  border-radius: 4rem;
+  background-color: #fff;
+}
+
+
 
