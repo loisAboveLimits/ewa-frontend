@@ -325,8 +325,13 @@ section .box-mixed{
 .mar-left-5{margin-left: 5px;}
 .mar-right-5{margin-right: 5px;}
 
-.stories-swiper{overflow: visible !important;}
-.stories-swiper .swiper-pagination{
+.stories-swiper,
+.directors-swiper{
+  overflow: visible !important;
+}
+
+.stories-swiper .swiper-pagination,
+.directors-swiper .swiper-pagination{
   bottom: -3rem !important;
   top: auto !important;
 }
@@ -341,9 +346,7 @@ section .box-mixed{
 
 .remPad{padding: 0px;}
 
-.gallery-swiper .swiper-pagination{
 
-}
 .gallery-swiper .swiper-pagination .swiper-pagination-bullet{
   background-color: rgba(196, 196, 196, 1);
   width: 25px;
@@ -353,8 +356,14 @@ section .box-mixed{
   background-color: rgba(19, 154, 157, 1);
 }
 
+.directors-swiper.gallery-swiper .swiper-pagination{
+  top: 5%;
+}
+
 .framed{
   border: 25px solid #fff;
   border-radius: 4rem;
   background-color: #fff;
 }
+
+
