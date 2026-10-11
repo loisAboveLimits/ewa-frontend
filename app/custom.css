@@ -360,6 +360,19 @@ section .box-mixed{
   top: 5%;
 }
 
+.gallery-swiper-orange .swiper-pagination .swiper-pagination-bullet{
+  background-color: rgba(238, 123, 82, 1);
+  width: 25px;
+  height: 15px;
+}
+.gallery-swiper-orange .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active{
+  background-color: rgba(238, 123, 82, 1);
+}
+
+.directors-swiper.gallery-swiper-orange .swiper-pagination{
+  top: 5%;
+}
+
 .framed{
   border: 25px solid #fff;
   border-radius: 4rem;
@@ -376,6 +389,19 @@ section .box-mixed{
   border: 20px solid #fff;
   border-radius: 4rem;
   background-color: #fff;
+}
+
+.glance-left{
+  background-color: rgba(19, 154, 157, 1);
+  border-top-right-radius: 10rem;
+}
+.glance-right{
+  background-color: rgba(19, 154, 157, 1);
+  border-top-left-radius: 10rem;
+}
+
+.box-user{
+  border: 2px solid rgba(246, 161, 129, 1);
 }
 
 

@@ -1,10 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
-import StoriesCarousel from "@/components/Stories";
+import CampusCarousel from "@/components/Campus";
 import ContactForm from "@/components/Contact";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { pages } from "@/lib/pages";
 
-export default function Home(){
+export const metadata: Metadata = {
+  title: pages.why.title,
+  description: "",
+};
+
+export default function Why(){
 
   return (
 
@@ -63,7 +69,7 @@ export default function Home(){
 
               <div className="md:col-span-2 flex justify-end">
                 <Link
-                  href=""
+                  href="/why/programs"
                   className="btn btn-transparent fnt-orange remPad font-bold"
                 >
                   View Programs
@@ -188,16 +194,186 @@ export default function Home(){
       </section>  
 
       {/*<!--glance-->*/}
-      <section id="glance" className="">
+      <section id="glance">
         <div className="spacer-40"></div>
 
-        <div className="bg-[url(/imgs/bgs/glance.jpg)] bg-cover bg-center h-[150px] w-full">
+        <div className="bg-[url('/imgs/bgs/glance.jpg')] bg-cover bg-center w-full">
 
+          <div className="flex flex-col md:flex-row md:min-h-[150px]">
+
+            {/* LEFT */}
+            <div className="w-full md:w-[15%]">
+              <div className="glance-left p-8 min-h-[150px] w-full flex flex-col justify-center">
+                <h4 className="font-bold text-[25px] leading-tight">
+                  EWA IN A GLANCE
+                </h4>
+              </div>
+            </div>
+
+            {/* CENTER */}
+            <div className="w-full md:w-[70%] flex items-center">
+              <div className="container mx-auto px-4">
+         
+                 <div className="flex flex-col md:flex-row">
+
+                    <div className="w-full md:w-[25%] p-4">
+                        <div className="flex flex-col md:flex-row">
+                          <div className="md:w-[25%] text-center">
+                            <Image src="/imgs/icons/glance-grad.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
+                          </div>
+
+                          <div className="md:w-[75%] px-3">
+                            <h4 className="text-[25px]! leading-tight">84,000+</h4>
+                            <p className="text-[12px]!">Graduated Trainees</p>
+                          </div>                  
+                        </div>  
+                    </div>
+
+                    <div className="w-full md:w-[25%] p-4">
+                        <div className="flex flex-col md:flex-row">
+                          <div className="md:w-[25%] text-center">
+                            <Image src="/imgs/icons/glace-industry-part.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
+                          </div>
+
+                          <div className="md:w-[75%] px-3">
+                            <h4 className="text-[25px]! leading-tight">60+</h4>
+                            <p className="text-[12px]!">Industry Partners</p>
+                          </div>                  
+                        </div>  
+                    </div>  
+
+                    <div className="w-full md:w-[25%] p-4">
+                        <div className="flex flex-col md:flex-row">
+                          <div className="md:w-[25%] text-center">
+                            <Image src="/imgs/icons/glace-expert-inst.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
+                          </div>
+
+                          <div className="md:w-[75%] px-3">
+                            <h4 className="text-[25px]! leading-tight">120+</h4>
+                            <p className="text-[12px]!">Expert Instructors</p>
+                          </div>                  
+                        </div>  
+                    </div> 
+
+                    <div className="w-full md:w-[25%] p-4">
+                        <div className="flex flex-col md:flex-row">
+                          <div className="md:w-[25%] text-center">
+                            <Image src="/imgs/icons/glace-acc-progs.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
+                          </div>
+
+                          <div className="md:w-[75%] px-3">
+                            <h4 className="text-[25px]! leading-tight">25+</h4>
+                            <p className="text-[12px]!">Accredited Programs</p>
+                          </div>                  
+                        </div>  
+                    </div>                                      
+
+
+                 </div>
+
+              </div>
+            </div>
+
+            {/* RIGHT */}
+            <div className="w-full md:w-[15%]">
+              <div className="glance-right p-8 min-h-[150px] w-full flex flex-col justify-center items-center text-center">
+                <p className="text-[32px]! leading-tight">
+                  4,130,814
+                </p>
+                <p className="text-[12px]! leading-tight">
+                  Safe Working Hours
+                </p>
+              </div>
+            </div>
+
+          </div>
         </div>
 
+        <div className="spacer-40"></div>
+      </section>
 
-        <div className="spacer-40"></div> 
-      </section>    
+
+      {/*<!--campus-->*/}
+      <section id="campus" className="relative">
+
+        <div className="spacer-40"></div>
+
+        <div className="container mx-auto px-4">
+
+          <div className="flex sm:flex-row md:flex-row justify-center items-center">
+
+            <div className="sm:w-[5%] text-center">
+              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+            </div>
+          
+            <div className="sm:w-[95%]">
+              <h2 className="font-bold title fnt-green">Campus & Facilities</h2>
+            </div>
+          </div>  
+          
+          <div className="spacer-20"></div>
+
+          
+
+            <div className="flex flex-col md:flex-row items-stretch">
+
+              {/* LEFT */}
+              <div className="w-full md:w-1/2 p-8 flex flex-col gap-10">
+
+                <div className="box bg-[url('/imgs/bgs/campus-tech.png')] bg-cover bg-center w-full flex flex-col justify-end min-h-[180px] px-8 py-12">
+                  <h3 className="font-bold sub-title mt-auto">
+                    Technical Labs
+                  </h3>
+                </div>
+
+                <div className="box bg-[url('/imgs/bgs/campus-simulation.png')] bg-cover bg-center w-full flex flex-col justify-end min-h-[180px] px-8 py-12">
+                  <h3 className="font-bold sub-title mt-auto">
+                    Simulation Rooms
+                  </h3>
+                </div>
+
+                <div className="box bg-[url('/imgs/bgs/campus-spaces.png')] bg-cover bg-center w-full flex flex-col  justify-end min-h-[180px] px-8 py-12">
+                  <h3 className="font-bold sub-title mt-auto">
+                    Learning Spaces
+                  </h3>
+                </div>
+
+              </div>
+
+              {/* RIGHT */}
+              <div className="w-full md:w-1/2 p-8 flex flex-col gap-10">
+
+                <div className="flex-1 min-h-[250px]">
+                  <CampusCarousel />
+                </div>
+
+                <div className="box box-orange p-8">
+                  <h2 className="font-bold title text-[27px]!">
+                    Built for Hands-On Learning
+                  </h2>
+
+                  <div className="spacer-10"></div>
+
+                  <p className="text-[18px]!">
+                    Our world-class facilities create the ideal
+                    environment for practical training, innovation
+                    and collaboration, with modern labs, simulation
+                    rooms and dedicated learning spaces.
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+
+
+          </div>
+   
+          <Image src="/imgs/logos/logo-circle-white.svg" alt="EWA" width={150} height={150} className="h-auto w-auto absolute inset-0 top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover items-center justify-center z-[100]"/>
+
+        <div className="spacer-40"></div>
+      </section>     
+
 
 
 

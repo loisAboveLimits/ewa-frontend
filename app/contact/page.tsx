@@ -3,8 +3,14 @@ import Image from "next/image";
 import StoriesCarousel from "@/components/Stories";
 import ContactForm from "@/components/Contact";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { pages } from "@/lib/pages";
 
-export default function Home(){
+export const metadata: Metadata = {
+  title: pages.contact.title,
+  description: "",
+};
+
+export default function Contact(){
 
   return (
 

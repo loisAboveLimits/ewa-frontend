@@ -1,54 +1,61 @@
+
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { pages } from "@/lib/pages";
 
 export default function Breadcrumbs() {
   const pathname = usePathname();
 
-  const paths = pathname
-    .split("/")
-    .filter(Boolean);
+  const segments = pathname.split("/").filter(Boolean);
+
+  const breadcrumbs = segments.map((segment, index) => {
+    const path = "/" + segments.slice(0, index + 1).join("/");
+
+    const page = Object.values(pages).find(
+      (item) => item.path === path
+    );
+
+    return {
+      title: page?.title ?? decodeURIComponent(segment).replace(/-/g, " "),
+      path,
+    };
+  });
 
   return (
-    <nav aria-label="Breadcrumb" className="py-4">
-      <ol className="flex items-center gap-2 text-sm">
+
+    <nav aria-label="Breadcrumb">
+      <div className="spacer-40"></div>
+      
+      <ol className="flex flex-wrap items-center gap-2 text-sm">
+
         <li>
-          <Link
-            href="/"
-            className="fnt-green !text-xl "
-          >
+          <Link href="/" className="fnt-green text-xl!">
             Home
           </Link>
         </li>
 
-        {paths.map((path, index) => {
-          const href = "/" + paths.slice(0, index + 1).join("/");
-          const isLast = index === paths.length - 1;
-
-          const label = decodeURIComponent(path)
-            .replace(/-/g, " ")
-            .replace(/\b\w/g, (letter) => letter.toUpperCase());
+        {breadcrumbs.map((item, index) => {
+          const isLast = index === breadcrumbs.length - 1;
 
           return (
-            <li key={href} className="flex items-center gap-2">
-              <span className="fnt-green !text-xl"><i className="fa-solid fa-chevron-right"></i></span>
+            <li key={item.path} className="flex items-center gap-2">
+              <span className="fnt-green text-xl!"><i className="fa-solid fa-chevron-right"></i></span>
 
               {isLast ? (
-                <span className="font-semibold fnt-green !text-xl">
-                  {label}
+                <span className="font-semibold fnt-green text-xl!">
+                  {item.title}
                 </span>
               ) : (
-                <Link
-                  href={href}
-                  className="fnt-green !text-xl"
-                >
-                  {label}
+                <Link href={item.path} className="fnt-green text-xl!">
+                  {item.title}
                 </Link>
               )}
             </li>
           );
         })}
+
       </ol>
     </nav>
   );

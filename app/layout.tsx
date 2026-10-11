@@ -19,8 +19,10 @@ const geistMono = Geist_Mono({
 }); 
 
 export const metadata: Metadata = {
-  title: "Energy and Water Academy",
-  description: "",
+  title: {
+    default: "EWA",
+    template: "EWA | %s",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

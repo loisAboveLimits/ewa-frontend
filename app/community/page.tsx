@@ -2,8 +2,15 @@ import Link from "next/link";
 import Image from "next/image";
 import StoriesCarousel from "@/components/Stories";
 import ContactForm from "@/components/Contact";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { pages } from "@/lib/pages";
 
-export default function Home(){
+export const metadata: Metadata = {
+  title: pages.why.title,
+  description: "",
+};
+
+export default function Community(){
 
   return (
 
@@ -21,6 +28,15 @@ export default function Home(){
           </div>
 
       </section>
+
+      {/*<!--breadcrumps-->*/}
+      <section className="breadcrumps">
+        <div className="spacer-20"></div>
+        <div className="container mx-auto h-full px-4">
+          <Breadcrumbs />
+        </div>
+        <div className="spacer-20"></div>
+      </section>  
 
       {/*<!--section-->*/}
       <section id="" className="relative">
