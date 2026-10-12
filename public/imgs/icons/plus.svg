@@ -1,0 +1,18 @@
+<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" width="88" height="88" viewBox="0 0 88 88" fill="none">
+<ns0:g filter="url(#filter0_d_356_492)">
+<ns0:circle cx="41.8103" cy="39.7956" r="39.7956" fill="#E6F0F3" />
+</ns0:g>
+<ns0:defs>
+<ns0:filter id="filter0_d_356_492" x="-0.000319719" y="0" width="87.6507" height="87.6511" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<ns0:feFlood flood-opacity="0" result="BackgroundImageFix" />
+<ns0:feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<ns0:feOffset dx="2.01497" dy="4.02994" />
+<ns0:feGaussianBlur stdDeviation="2.01497" />
+<ns0:feComposite in2="hardAlpha" operator="out" />
+<ns0:feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+<ns0:feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_356_492" />
+<ns0:feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_356_492" result="shape" />
+</ns0:filter>
+</ns0:defs>
+<ns0:g transform="translate(31.8103 30.2956)"><ns0:path d="M8.21886 8.16265L8.21886 3.50587e-05H10.7955L10.7955 8.16265H19.0334V10.7393H10.7955V18.9019H8.21886V10.7393H-0.000180742V8.16265H8.21886Z" fill="#139A9D" />
+</ns0:g></ns0:svg>

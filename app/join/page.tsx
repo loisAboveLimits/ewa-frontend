@@ -39,16 +39,106 @@ export default function Join(){
       </section>
 
       {/*<!--section-->*/}
-      <section id="" className="relative">
+      <section id="trainee" className="">
 
         <div className="spacer-40"></div>
 
         <div className="container mx-auto px-4">
+
+          <div className="flex sm:flex-row md:flex-row justify-center items-center">
+
+            <div className="sm:w-[5%] text-center">
+              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+            </div>
+          
+            <div className="sm:w-[95%]">
+              <h2 className="font-bold title fnt-green">Become a Trainee</h2>
+            </div>
+          </div> 
+
+          <div className="spacer-20"></div>  
+          
+          <div className="box box-orange p-12 w-full bg-bottom-right bg-no-repeat" style={{backgroundImage: "url('/imgs/assets/footer-bg.png')",}}>
+
+            <div className="flex sm:flex-row md:flex-row justify-center">
+
+              <div className="md:w-[70%]">
+                <h2 className="font-bold text-[35px]">Why Join EWA</h2>
+                <div className="spacer-20"></div>
+
+                <p className="">EWA is designed in collaboration with industry leaders to ensure you gain the skills and knowledge needed for today's challenges and tomorrow's opportunities.</p>
+              </div>
+            
+              <div className="md:w-[30%]">
+                
+              </div>
+            </div> 
+
+          </div>        
           
 
 
         </div>
  
+
+        <div className="spacer-40"></div>
+      </section>
+
+      {/*<!--section-->*/}
+      <section id="requirements" className="">
+        <div className="spacer-40"></div>
+
+        <div className="container mx-auto px-4">
+
+
+          <div className="flex sm:flex-row md:flex-row justify-center items-center">
+
+            <div className="sm:w-[5%] text-center"></div>
+          
+            <div className="sm:w-[95%]">
+              <h2 className="font-bold title fnt-green">Requirements</h2>
+            </div>
+          </div> 
+
+          <div className="spacer-40"></div>            
+
+            <div className="flex sm:flex-row md:flex-row justify-center items-center">
+
+              <div className="md:w-[16.66%] text-center"></div>
+
+              <div className="md:w-[16.66%] text-center">
+                <center>
+                  <Image src="/imgs/icons/ksa.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+                </center>
+                <p className="fnt-green font-bold">Saudi Citizen</p>
+              </div>
+
+              <div className="md:w-[16.66%] text-center">
+                <center>
+                  <Image src="/imgs/icons/grad-cap-big.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+                </center>
+                <p className="fnt-green font-bold">75% + High School</p>
+              </div>  
+
+              <div className="md:w-[16.66%] text-center">
+                <center>
+                  <Image src="/imgs/icons/impact.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+                </center>
+                <p className="fnt-green font-bold">Impact</p>
+              </div> 
+
+              <div className="md:w-[16.66%] text-center">
+                <center>
+                  <Image src="/imgs/icons/safe-ethics.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+                </center>
+                <p className="fnt-green font-bold">Safe Ethics</p>
+              </div> 
+
+              <div className="md:w-[16.66%] text-center"> </div>                                         
+
+            </div>          
+
+        </div>
 
         <div className="spacer-40"></div>
       </section>
