@@ -1,0 +1,204 @@
+/* Square stage that scales with its container */
+.stage {
+  position: relative;
+  width: min(100%, 640px);
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+  container-type: inline-size;
+}
+
+/* ---------- rotation ---------- */
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.anim {
+  animation-name: orbit-spin;
+  animation-duration: var(--duration, 40s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Stop everything while the mouse is over the stage, or a card is open (touch/keyboard) */
+.stage:hover .anim,
+.stage:focus-within .anim,
+.stage[data-paused="true"] .anim {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim {
+    animation: none;
+  }
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ---------- rings ---------- */
+.ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--size);
+  height: var(--size);
+  translate: -50% -50%;
+  border-radius: 9999px;
+  border: 2px dashed var(--ring-color);
+  box-shadow:
+    0 0 6cqw var(--ring-glow),
+    inset 0 0 6cqw var(--ring-glow);
+}
+
+/* ---------- center ---------- */
+.center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34%;
+  translate: -50% -50%;
+  z-index: 5;
+}
+
+/* ---------- items on the ring ---------- */
+.slot {
+  position: absolute;
+  translate: -50% -50%;
+  pointer-events: auto;
+}
+.avatarSlot {
+  width: 15%;
+  aspect-ratio: 1;
+}
+.actionSlot {
+  width: 12%;
+  aspect-ratio: 1;
+}
+
+.upright {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.avatar {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+  border: 0.5cqw solid #fff;
+  outline: 0.4cqw solid var(--ring-color);
+  background: #e5e7eb;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.avatar:hover,
+.avatar[aria-expanded="true"] {
+  transform: scale(1.08);
+}
+.avatar:focus-visible {
+  outline-width: 0.8cqw;
+}
+.avatarImg {
+  object-fit: cover;
+}
+
+.action {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--ring-color);
+  color: #fff;
+  box-shadow: 0 0.8cqw 2.5cqw rgba(0, 0, 0, 0.18);
+  transition: transform 0.3s ease;
+}
+.action:hover {
+  transform: scale(1.1) rotate(90deg);
+}
+
+/* ---------- sliding card ---------- */
+.card {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  width: clamp(200px, 48cqw, 300px);
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  translate: 0 -50%;
+  background: #e4e4e4;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    clip-path 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.25s ease;
+}
+
+/* Opens to the right: starts hidden behind the avatar, reveals left → right */
+.cardRight {
+  left: 50%;
+  padding: 0.75rem 1.5rem 0.75rem calc(clamp(32px, 7.5cqw, 48px) + 0.9rem);
+  border-radius: 0 9999px 9999px 0;
+  clip-path: inset(0 100% 0 0 round 0 9999px 9999px 0);
+}
+/* Opens to the left: reveals right → left */
+.cardLeft {
+  right: 50%;
+  padding: 0.75rem calc(clamp(32px, 7.5cqw, 48px) + 0.9rem) 0.75rem 1.5rem;
+  border-radius: 9999px 0 0 9999px;
+  clip-path: inset(0 0 0 100% round 9999px 0 0 9999px);
+  text-align: right;
+}
+
+.cardOpen {
+  opacity: 1;
+  clip-path: inset(0 0 0 0 round 9999px);
+}
+
+.cardText {
+  transform: translateX(-12px);
+  opacity: 0;
+  transition:
+    transform 0.45s 0.1s ease,
+    opacity 0.3s 0.1s ease;
+}
+.cardLeft .cardText {
+  transform: translateX(12px);
+}
+.cardOpen .cardText {
+  transform: none;
+  opacity: 1;
+}
+
+.name {
+  margin: 0;
+  color: #f05a28;
+  font-weight: 700;
+  font-size: clamp(0.85rem, 2.4cqw, 1rem);
+  line-height: 1.2;
+}
+.role {
+  margin: 0.1rem 0 0.3rem;
+  color: #f05a28;
+  font-size: clamp(0.6rem, 1.6cqw, 0.7rem);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.desc {
+  margin: 0;
+  color: #333;
+  font-size: clamp(0.7rem, 1.9cqw, 0.82rem);
+  line-height: 1.35;
+}

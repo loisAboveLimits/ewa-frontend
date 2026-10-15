@@ -6,6 +6,9 @@ import ContactForm from "@/components/Contact";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { pages } from "@/lib/pages";
 
+import OrbitShowcase from "@/components/orbit/OrbitShowcase";
+import { orbitActions, team } from "@/components/orbit/team";
+
 export const metadata: Metadata = {
   title: pages.why.title,
   description: "",
@@ -130,10 +133,15 @@ export default function Community(){
 
         <div className="spacer-40"></div>
 
-        <div className="flex items-center justify-center h-screen">
-          <Image src="/imgs/logos/logo-circle-white.svg" alt="EWA" width={300} height={300} className="h-auto w-auto"/>
-        </div>
-
+        <OrbitShowcase
+          members={team}
+          actions={orbitActions}
+          outerDuration={60}
+          innerDuration={40}
+          center={
+            <Image src="/imgs/logos/logo-circle-white.svg" alt="EWA" width={344} height={306} priority className="h-auto w-full" />
+          }
+        />
 
          <div className="spacer-80"></div>
       </section>      

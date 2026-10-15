@@ -481,12 +481,19 @@ section .box-mixed{
   background: linear-gradient(0deg,rgba(19, 154, 157, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%);
 }
 
-.centeredSwiper .swiper-button-prev{
-  left: 5%;
+
+.noNav .swiper-pagination{
+  bottom: -7rem !important;
+  top: auto !important;
 }
 
-.centeredSwiper .swiper-button-next{
-  
+.noNav .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    background-color: #139a9d;
+}
+.noNav .swiper-pagination .swiper-pagination-bullet {
+    background-color: #c4c4c4;
+    width: 25px;
+    height: 15px;
 }
 
 

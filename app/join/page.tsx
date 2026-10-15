@@ -3,6 +3,7 @@ import Image from "next/image";
 import StoriesCarousel from "@/components/Stories";
 import ContactForm from "@/components/Contact";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import CareersCarousel from "@/components/Careers";
 import { pages } from "@/lib/pages";
 
 export const metadata: Metadata = {
@@ -84,7 +85,7 @@ export default function Join(){
         <div className="spacer-40"></div>
       </section>
 
-      {/*<!--section-->*/}
+      {/*<!--requirements-->*/}
       <section id="requirements" className="">
         <div className="spacer-40"></div>
 
@@ -102,7 +103,7 @@ export default function Join(){
 
           <div className="spacer-40"></div>            
 
-            <div className="flex sm:flex-row md:flex-row justify-center items-center">
+            <div className="flex sm:flex-row md:flex-row justify-center items-start">
 
               <div className="md:w-[16.66%] text-center"></div>
 
@@ -117,21 +118,23 @@ export default function Join(){
                 <center>
                   <Image src="/imgs/icons/grad-cap-big.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
                 </center>
-                <p className="fnt-green font-bold">75% + High School</p>
+                <p className="fnt-green font-bold">75% +<br />High School</p>
               </div>  
 
               <div className="md:w-[16.66%] text-center">
                 <center>
-                  <Image src="/imgs/icons/impact.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+                  <Image src="/imgs/icons/vision-big.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
                 </center>
-                <p className="fnt-green font-bold">Impact</p>
+                <p className="fnt-green font-bold">Under 24<br />Years Old</p>
               </div> 
 
               <div className="md:w-[16.66%] text-center">
-                <center>
-                  <Image src="/imgs/icons/safe-ethics.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
-                </center>
-                <p className="fnt-green font-bold">Safe Ethics</p>
+                <Link href="" className="">
+                  <center>
+                    <Image src="/imgs/icons/plus.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+                  </center>
+                  <p className="fnt-green font-bold">More</p>
+                </Link>
               </div> 
 
               <div className="md:w-[16.66%] text-center"> </div>                                         
@@ -143,6 +146,33 @@ export default function Join(){
         <div className="spacer-40"></div>
       </section>
 
+
+      {/*<!--requirements-->*/}
+      <section id="requirements" className="">
+        <div className="spacer-40"></div>
+
+        <div className="container mx-auto px-4">
+
+          <div className="flex sm:flex-row md:flex-row justify-center items-center">
+
+            <div className="sm:w-[5%] text-center">
+              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
+            </div>
+          
+            <div className="sm:w-[95%]">
+              <h2 className="font-bold title fnt-green">Careers</h2>
+            </div>
+          </div> 
+
+          <div className="spacer-40"></div> 
+
+          <CareersCarousel />
+
+          <div className="spacer-80"></div>
+        </div>
+
+        <div className="spacer-40"></div>
+      </section>
 
 
     </div>
