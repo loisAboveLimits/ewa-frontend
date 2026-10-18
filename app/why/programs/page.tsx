@@ -5,6 +5,9 @@ import ContactForm from "@/components/Contact";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { pages } from "@/lib/pages";
 
+import FilterPrograms from "@/components/filter/Filter";
+import ProgramsSlider from "@/components/filter/ProgramsSlider";
+
 export const metadata: Metadata = {
   title: pages.programs.title,
   description: "",
@@ -45,8 +48,22 @@ export default function Home(){
 
         <div className="container mx-auto px-4">        
           
+          <div className="flex flex-col md:flex-row">
+
+            <div className="md:w-[30%] p-8 flex flex-col">
+
+              <FilterPrograms />
+
+            </div>
+
+            <div className="md:w-[70%] p-8 flex flex-col">
+
+              <ProgramsSlider />
+
+            </div>
 
 
+          </div>
         
 
         </div>

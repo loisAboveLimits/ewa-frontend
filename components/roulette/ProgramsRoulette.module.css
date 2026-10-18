@@ -1,0 +1,99 @@
+/* ---------- background ---------- */
+.box {
+  position: relative;
+  isolation: isolate;
+  background-color: rgba(19, 154, 157, 1);
+}
+
+.bgStack {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(1.08);
+  transition: opacity 0.9s ease, transform 6s ease-out;
+}
+
+.bgActive {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tint {
+  position: absolute;
+  inset: 0;
+  background: rgba(19, 154, 157, 0.6);
+}
+
+/* ---------- roulette ---------- */
+.roulette {
+  --row: 60px;
+  position: relative;
+  height: calc(var(--row) * 3);
+  perspective: 600px;
+  /* fade the rows out at the top and bottom edges */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%);
+}
+
+.swiper {
+  height: 100%;
+}
+
+.slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.label {
+  display: block;
+  color: #fff;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  transform-origin: center;
+  backface-visibility: hidden;
+  transition-property: transform, opacity;
+  transition-timing-function: ease;
+  will-change: transform, opacity;
+}
+
+:global(.swiper-slide-active) > .label {
+  font-weight: 700;
+}
+
+/* lines framing the centre row */
+.line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+
+.lineTop    { top: var(--row); }
+.lineBottom { top: calc(var(--row) * 2); }
+
+@media (max-width: 767px) {
+  .roulette { --row: 48px; }
+  .label    { font-size: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg,
+  .label {
+    transition: none !important;
+  }
+}

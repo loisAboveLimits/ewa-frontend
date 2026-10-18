@@ -50,7 +50,7 @@ export default function StoriesCarousel() {
         <img
           src="/imgs/slides/slide1.jpg"
           alt=""
-          className="w-full h-[auto] object-cover"
+          className="w-full h-auto object-cover"
         />
       </SwiperSlide>
 
@@ -58,7 +58,7 @@ export default function StoriesCarousel() {
         <img
           src="/imgs/slides/slide2.jpg"
           alt=""
-          className="w-full h-[auto] object-cover"
+          className="w-full h-auto object-cover"
         />
       </SwiperSlide>
 
@@ -66,7 +66,7 @@ export default function StoriesCarousel() {
         <img
           src="/imgs/slides/slide3.jpg"
           alt=""
-          className="w-full h-[auto] object-cover"
+          className="w-full h-auto object-cover"
         />
       </SwiperSlide>
 
@@ -74,14 +74,14 @@ export default function StoriesCarousel() {
         <img
           src="/imgs/slides/slide4.jpg"
           alt=""
-          className="w-full h-[auto] object-cover"
+          className="w-full h-auto object-cover"
         />
       </SwiperSlide>
       <SwiperSlide>
         <img
           src="/imgs/slides/slide3.jpg"
           alt=""
-          className="w-full h-[auto] object-cover"
+          className="w-full h-auto object-cover"
         />
       </SwiperSlide>
     </Swiper>

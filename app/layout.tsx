@@ -6,7 +6,10 @@ import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./custom.css";
+import "./header.css";
 import "./responsive.css";
+
+import Preloader from "@/components/preloader/Preloader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,6 +61,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
 
       <body className="min-h-full flex flex-col bg-white">
+
+         <Preloader />
 
         <Header />
 

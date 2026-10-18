@@ -1,25 +1,51 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
+const navItems = [
+  { label: "About EWA", href: "/about" },
+  { label: "Why EWA", href: "/why" },
+  { label: "EWA Community", href: "/community" },
+  { label: "EWA Users", href: "/users" },
+  { label: "EWA Join", href: "/join" },
+  { label: "Contact", href: "/contact" },
+];
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
 
-  const navItems = [
-    { label: "About EWA", href: "/about" },
-    { label: "Why EWA", href: "/why" },
-    { label: "EWA Community", href: "/community" },
-    { label: "EWA Users", href: "/users" },
-    { label: "EWA Join", href: "/join" },
-    { label: "Contact", href: "/contact" },
-  ];
+  const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+  const close = () => setMenuOpen(false);
+
+  // Lock page scroll while the mobile menu is open; close on Escape or when
+  // the viewport grows to the desktop layout.
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const onResize = () => desktop.matches && setMenuOpen(false);
+
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", onKey);
+    desktop.addEventListener("change", onResize);
+
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", onResize);
+    };
+  }, [menuOpen]);
 
   return (
     <header className="header">
 
       <div id="main-navigation" className="w-full" >
-        
+
+        {/* Desktop (≥1024px) */}
         <div className="hidden lg:block nav-desktop">
 
           <div className="lang-switcher">
@@ -31,7 +57,7 @@ export default function Header() {
           <div className="flex w-full">
             <div className="flex flex-col item-center justify-center md:w-1/4 bar-logo">
 
-                <Link href="/" className="logo" onClick={() => setMenuOpen(false)}>
+                <Link href="/" className="logo" onClick={close}>
                   <Image
                     className="mx-auto h-auto ewa-logo"
                     src="/imgs/logos/logo.svg"
@@ -40,97 +66,87 @@ export default function Header() {
                     height={800}
                     priority
                   />
-                </Link>              
-                
+                </Link>
+
             </div>
 
             <div className="flex flex-col justify-center md:w-3/4 bar-nav">
-              
-                <nav className="flex w-full items-center justify-between desktop-nav">
+
+                <nav className="flex w-full items-center justify-between desktop-nav" aria-label="Main navigation">
                   {navItems.map((item) => (
-                    <Link key={item.href} href={item.href}>
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={isActive(item.href) ? "active" : undefined}
+                      aria-current={isActive(item.href) ? "page" : undefined}
+                    >
                       {item.label}
                     </Link>
                   ))}
-                </nav>                
-             
+                </nav>
+
             </div>
           </div>
         </div>
 
-        <div className="flex lg:hidden nav-mobile">
-          
-        </div>
+        {/* Mobile & tablet (<1024px) */}
+        <div className={`lg:hidden nav-mobile ${menuOpen ? "open" : ""}`}>
 
-      </div>      
-
-      {/* Desktop Navigation */}
-      {/*
-      <div className="header-container">
-
-        <Link href="/" className="logo" onClick={() => setMenuOpen(false)}>
-          <Image
-            src="/imgs/logos/logo.svg"
-            alt="EWA"
-            width={140}
-            height={50}
-            priority
-          />
-        </Link>
-
-        <nav className="desktop-nav">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href}>
-              {item.label}
+          <div className="nav-mobile-bar">
+            <Link href="/" className="nav-mobile-logo" onClick={close}>
+              <Image
+                src="/imgs/logos/logo.svg"
+                alt="EWA"
+                width={1200}
+                height={800}
+                priority
+                className="h-auto w-full"
+              />
             </Link>
-          ))}
-        </nav>
 
-
-        <div className="header-actions">
-          <Link href="/contact" className="contact-btn">
-            Get in Touch
-          </Link>
-        </div>
-
-        <button
-          type="button"
-          className={`menu-toggle ${menuOpen ? "active" : ""}`}
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle navigation"
-          aria-expanded={menuOpen}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
-      </div>
-      */}
-
-      {/* Mobile Navigation */}
-       {/*
-      <div className={`mobile-nav ${menuOpen ? "open" : ""}`}>
-        <nav aria-label="Mobile navigation">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setMenuOpen(false)}
+            <button
+              type="button"
+              className={`menu-toggle ${menuOpen ? "active" : ""}`}
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
             >
-              {item.label}
-            </Link>
-          ))}
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
 
-          <Link
-            href="/contact"
-            className="mobile-contact-btn"
-            onClick={() => setMenuOpen(false)}
-          >
-            Get in Touch
-          </Link>
-        </nav>
+          <div id="mobile-menu" className="mobile-nav" aria-hidden={!menuOpen} inert={!menuOpen}>
+            <nav aria-label="Mobile navigation">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={close}
+                  className={isActive(item.href) ? "active" : undefined}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                >
+                  {item.label}
+                </Link>
+              ))}
+
+              <div className="mobile-lang">
+                <a href="">ENG</a>
+              </div>
+            </nav>
+          </div>
+        </div>
+
       </div>
-      */}
+
+      {/* Tap outside the menu to close it */}
+      <div
+        className={`nav-backdrop lg:hidden ${menuOpen ? "show" : ""}`}
+        onClick={close}
+        aria-hidden="true"
+      />
 
     </header>
   );

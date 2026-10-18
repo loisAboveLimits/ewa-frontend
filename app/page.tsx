@@ -1,9 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import StoriesCarousel from "@/components/Stories";
+// import StoriesCarousel from "@/components/Stories";
+import StoriesCarousel from "@/components/stories/Stories";
 import ContactForm from "@/components/Contact";
 import OrbitShowcase from "@/components/orbit/OrbitShowcase";
 import { orbitActions, team } from "@/components/orbit/team";
+import ProgramsRoulette from "@/components/roulette/ProgramsRoulette";
 
 export default function Home(){
 
@@ -154,61 +156,13 @@ export default function Home(){
       </section>
 
       {/*<!--courses-->*/}
-      <section id="courses">
-        <div className="spacer-20"></div>
-
-        <div className="container mx-auto px-4">
-
-          <div className="box bg-[url(/imgs/bgs/home-courses.jpg)] bg-cover bg-center w-full">
-
-            <div className="spacer-40"></div>
-
-            <div className="flex flex-col h-full md:flex-row">
-
-              <div className="md:w-1/4 gap-6 p-8 mt-auto">
-                <h2 className="font-bold title">EWA<br/>Programs </h2>
-              </div>
-
-              <div className="md:w-1/2 gap-6 p-8">
-
-                <div id="course-lists" className="course-programs">
-
-                  <div className="item text-center">
-                    <p>Short Courses</p>
-                  </div>
-
-                  <div className="item text-center">
-                    <hr />
-                  </div>
-
-                  <div className="item text-center active">
-                    <p>Diploma Programs</p>
-                  </div>
-
-                  <div className="item text-center">
-                    <hr />
-                  </div>                  
-
-                  <div className="item text-center">
-                    <p>Summer Courses</p>
-                  </div>                  
-                  
-                </div>
-
-              </div>
-
-              <div className="md:w-1/4 gap-6 p-8"></div>                            
-
-            </div>
-
-            <div className="spacer-40"></div>
-
+        <section id="courses">
+          <div className="spacer-20"></div>
+          <div className="container mx-auto px-4">
+            <ProgramsRoulette />
           </div>
-
-        </div>
-
-        <div className="spacer-20"></div>
-      </section>
+          <div className="spacer-20"></div>
+        </section>
 
       {/*<!--stories-->*/}
       <section id="stories">

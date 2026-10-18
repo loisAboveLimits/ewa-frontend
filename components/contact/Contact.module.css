@@ -1,0 +1,314 @@
+/* =====================================================================
+   Contact page + form
+   ===================================================================== */
+
+/* ---------- "Hi! We are always here to help you" card ---------- */
+.helpCard {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  padding: 1.75rem 1.25rem 1.5rem;
+  color: #fff;
+  background: #139a9d;
+  border-radius: 1.5rem;
+  box-shadow: 0 18px 40px -18px rgba(19, 154, 157, 0.55);
+}
+
+@media (min-width: 1024px) {
+  .helpCard {
+    position: absolute;
+    top: -7rem; /* overlaps the bottom of the banner */
+    right: 4%;
+    width: 300px;
+  }
+}
+
+.helpTitle {
+  margin: 0 0.25rem 1.5rem;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.helpList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.helpItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 1rem;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.helpItem:hover,
+.helpItem:focus-visible {
+  background: rgba(255, 255, 255, 0.26);
+  transform: translateY(-1px);
+}
+
+.helpIcon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+}
+
+.helpLabel {
+  display: block;
+  font-size: 13px !important;
+  line-height: 1.3;
+}
+
+.helpValue {
+  display: block;
+  font-size: 16px !important;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- "Send us a message" panel ---------- */
+.panel {
+  padding: 2rem 1.25rem 1.5rem;
+  background: rgba(19, 154, 157, 0.14);
+  border-radius: 2rem;
+}
+
+@media (min-width: 768px) {
+  .panel { padding: 2.25rem 2.25rem 2rem 1.25rem; border-radius: 3rem; }
+}
+
+@media (min-width: 1024px) {
+  .panel { margin: 0 5%; }
+}
+
+.panelHead {
+  padding: 0 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .panelHead { max-width: 62%; }
+}
+
+.panel .panelTitle {
+  margin: 0 0 0.5rem;
+  color: #139a9d;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.panel .panelLead {
+  margin: 0;
+  color: #139a9d;
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+/* ---------- form fields ---------- */
+.form {
+  width: 100%;
+}
+
+.form .field {
+  width: 100%;
+  min-height: 62px;
+  padding: 0 2rem;
+  color: #0e6f71;
+  font-size: 18px;
+  background: rgba(19, 154, 157, 0.36);
+  border: 0;
+  border-radius: 1rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(19, 154, 157, 0.12);
+  outline: none;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.form .field::placeholder {
+  color: rgba(255, 255, 255, 0.95);
+  opacity: 1;
+}
+
+.form .field:focus-visible {
+  background: rgba(19, 154, 157, 0.44);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 0 0 3px rgba(19, 154, 157, 0.45);
+}
+
+.form .textarea {
+  min-height: 245px;
+  padding: 1.5rem 2rem;
+  resize: vertical;
+}
+
+/* select: white bold "Sponsorship" + custom triangle */
+.selectWrap {
+  position: relative;
+}
+
+.selectWrap::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1.75rem;
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid #5f8f90;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.form .select {
+  padding-right: 3.5rem;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form .selectFilled {
+  color: #0e6f71;
+}
+
+.form .select option {
+  color: #222;
+  font-weight: 400;
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  color: rgba(238, 123, 82, 1);
+  font-size: 20px;
+  font-weight: 700;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.submit:hover {
+  opacity: 0.8;
+}
+
+/* ---------- newsletter ---------- */
+.newsletterTitle {
+  margin: 0 0 1rem;
+  color: rgba(95, 175, 175, 1);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.newsletter {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  min-height: 64px;
+  background: rgba(19, 154, 157, 0.36);
+  border-radius: 9999px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.newsletterInput {
+  flex: 1;
+  min-width: 0;
+  padding: 0 2.25rem;
+  color: #0e6f71;
+  font-size: 18px;
+  background: transparent;
+  border: 0;
+  border-radius: 9999px;
+  outline: none;
+}
+
+.newsletterInput::placeholder {
+  color: rgba(255, 255, 255, 0.95);
+  opacity: 1;
+}
+
+.newsletterInput:focus-visible {
+  box-shadow: 0 0 0 3px rgba(19, 154, 157, 0.45);
+}
+
+.subscribe {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: -1px;
+  padding: 0 1.75rem 0 2rem;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  background: rgba(238, 123, 82, 1);
+  border: 4px solid #fff;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.subscribe:hover {
+  background: rgba(220, 105, 65, 1);
+}
+
+.subscribeIcon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  color: rgba(238, 123, 82, 1);
+  background: #fff;
+  border-radius: 9999px;
+}
+
+/* ---------- map (tucks under the footer's rounded top) ---------- */
+.map {
+  --tuck: 10rem; /* match the footer's top corner radius */
+  position: relative;
+  height: calc(360px + var(--tuck));
+  margin-bottom: calc(var(--tuck) * -1);
+}
+
+.map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* footer must paint above the map */
+:global(footer) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- small screens ---------- */
+@media (max-width: 1023px) {
+  .map { --tuck: 6rem; }
+}
+
+@media (max-width: 767px) {
+  .panel .panelTitle  { font-size: 26px; }
+  .panel .panelLead   { font-size: 16px; }
+  .form .field        { min-height: 54px; padding: 0 1.25rem; font-size: 16px; }
+  .form .textarea     { min-height: 180px; padding: 1rem 1.25rem; }
+  .newsletterTitle    { font-size: 24px; }
+  .newsletter         { min-height: 56px; }
+  .newsletterInput    { padding: 0 1.25rem; font-size: 16px; }
+  .subscribe          { padding: 0 1rem 0 1.25rem; font-size: 16px; gap: 0.5rem; }
+  .map                { --tuck: 3rem; height: calc(300px + var(--tuck)); }
+}

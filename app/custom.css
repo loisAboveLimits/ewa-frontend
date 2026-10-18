@@ -496,6 +496,19 @@ section .box-mixed{
     height: 15px;
 }
 
+.filter-box{
+  border: 2px solid rgba(19, 154, 157, 1);
+  background-color: rgba(234, 243, 243, 1);
+}
+
+.filter-box-header{
+  border-bottom: 2px solid rgba(19, 154, 157, 1);
+}
+
+.filter-cb{
+  border:1px solid rgba(19, 154, 157, 1);
+}
+
 
 
 

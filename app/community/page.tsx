@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import StoriesCarousel from "@/components/Stories";
+// import StoriesCarousel from "@/components/Stories";
+import StoriesCarousel from "@/components/stories/Stories";
 import MediaCarousel from "@/components/Media";
 import ContactForm from "@/components/Contact";
 import Breadcrumbs from "@/components/Breadcrumbs";
