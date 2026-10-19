@@ -1,0 +1,109 @@
+
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
+const tabs = [
+  { id: "atp", label: "Attendance Policy", icon: "/imgs/icons/calendar-green.svg" },
+  { id: "tlp", label: "Training and Learning Policy", icon: "/imgs/icons/shield.svg" },
+  { id: "ipp", label: "Intellectual Property", icon: "/imgs/icons/brain.svg" },
+  { id: "aip", label: "Academic Integrity", icon: "/imgs/icons/grad-car-green.svg" },
+];
+
+export default function Tabs() {
+  const [activeTab, setActiveTab] = useState("home");
+
+  return (
+    <div className="w-full">
+      {/* Navigation Tabs */}
+      <div
+        role="tablist"
+        aria-label="Content tabs"
+        className="flex border-b border-gray-300"
+      >
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            role="tab"
+            id={`tab-${tab.id}`}
+            aria-selected={activeTab === tab.id}
+            aria-controls={`panel-${tab.id}`}
+            onClick={() => setActiveTab(tab.id)}
+            className={`
+              px-6 py-3 font-medium transition-colors
+              duration-300 border-b-2
+              ${
+                activeTab === tab.id
+                  ? "border-teal-500 text-teal-600"
+                  : "border-transparent text-gray-500 hover:text-teal-500"
+              }
+            `}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content with Fade Effect */}
+      <div className="relative pt-6">
+        {tabs.map((tab) => (
+          <div
+            key={tab.id}
+            id={`panel-${tab.id}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${tab.id}`}
+            aria-hidden={activeTab !== tab.id}
+            inert={activeTab !== tab.id}
+            className={`
+              transition-opacity duration-500 ease-in-out
+              ${
+                activeTab === tab.id
+                  ? "opacity-100 relative"
+                  : "opacity-0 absolute inset-0 pointer-events-none"
+              }
+            `}
+          >
+            {tab.id === "atp" && (
+              <div>
+                <h2 className="text-2xl font-bold">
+                  Home Content
+                </h2>
+                <p>Welcome to the home tab.</p>
+              </div>
+            )}
+
+            {tab.id === "tlp" && (
+              <div>
+                <h2 className="text-2xl font-bold">
+                  Profile Content
+                </h2>
+                <p>This is the profile tab.</p>
+              </div>
+            )}
+
+            {tab.id === "ipp" && (
+              <div>
+                <h2 className="text-2xl font-bold">
+                  Contact Content
+                </h2>
+                <p>This is the contact tab.</p>
+              </div>
+            )}
+
+            {tab.id === "aip" && (
+              <div>
+                <h2 className="text-2xl font-bold">
+                  AIP Content
+                </h2>
+                <p>This is the contact tab.</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
