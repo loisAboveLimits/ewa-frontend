@@ -44,5 +44,15 @@ export const pages = {
     path: "/rules-regulations",
     desc: "Policies To Make EWA Stronger"
   },
+  awards: {
+    title: "Awards",
+    path: "/awards",
+    desc: "Explore the moments, milestones and those behind them"
+  },
+  campus: {
+    title: "Campus & Facilities",
+    path: "/why/campus-facilities",
+    desc: "More Than Just An Academy"
+  },
 
 } as const;

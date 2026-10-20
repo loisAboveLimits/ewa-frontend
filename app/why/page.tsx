@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import CampusCarousel from "@/components/Campus";
+import CampusCarousel from "@/components/campus/Campus";
 import ContactForm from "@/components/Contact";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { pages } from "@/lib/pages";

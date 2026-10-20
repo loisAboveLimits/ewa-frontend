@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import DirectorsCarousel from "@/components/Directors";
+import DirectorsCarousel from "@/components/directors/Directors";
 import ContactForm from "@/components/Contact";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { pages } from "@/lib/pages";
@@ -257,7 +257,7 @@ export default function About(){
                       alt="EWA"
                       width={30}
                       height={30}
-                      className="mar-left-5"
+                      className="mar-left-5 h-auto"
                     />
                   </Link>
                 </div>
@@ -276,7 +276,7 @@ export default function About(){
       <section id="directors" className="relative"> 
         <div className="spacer-40"></div>
 
-        <div className="container mx-auto px-4">
+        
 
           <center>
             <h2 className="font-bold fnt-orange text-[35px]">Board of Directors</h2>
@@ -286,7 +286,7 @@ export default function About(){
 
           <DirectorsCarousel />
 
-        </div>
+        
 
         <div className="spacer-80"></div>
       </section>  
@@ -320,7 +320,7 @@ export default function About(){
                 alt="EWA"
                 width={30}
                 height={30}
-                className="mar-left-5"
+                className="mar-left-5 h-auto"
                 download
               />
             </Link>

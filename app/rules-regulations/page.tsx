@@ -40,7 +40,7 @@ export default function Rules(){
       </section>      
 
       {/*<!--why-->*/}
-      <section id="programs" className="relative pb-[5%]">
+      <section id="rules-regulations" className="">
 
         <div className="spacer-40"></div>
 

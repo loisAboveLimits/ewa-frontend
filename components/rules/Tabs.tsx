@@ -84,7 +84,7 @@ export default function Tabs() {
       </div>
 
       {/* Tab Content with Fade Effect */}
-      <div className="relative pt-8">
+      <div className="bg-white pt-8">
         {tabs.map((tab) => (
           <div
             key={tab.id}

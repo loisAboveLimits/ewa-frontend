@@ -1,0 +1,111 @@
+/* Set --pano-bg to the section's background colour if it isn't white */
+.panorama {
+  --pano-bg: #fff;
+  --arc: 36px; /* how deep the top/bottom curve cuts in at the centre */
+  --dots: 2.75rem; /* space for the dots below the curve */
+  position: relative;
+  overflow: hidden;
+  padding-bottom: calc(var(--arc) + var(--dots));
+}
+
+.swiper {
+  perspective: 1200px;
+  overflow: visible !important;
+}
+
+.slide {
+  transform-style: preserve-3d;
+}
+
+.card {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  transform-origin: center;
+  backface-visibility: hidden;
+  transition-property: transform;
+  transition-timing-function: ease;
+  will-change: transform;
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+/* White ellipses that bow into the strip at the middle */
+.arc {
+  position: absolute;
+  left: -15%;
+  width: 130%;
+  height: calc(var(--arc) * 2);
+  z-index: 5;
+  background: var(--pano-bg);
+  pointer-events: none;
+}
+
+.arcTop {
+  top: calc(var(--arc) * -1);
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+}
+
+/* solid fill beyond each curve so nothing peeks past it */
+.arcTop::before,
+.arcBottom::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 400px;
+  background: var(--pano-bg);
+}
+.arcTop::before   { bottom: 100%; }
+.arcBottom::after { top: 100%; }
+
+.arcBottom {
+  /* peak cuts --arc into the slides; flat base sits above the dots */
+  bottom: calc(var(--arc) * -1);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+/* Dots: below the bottom curve, above everything else */
+.panorama .swiper :global(.swiper-pagination) {
+  top: auto !important;
+  bottom: calc((var(--arc) + var(--dots) / 2) * -1) !important;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  transform: translateY(50%);
+}
+
+.panorama .swiper :global(.swiper-pagination-bullet) {
+  width: 25px;
+  height: 15px;
+  margin: 0 !important;
+  border-radius: 50%; /* oval, not pill */
+  background: #dcdcdc;
+  opacity: 1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.panorama .swiper :global(.swiper-pagination-bullet-active) {
+  background: #139a9d;
+}
+
+@media (max-width: 1023px) {
+  .panorama { --arc: 28px; }
+}
+
+@media (max-width: 639px) {
+  .panorama { --arc: 18px; }
+  .card { aspect-ratio: 5 / 4; }
+  .panorama .swiper :global(.swiper-pagination-bullet) { width: 20px; height: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none !important; }
+}

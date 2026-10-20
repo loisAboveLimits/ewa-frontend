@@ -8,7 +8,7 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 
-export default function DirectorsCarousel() {
+export default function StoriesCarousel() {
   return (
     <Swiper
         effect={'coverflow'}
@@ -33,7 +33,7 @@ export default function DirectorsCarousel() {
         loop={true}
         spaceBetween={5}
         modules={[EffectCoverflow, Pagination, Autoplay]}
-        className="directors-swiper gallery-swiper"
+        className="stories-swiper gallery-swiper"
         breakpoints={{
           640: {
             slidesPerView: 1,
@@ -48,40 +48,40 @@ export default function DirectorsCarousel() {
     >
       <SwiperSlide>
         <img
-          src="/imgs/directors/dir1.jpg"
+          src="/imgs/slides/slide1.jpg"
           alt=""
-          className="w-full h-[auto] object-cover"
+          className="w-full h-auto object-cover"
         />
       </SwiperSlide>
 
       <SwiperSlide>
         <img
-          src="/imgs/directors/dir2.jpg"
+          src="/imgs/slides/slide2.jpg"
           alt=""
-          className="w-full h-[auto] object-cover"
+          className="w-full h-auto object-cover"
         />
       </SwiperSlide>
 
       <SwiperSlide>
         <img
-          src="/imgs/directors/dir3.jpg"
+          src="/imgs/slides/slide3.jpg"
           alt=""
-          className="w-full h-[auto] object-cover"
+          className="w-full h-auto object-cover"
         />
       </SwiperSlide>
 
       <SwiperSlide>
         <img
-          src="/imgs/directors/dir4.jpg"
+          src="/imgs/slides/slide4.jpg"
           alt=""
-          className="w-full h-[auto] object-cover"
+          className="w-full h-auto object-cover"
         />
       </SwiperSlide>
       <SwiperSlide>
         <img
-          src="/imgs/directors/dir3.jpg"
+          src="/imgs/slides/slide3.jpg"
           alt=""
-          className="w-full h-[auto] object-cover"
+          className="w-full h-auto object-cover"
         />
       </SwiperSlide>
     </Swiper>
