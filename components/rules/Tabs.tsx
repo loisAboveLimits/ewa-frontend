@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import Image from "next/image";
 
 const tabs = [
@@ -10,9 +10,38 @@ const tabs = [
   { id: "aip", label: "Academic Integrity", icon: "/imgs/icons/shield.svg" },
 ];
 
+const FADE_MS = 250;
+
 export default function Tabs() {
-  const [activeTab, setActiveTab] = useState(tabs[0].id);
+  const [activeTab, setActiveTab] = useState(tabs[0].id); // highlighted tab button
+  const [shownTab, setShownTab] = useState(tabs[0].id); // panel currently on screen
+  const [visible, setVisible] = useState(true); // panel opacity
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const fadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (fadeTimer.current) clearTimeout(fadeTimer.current);
+  }, []);
+
+  // Fade the current panel out, swap content, then fade the new one in
+  const selectTab = (id: string) => {
+    if (id === activeTab) return;
+    setActiveTab(id);
+    if (fadeTimer.current) clearTimeout(fadeTimer.current);
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      setShownTab(id);
+      setVisible(true);
+      return;
+    }
+
+    setVisible(false);
+    fadeTimer.current = setTimeout(() => {
+      setShownTab(id);
+      setVisible(true);
+    }, FADE_MS);
+  };
 
   // Arrow / Home / End keyboard navigation for the tablist
   const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
@@ -23,7 +52,7 @@ export default function Tabs() {
     if (e.key === "End") next = tabs.length - 1;
     if (next === null) return;
     e.preventDefault();
-    setActiveTab(tabs[next].id);
+    selectTab(tabs[next].id);
     tabRefs.current[next]?.focus();
   };
 
@@ -49,7 +78,7 @@ export default function Tabs() {
               aria-selected={isActive}
               aria-controls={`panel-${tab.id}`}
               tabIndex={isActive ? 0 : -1}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => selectTab(tab.id)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               className={`
                 group flex h-full min-h-[84px] flex-col items-start gap-3 rounded-xl border-2
@@ -84,23 +113,21 @@ export default function Tabs() {
       </div>
 
       {/* Tab Content with Fade Effect */}
-      <div className="bg-white pt-8">
+      <div
+        className={`
+          bg-white pt-8 transition-[opacity,transform] duration-[250ms] ease-out
+          motion-reduce:transition-none will-change-[opacity,transform]
+          ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}
+        `}
+      >
         {tabs.map((tab) => (
           <div
             key={tab.id}
             id={`panel-${tab.id}`}
             role="tabpanel"
             aria-labelledby={`tab-${tab.id}`}
-            aria-hidden={activeTab !== tab.id}
-            inert={activeTab !== tab.id}
-            className={`
-              transition-opacity duration-500 ease-in-out
-              ${
-                activeTab === tab.id
-                  ? "opacity-100 relative"
-                  : "opacity-0 absolute inset-0 pointer-events-none"
-              }
-            `}
+            tabIndex={0}
+            hidden={shownTab !== tab.id}
           >
             {tab.id === "atp" && (
               <div>

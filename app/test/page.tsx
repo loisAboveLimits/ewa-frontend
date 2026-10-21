@@ -7,7 +7,7 @@ import { pages } from "@/lib/pages";
 
 export const metadata: Metadata = {
   title: pages.programs.title,
-  description: "",
+  description: pages.programs.desc,
 };
 
 export default function Home(){
@@ -21,9 +21,9 @@ export default function Home(){
 
           <div className="banner-caption top-[20%] -translate-y-1/2 absolute inset-0 vh-100">
             <div className="container mx-auto h-full px-4">
-              <h1 className="flex h-full items-end banner-title">Our Programs</h1>
+              <h1 className="flex h-full items-end banner-title">{pages.programs.title}</h1>
               <div className="spacer-10"></div>
-              <p className="banner-subtitle">Building Skills, Creating Opportunities</p>
+              <p className="banner-subtitle">{pages.programs.desc}</p>
             </div>
           </div>
 
@@ -38,16 +38,16 @@ export default function Home(){
         <div className="spacer-20"></div>
       </section>      
 
-      {/*<!--why-->*/}
-      <section id="programs" className="relative pb-[5%]">
+      {/*<!--content-body-->*/}
+      <section id="content-body" className="">
 
         <div className="spacer-40"></div>
 
         <div className="container mx-auto px-4">        
+
           
+           {/*<!--content body start here-->*/}
 
-
-        
 
         </div>
  

@@ -7,7 +7,7 @@ import { pages } from "@/lib/pages";
 
 export const metadata: Metadata = {
   title: pages.why.title,
-  description: "",
+  description: pages.why.desc,
 };
 
 export default function Why(){
@@ -21,9 +21,9 @@ export default function Why(){
 
           <div className="banner-caption top-[20%] -translate-y-1/2 absolute inset-0 vh-100">
             <div className="container mx-auto h-full px-4">
-              <h1 className="flex h-full items-end banner-title">WHY EWA</h1>
+              <h1 className="flex h-full items-end banner-title">{pages.why.title}</h1>
               <div className="spacer-10"></div>
-              <p className="banner-subtitle">More Than Just An Academy</p>
+              <p className="banner-subtitle">{ pages.why.desc}</p>
             </div>
           </div>
 

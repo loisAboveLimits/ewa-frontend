@@ -49,7 +49,7 @@ export default function Header() {
         <div className="hidden lg:block nav-desktop">
 
           <div className="lang-switcher">
-            <a href="">ENG</a>
+            <a href="">AR</a>
           </div>
 
           <div className="clear-both"></div>
