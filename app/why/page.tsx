@@ -70,7 +70,7 @@ export default function Why(){
               <div className="md:col-span-2 flex justify-end">
                 <Link
                   href="/why/programs"
-                  className="btn btn-transparent fnt-orange remPad font-bold"
+                  className="btn btn-transparent fnt-orange text-[18px]! remPad font-bold"
                 >
                   View Programs
                   <Image src="/imgs/icons/icon-send-orange.png" alt="EWA" width={30} height={30} className="mar-left-5"/>

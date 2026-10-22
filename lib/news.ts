@@ -21,7 +21,7 @@ export const featuredNews: NewsItem[] = [
       "Meet Amani Al-Saedi from Madina, who holds a bachelor's degree in chemistry sciences and is studying water desalination plant operation at EWA with the support of the ENGIE company.",
     date: "2023-10-01",
     image: "/imgs/slides/media3.jpg",
-    href: "/success-stories/amani-al-saedi",
+    href: "/media-center/success-stories/amani-al-saedi",
     ctaLabel: "Read her story",
   },
   {
@@ -32,7 +32,7 @@ export const featuredNews: NewsItem[] = [
       "Trainees, families and industry partners gathered at Ghazi Al-Gosaibi Hall to celebrate the achievements of this year's graduating class.",
     date: "2023-09-20",
     image: "/imgs/slides/media5.jpg",
-    href: "/news/annual-graduation-ceremony",
+    href: "/media-center/news-articles/annual-graduation-ceremony",
   },
   {
     id: "featured-3",
@@ -42,7 +42,7 @@ export const featuredNews: NewsItem[] = [
       "The academy has opened a new tech-equipped workshop for solar and wind energy training, giving trainees hands-on experience with industry equipment.",
     date: "2023-09-12",
     image: "/imgs/slides/media4.jpg",
-    href: "/news/renewable-energy-workshop",
+    href: "/media-center/news-articles/renewable-energy-workshop",
   },
 ];
 
@@ -53,7 +53,7 @@ export const latestNews: NewsItem[] = [
     title: "57 Trainees finish EWA Program in Rabigh",
     date: "2023-09-08",
     image: "/imgs/slides/slide2.jpg",
-    href: "/news/57-trainees-finish-ewa-program",
+    href: "/media-center/news-articles/57-trainees-finish-ewa-program",
   },
   {
     id: "57-trainees-rabigh-2",
@@ -61,7 +61,7 @@ export const latestNews: NewsItem[] = [
     title: "57 Trainees finish EWA Program in Rabigh",
     date: "2023-09-08",
     image: "/imgs/slides/slide3.jpg",
-    href: "/news/57-trainees-finish-ewa-program",
+    href: "/media-center/news-articles/57-trainees-finish-ewa-program",
   },
   {
     id: "57-trainees-rabigh-3",
@@ -69,7 +69,7 @@ export const latestNews: NewsItem[] = [
     title: "57 Trainees finish EWA Program in Rabigh",
     date: "2023-09-08",
     image: "/imgs/slides/slide1.jpg",
-    href: "/news/57-trainees-finish-ewa-program",
+    href: "/media-center/news-articles/57-trainees-finish-ewa-program",
   },
 ];
 
