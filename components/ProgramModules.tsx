@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { fmt } from "@/lib/i18n/config";
 
 export type CourseItem = { name: string; credits: string };
 export type Course = { name: string; items: CourseItem[] };
@@ -10,9 +11,11 @@ type Props = {
   modules: Module[];
   /** index open on first render; -1 for all closed */
   defaultOpen?: number;
+  /** e.g. "{n} credits" — translated by the page */
+  creditsLabel?: string;
 };
 
-export default function ProgramModules({ modules, defaultOpen = 0 }: Props) {
+export default function ProgramModules({ modules, defaultOpen = 0, creditsLabel = "{n} credits" }: Props) {
   const [open, setOpen] = useState<number>(defaultOpen);
 
   return (
@@ -25,7 +28,7 @@ export default function ProgramModules({ modules, defaultOpen = 0 }: Props) {
         return (
           <div
             key={mod.title}
-            className="overflow-hidden rounded-tl-[30px] rounded-tr-[30px] rounded-bl-[30px] md:rounded-tl-[40px] md:rounded-tr-[40px] md:rounded-bl-[40px] bg-[#BCE3E2]"
+            className="overflow-hidden rounded-ss-[30px] rounded-se-[30px] rounded-es-[30px] md:rounded-ss-[40px] md:rounded-se-[40px] md:rounded-es-[40px] bg-[#BCE3E2]"
           >
             <h3>
               <button
@@ -34,7 +37,7 @@ export default function ProgramModules({ modules, defaultOpen = 0 }: Props) {
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpen(isOpen ? -1 : i)}
-                className="flex w-full items-center justify-between gap-4 px-6 py-5 md:px-12 md:py-7 text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#14989A]/40"
+                className="flex w-full items-center justify-between gap-4 px-6 py-5 md:px-12 md:py-7 text-start focus:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-[#14989A]/40"
               >
                 <span className="text-xl md:text-2xl font-semibold text-white">{mod.title}</span>
                 <svg
@@ -64,11 +67,11 @@ export default function ProgramModules({ modules, defaultOpen = 0 }: Props) {
               }`}
             >
               <div className="overflow-hidden">
-                <div className="grid grid-cols-1 gap-5 px-6 pb-6 md:grid-cols-2 md:gap-8 md:px-12 md:pb-8 lg:pr-28">
+                <div className="grid grid-cols-1 gap-5 px-6 pb-6 md:grid-cols-2 md:gap-8 md:px-12 md:pb-8 lg:pe-28">
                   {mod.courses.map((course) => (
                     <div
                       key={course.name}
-                      className="rounded-tr-[20px] rounded-br-[20px] rounded-bl-[20px] bg-[#D5EEEE] px-6 py-5 md:px-8 md:py-6 shadow-sm"
+                      className="rounded-se-[20px] rounded-ee-[20px] rounded-es-[20px] bg-[#D5EEEE] px-6 py-5 md:px-8 md:py-6 shadow-sm"
                     >
                       <h4 className="mb-3 text-lg md:text-xl font-semibold text-[#14989A]">
                         {course.name}
@@ -78,7 +81,7 @@ export default function ProgramModules({ modules, defaultOpen = 0 }: Props) {
                           <li key={idx} className="flex gap-2 text-base md:text-xl text-[#14989A]">
                             <span aria-hidden="true">•</span>
                             <span>
-                              {item.name} · {item.credits} credits
+                              {item.name} · {fmt(creditsLabel, { n: item.credits })}
                             </span>
                           </li>
                         ))}

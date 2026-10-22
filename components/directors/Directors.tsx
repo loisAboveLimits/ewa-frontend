@@ -2,7 +2,7 @@
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
-import type { Swiper as SwiperType } from "swiper";
+import { paintPanorama, setPanoramaTransition } from "@/components/ui/panorama";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -15,34 +15,6 @@ const slides = [
   "/imgs/directors/dir4.jpg",
   "/imgs/directors/dir2.jpg",
 ];
-
-/* Panorama strength: how much the side slides turn toward you and grow */
-const ANGLE = 22; // deg at the edge of the view
-const GROW_Y = 0.2; // +20% taller at the edge of the view
-const GROW_X = 0.04; // keep widths nearly the same so the gaps stay visible
-
-type PanoSlide = HTMLElement & { swiperSlideOffset: number };
-
-function paintPanorama(swiper: SwiperType) {
-  const half = swiper.width / 2;
-  swiper.slides.forEach((el) => {
-    const slide = el as PanoSlide;
-    const center = slide.swiperSlideOffset + swiper.translate + slide.offsetWidth / 2;
-    // -1 = left edge of the view, 0 = middle, 1 = right edge
-    const d = Math.max(-1.4, Math.min(1.4, (center - half) / half));
-    const inner = slide.firstElementChild as HTMLElement | null;
-    if (!inner) return;
-    const a = Math.abs(d);
-    inner.style.transform = `rotateY(${d * -ANGLE}deg) scale(${1 + a * GROW_X}, ${1 + a * GROW_Y})`;
-  });
-}
-
-function setPanoramaTransition(swiper: SwiperType, duration: number) {
-  swiper.slides.forEach((el) => {
-    const inner = el.firstElementChild as HTMLElement | null;
-    if (inner) inner.style.transitionDuration = `${duration}ms`;
-  });
-}
 
 export default function DirectorsCarousel() {
   return (

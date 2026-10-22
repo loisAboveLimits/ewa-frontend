@@ -1,35 +1,25 @@
-import Link from "next/link";
 import Image from "next/image";
-import StoriesCarousel from "@/components/Stories";
-import ContactForm from "@/components/Contact";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { pages } from "@/lib/pages";
+import PageBanner from "@/components/ui/PageBanner";
+import ArrowLink from "@/components/ui/ArrowLink";
+import { getI18n, pageMetadata } from "@/lib/i18n/server";
 
-export const metadata: Metadata = {
-  title: pages.users.title,
-  description: "",
-};
+export const generateMetadata = () => pageMetadata("users");
 
-export default function Users(){
+/* One entry per portal — replace with the real systems + links */
+const portals = Array.from({ length: 8 }, (_, i) => ({ id: i, href: "#" }));
+
+export default async function Users() {
+  const { t } = await getI18n();
 
   return (
 
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <section className="banner bg-[url(/imgs/banners/banner-users.png)] bg-cover bg-center w-full vh-100">
+      <PageBanner image="/imgs/banners/banner-users.png" title={t.pages.users.title} subtitle={t.pages.users.desc} />
 
-          <div className="banner-caption top-[20%] -translate-y-1/2 absolute inset-0 vh-100">
-            <div className="container mx-auto h-full px-4">
-              <h1 className="flex h-full items-end banner-title">EWA Users</h1>
-              <div className="spacer-10"></div>
-              <p className="banner-subtitle">A Seamless Experience with EWA</p>
-            </div>
-          </div>
-
-      </section>
-
-      {/*<!--breadcrumps-->*/}
+      {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">
         <div className="spacer-20"></div>
         <div className="container mx-auto h-full px-4">
@@ -38,290 +28,43 @@ export default function Users(){
         <div className="spacer-20"></div>
       </section>
 
-      {/*<!--section-->*/}
-      <section id="" className="relative">
+      {/*<!--portals-->*/}
+      <section className="relative">
 
         <div className="spacer-40"></div>
 
         <div className="container mx-auto px-4">
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {portals.map((portal) => (
+              <div key={portal.id} className="box box-user flex flex-col p-6 md:p-8 bg-[url(/imgs/assets/box-user-bg.svg)] bg-cover">
 
-            <div className="box box-user p-8 bg-[url(/imgs/assets/box-user-bg.svg)] bg-cover">
+                <div className="flex flex-row items-center gap-4">
+                  <div className="w-14 shrink-0 md:w-[20%]">
+                    <Image src="/imgs/icons/grad-cap.svg" alt="" width={150} height={150} className="mx-auto h-auto max-w-full"/>
+                  </div>
 
-              <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-                <div className="md:w-[20%] text-center">
-                  <Image src="/imgs/icons/grad-cap.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
+                  <div className="flex-1 md:px-4">
+                    <h4 className="text-[20px]! md:text-[24px]! font-bold fnt-orange">{t.users.cardTitle}</h4>
+                    <p className="text-[16px]! md:text-[18px]! fnt-orange">{t.users.cardText}</p>
+                  </div>
                 </div>
 
-                <div className="md:w-[80%] px-4">
-                  <h4 className="text-[24px]! font-bold fnt-orange">Trainee Management System</h4>
-                  <p className="text-[18px]! fnt-orange">Access your training programs, schedules, assessments and more</p>
-
-                  <div className="spacer-40"></div>
-                </div>                  
-
-              </div> 
+                <div className="spacer-20"></div>
 
                 <div className="flex justify-end mt-auto">
-                    <Link href="" className="btn btn-transparent font-bold fnt-orange remPad">
-                      Visit Portal
-                      <Image
-                        src="/imgs/icons/icon-send-green.png"
-                        alt="EWA"
-                        width={30}
-                        height={30}
-                        className="mar-left-5"
-                      />
-                    </Link>
-                  </div>             
-              
-            </div>
-
-            <div className="box box-user p-8 bg-[url(/imgs/assets/box-user-bg.svg)] bg-cover">
-
-              <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-                <div className="md:w-[20%] text-center">
-                  <Image src="/imgs/icons/grad-cap.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
+                  <ArrowLink href={portal.href} className="fnt-orange">{t.common.visitPortal}</ArrowLink>
                 </div>
 
-                <div className="md:w-[80%] px-4">
-                  <h4 className="text-[24px]! font-bold fnt-orange">Trainee Management System</h4>
-                  <p className="text-[18px]! fnt-orange">Access your training programs, schedules, assessments and more</p>
-
-                  <div className="spacer-40"></div>
-                </div>                  
-
-              </div> 
-
-                <div className="flex justify-end mt-auto">
-                    <Link href="" className="btn btn-transparent font-bold fnt-orange remPad">
-                      Visit Portal
-                      <Image
-                        src="/imgs/icons/icon-send-green.png"
-                        alt="EWA"
-                        width={30}
-                        height={30}
-                        className="mar-left-5"
-                      />
-                    </Link>
-                  </div>             
-              
-            </div>
-
-
-            <div className="box box-user p-8 bg-[url(/imgs/assets/box-user-bg.svg)] bg-cover">
-
-              <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-                <div className="md:w-[20%] text-center">
-                  <Image src="/imgs/icons/grad-cap.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
-                </div>
-
-                <div className="md:w-[80%] px-4">
-                  <h4 className="text-[24px]! font-bold fnt-orange">Trainee Management System</h4>
-                  <p className="text-[18px]! fnt-orange">Access your training programs, schedules, assessments and more</p>
-
-                  <div className="spacer-40"></div>
-                </div>                  
-
-              </div> 
-
-                <div className="flex justify-end mt-auto">
-                    <Link href="" className="btn btn-transparent font-bold fnt-orange remPad">
-                      Visit Portal
-                      <Image
-                        src="/imgs/icons/icon-send-green.png"
-                        alt="EWA"
-                        width={30}
-                        height={30}
-                        className="mar-left-5"
-                      />
-                    </Link>
-                  </div>             
-              
-            </div>
-
-
-            <div className="box box-user p-8 bg-[url(/imgs/assets/box-user-bg.svg)] bg-cover">
-
-              <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-                <div className="md:w-[20%] text-center">
-                  <Image src="/imgs/icons/grad-cap.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
-                </div>
-
-                <div className="md:w-[80%] px-4">
-                  <h4 className="text-[24px]! font-bold fnt-orange">Trainee Management System</h4>
-                  <p className="text-[18px]! fnt-orange">Access your training programs, schedules, assessments and more</p>
-
-                  <div className="spacer-40"></div>
-                </div>                  
-
-              </div> 
-
-                <div className="flex justify-end mt-auto">
-                    <Link href="" className="btn btn-transparent font-bold fnt-orange remPad">
-                      Visit Portal
-                      <Image
-                        src="/imgs/icons/icon-send-green.png"
-                        alt="EWA"
-                        width={30}
-                        height={30}
-                        className="mar-left-5"
-                      />
-                    </Link>
-                  </div>             
-              
-            </div>
-
-            <div className="box box-user p-8 bg-[url(/imgs/assets/box-user-bg.svg)] bg-cover">
-
-              <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-                <div className="md:w-[20%] text-center">
-                  <Image src="/imgs/icons/grad-cap.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
-                </div>
-
-                <div className="md:w-[80%] px-4">
-                  <h4 className="text-[24px]! font-bold fnt-orange">Trainee Management System</h4>
-                  <p className="text-[18px]! fnt-orange">Access your training programs, schedules, assessments and more</p>
-
-                  <div className="spacer-40"></div>
-                </div>                  
-
-              </div> 
-
-                <div className="flex justify-end mt-auto">
-                    <Link href="" className="btn btn-transparent font-bold fnt-orange remPad">
-                      Visit Portal
-                      <Image
-                        src="/imgs/icons/icon-send-green.png"
-                        alt="EWA"
-                        width={30}
-                        height={30}
-                        className="mar-left-5"
-                      />
-                    </Link>
-                  </div>             
-              
-            </div>
-
-            <div className="box box-user p-8 bg-[url(/imgs/assets/box-user-bg.svg)] bg-cover">
-
-              <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-                <div className="md:w-[20%] text-center">
-                  <Image src="/imgs/icons/grad-cap.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
-                </div>
-
-                <div className="md:w-[80%] px-4">
-                  <h4 className="text-[24px]! font-bold fnt-orange">Trainee Management System</h4>
-                  <p className="text-[18px]! fnt-orange">Access your training programs, schedules, assessments and more</p>
-
-                  <div className="spacer-40"></div>
-                </div>                  
-
-              </div> 
-
-                <div className="flex justify-end mt-auto">
-                    <Link href="" className="btn btn-transparent font-bold fnt-orange remPad">
-                      Visit Portal
-                      <Image
-                        src="/imgs/icons/icon-send-green.png"
-                        alt="EWA"
-                        width={30}
-                        height={30}
-                        className="mar-left-5"
-                      />
-                    </Link>
-                  </div>             
-              
-            </div>
-
-            <div className="box box-user p-8 bg-[url(/imgs/assets/box-user-bg.svg)] bg-cover">
-
-              <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-                <div className="md:w-[20%] text-center">
-                  <Image src="/imgs/icons/grad-cap.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
-                </div>
-
-                <div className="md:w-[80%] px-4">
-                  <h4 className="text-[24px]! font-bold fnt-orange">Trainee Management System</h4>
-                  <p className="text-[18px]! fnt-orange">Access your training programs, schedules, assessments and more</p>
-
-                  <div className="spacer-40"></div>
-                </div>                  
-
-              </div> 
-
-                <div className="flex justify-end mt-auto">
-                    <Link href="" className="btn btn-transparent font-bold fnt-orange remPad">
-                      Visit Portal
-                      <Image
-                        src="/imgs/icons/icon-send-green.png"
-                        alt="EWA"
-                        width={30}
-                        height={30}
-                        className="mar-left-5"
-                      />
-                    </Link>
-                  </div>             
-              
-            </div>
-
-            <div className="box box-user p-8 bg-[url(/imgs/assets/box-user-bg.svg)] bg-cover">
-
-              <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-                <div className="md:w-[20%] text-center">
-                  <Image src="/imgs/icons/grad-cap.svg" alt="EWA" width={150} height={150} className="max-w-full h-auto"/>
-                </div>
-
-                <div className="md:w-[80%] px-4">
-                  <h4 className="text-[24px]! font-bold fnt-orange">Trainee Management System</h4>
-                  <p className="text-[18px]! fnt-orange">Access your training programs, schedules, assessments and more</p>
-
-                  <div className="spacer-40"></div>
-                </div>                  
-
-              </div> 
-
-                <div className="flex justify-end mt-auto">
-                    <Link href="" className="btn btn-transparent font-bold fnt-orange remPad">
-                      Visit Portal
-                      <Image
-                        src="/imgs/icons/icon-send-green.png"
-                        alt="EWA"
-                        width={30}
-                        height={30}
-                        className="mar-left-5"
-                      />
-                    </Link>
-                  </div>             
-              
-            </div>                        
-
-                                               
+              </div>
+            ))}
           </div>
-                    
-
 
         </div>
- 
 
         <div className="spacer-40"></div>
       </section>
 
-
-
     </div>
-
-
-
-    
   );
 }

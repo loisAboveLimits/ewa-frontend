@@ -88,7 +88,11 @@
 
 @media (max-width: 767px) {
   .roulette { --row: 48px; }
-  .label    { font-size: 28px; }
+  .label    { font-size: 26px; }
+}
+
+@media (max-width: 380px) {
+  .label    { font-size: 22px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

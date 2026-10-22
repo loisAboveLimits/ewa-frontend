@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from "./Preloader.module.css";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 /** Logo with the orbit-style spinning rings. Reused by the route loader (app/loading.tsx). */
 export function LoaderMark({ size = 150 }: { size?: number }) {
@@ -66,6 +67,7 @@ function waitForPageAssets(timeout: number) {
  *   fades out once the new page and its visible images are ready.
  */
 export default function Preloader() {
+  const { t } = useI18n();
   const pathname = usePathname();
   const [phase, setPhase] = useState<Phase>("visible");
   const [navigating, setNavigating] = useState(false); // fade in quickly for page changes
@@ -187,7 +189,7 @@ export default function Preloader() {
       aria-busy={phase === "visible"}
     >
       <LoaderMark />
-      <span className="sr-only">Loading…</span>
+      <span className="sr-only">{t.common.loading}</span>
 
       {/* Visitors with JavaScript off should never get stuck behind the loader */}
       <noscript>

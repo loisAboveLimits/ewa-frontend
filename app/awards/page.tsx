@@ -1,75 +1,44 @@
-import Link from "next/link";
-import Image from "next/image";
-import CampusCarousel from "@/components/Campus";
-import ContactForm from "@/components/Contact";
 import Breadcrumbs from "@/components/Breadcrumbs";
-// import Awards from "@/components/Awards";
 import AwardsHistory from "@/components/awards/AwardsHistory";
 import SmoothScroll from "@/components/awards/SmoothScroll";
-import { pages } from "@/lib/pages";
+import PageBanner from "@/components/ui/PageBanner";
+import { getI18n, pageMetadata } from "@/lib/i18n/server";
 
-export const metadata: Metadata = {
-  title: pages.awards.title,
-  description: "",
-};
+export const generateMetadata = () => pageMetadata("awards");
 
-export default function Home(){
+export default async function Awards() {
+  const { t } = await getI18n();
 
   return (
 
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <section className="banner bg-[url(/imgs/banners/banner-programs.png)] bg-cover bg-center w-full vh-100">
+      <PageBanner image="/imgs/banners/banner-programs.png" title={t.pages.awards.title} subtitle={t.pages.awards.desc} />
 
-          <div className="banner-caption top-[20%] -translate-y-1/2 absolute inset-0 vh-100">
-            <div className="container mx-auto h-full px-4">
-              <h1 className="flex h-full items-end banner-title">{pages.awards.title}</h1>
-              <div className="spacer-10"></div>
-              <p className="banner-subtitle">{pages.awards.desc}</p>
-            </div>
-          </div>
-
-      </section>
-
-      {/*<!--breadcrumps-->*/}
+      {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">
         <div className="spacer-20"></div>
         <div className="container mx-auto h-full px-4">
           <Breadcrumbs />
         </div>
         <div className="spacer-20"></div>
-      </section>      
+      </section>
 
       {/*<!--awards-->*/}
-      <section id="awards" className="">
+      <section id="awards">
 
         <div className="spacer-40"></div>
 
-        <div className="container mx-auto px-4">        
-          
-
-        <SmoothScroll>
-         {/* …hero / other sections… */}
-           <AwardsHistory />
-         {/* next section — "Skip" scrolls here */}
-        </SmoothScroll>
-        
-
+        <div className="container mx-auto px-4">
+          <SmoothScroll>
+            <AwardsHistory />
+          </SmoothScroll>
         </div>
- 
+
         <div className="spacer-40"></div>
       </section>
 
-   
-
-
-
-
     </div>
-
-
-
-    
   );
 }

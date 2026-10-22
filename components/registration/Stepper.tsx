@@ -1,21 +1,25 @@
 "use client";
 
+import { useI18n } from "@/components/i18n/I18nProvider";
+
 type StepperProps = {
   /** 0 = Register, 1 = Apply, 2 = Confirmation */
   current: number;
   className?: string;
 };
 
-const steps = [
-  { label: "Register", Icon: RegisterIcon },
-  { label: "Apply", Icon: ApplyIcon },
-  { label: "Confirmation", Icon: ConfirmIcon },
-];
+const stepDefs = [
+  { key: "register", Icon: RegisterIcon },
+  { key: "apply", Icon: ApplyIcon },
+  { key: "confirmation", Icon: ConfirmIcon },
+] as const;
 
 export default function Stepper({ current, className = "" }: StepperProps) {
+  const { t } = useI18n();
+  const steps = stepDefs.map((s) => ({ ...s, label: t.registration.steps[s.key] }));
   return (
     <nav
-      aria-label="Registration progress"
+      aria-label={t.registration.progressAria}
       className={
         "mx-auto w-full max-w-[730px] rounded-[20px] md:rounded-[26px] bg-[#7AC4C4] px-4 py-6 sm:px-8 md:px-14 md:py-12 " +
         "shadow-[-10px_10px_20px_rgba(0,0,0,0.08)] " +
@@ -23,18 +27,18 @@ export default function Stepper({ current, className = "" }: StepperProps) {
       }
     >
       <ol className="flex items-start">
-        {steps.map(({ label, Icon }, i) => {
+        {steps.map(({ key, label, Icon }, i) => {
           const done = i < current;
           const active = i === current;
           const isLast = i === steps.length - 1;
           return (
-            <li key={label} className={`relative flex flex-1 flex-col items-center ${isLast ? "" : ""}`}>
+            <li key={key} className="relative flex flex-1 flex-col items-center">
               {/* connector to the next step */}
               {!isLast && (
                 <span
                   aria-hidden
                   className={
-                    "absolute top-6 md:top-[38px] left-1/2 h-[3px] w-full -translate-y-1/2 " +
+                    "absolute top-6 md:top-[38px] start-1/2 h-[3px] w-full -translate-y-1/2 " +
                     (done ? "bg-[#EE7A52]" : "bg-[#EE7A52]/80")
                   }
                 />

@@ -8,6 +8,8 @@ import type { Swiper as SwiperType } from "swiper";
 
 import "swiper/css";
 import styles from "./ProgramsRoulette.module.css";
+import { useI18n } from "@/components/i18n/I18nProvider";
+import type { Localized } from "@/lib/i18n/config";
 
 /* ------------------------------------------------------------------ */
 /* Data — swap the images for the real ones when you have them.        */
@@ -15,10 +17,15 @@ import styles from "./ProgramsRoulette.module.css";
 /* already teal-graded (like home-courses.jpg).                        */
 /* ------------------------------------------------------------------ */
 export const programs = [
-  { title: "Short Courses", image: "/imgs/bgs/campus-tech.png", tint: true },
-  { title: "Diploma Programs", image: "/imgs/bgs/home-courses.jpg", tint: false },
-  { title: "Summer Courses", image: "/imgs/bgs/campus-spaces.png", tint: true },
+  { id: "short", image: "/imgs/bgs/campus-tech.png", tint: true },
+  { id: "diploma", image: "/imgs/bgs/home-courses.jpg", tint: false },
+  { id: "summer", image: "/imgs/bgs/campus-spaces.png", tint: true },
 ];
+
+const titles: Localized<Record<string, string>> = {
+  en: { short: "Short Courses", diploma: "Diploma Programs", summer: "Summer Courses" },
+  ar: { short: "الدورات القصيرة", diploma: "برامج الدبلوم", summer: "الدورات الصيفية" },
+};
 
 /* Loop mode needs more slides than are visible, so the list is repeated. */
 const REPEAT = 3;
@@ -49,6 +56,8 @@ function setDrumTransition(swiper: SwiperType, duration: number) {
 }
 
 export default function ProgramsRoulette() {
+  const { locale, t } = useI18n();
+  const title = (id: string) => titles[locale][id];
   const [active, setActive] = useState(START);
 
   const onChange = useCallback((swiper: SwiperType) => {
@@ -62,7 +71,7 @@ export default function ProgramsRoulette() {
       <div className={styles.bgStack} aria-hidden="true">
         {programs.map((p, i) => (
           <div
-            key={p.title}
+            key={p.id}
             className={`${styles.bg} ${i === active ? styles.bgActive : ""}`}
           >
             <Image
@@ -83,7 +92,7 @@ export default function ProgramsRoulette() {
         <div className="flex flex-col h-full md:flex-row">
 
           <div className="md:w-1/4 gap-6 px-6 pt-2 pb-0 md:p-8 mt-auto">
-            <h2 className="font-bold title text-white">EWA<br />Programs</h2>
+            <h2 className="font-bold title text-white">{t.programs.rouletteA}<br />{t.programs.rouletteB}</h2>
           </div>
 
           <div className="md:w-1/2 gap-6 p-6 md:p-8">
@@ -106,7 +115,7 @@ export default function ProgramsRoulette() {
                 watchSlidesProgress
                 keyboard={{ enabled: true, onlyInViewport: true }}
                 autoplay={{ delay: 3500, disableOnInteraction: false, pauseOnMouseEnter: true }}
-                a11y={{ containerMessage: "EWA programs", slideRole: "option" }}
+                a11y={{ containerMessage: t.programs.rouletteAria, slideRole: "option" }}
                 onInit={(s) => { paintDrum(s); onChange(s); }}
                 onProgress={paintDrum}
                 onSetTranslate={paintDrum}
@@ -115,15 +124,15 @@ export default function ProgramsRoulette() {
                 className={styles.swiper}
               >
                 {wheel.map((p, i) => (
-                  <SwiperSlide key={`${p.title}-${i}`} className={styles.slide}>
-                    <span className={styles.label}>{p.title}</span>
+                  <SwiperSlide key={`${p.id}-${i}`} className={styles.slide}>
+                    <span className={styles.label}>{title(p.id)}</span>
                   </SwiperSlide>
                 ))}
               </Swiper>
             </div>
 
             {/* Announce the active program to screen readers */}
-            <p className="sr-only" aria-live="polite">{programs[active].title}</p>
+            <p className="sr-only" aria-live="polite">{title(programs[active].id)}</p>
           </div>
 
           <div className="hidden md:block md:w-1/4 gap-6 p-8"></div>

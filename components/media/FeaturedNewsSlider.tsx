@@ -7,11 +7,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { A11y, Autoplay, EffectFade, Keyboard } from "swiper/modules";
 import type { NewsItem } from "@/lib/news";
+import { useI18n } from "@/components/i18n/I18nProvider";
+import { fmt } from "@/lib/i18n/config";
+import { ArrowIcon } from "@/components/ui/ArrowLink";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
 
 export default function FeaturedNewsSlider({ items }: { items: NewsItem[] }) {
+  const { t } = useI18n();
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [active, setActive] = useState(0);
   const multiple = items.length > 1;
@@ -21,7 +25,7 @@ export default function FeaturedNewsSlider({ items }: { items: NewsItem[] }) {
       <div
         className={
           "relative isolate overflow-hidden " +
-          "rounded-tl-[56px] rounded-br-[56px] md:rounded-tl-[90px] md:rounded-br-[90px] " +
+          "rounded-ss-[56px] rounded-ee-[56px] md:rounded-ss-[90px] md:rounded-ee-[90px] " +
           "shadow-[0_12px_30px_rgba(19,153,156,0.18)]"
         }
       >
@@ -36,12 +40,12 @@ export default function FeaturedNewsSlider({ items }: { items: NewsItem[] }) {
           autoplay={multiple ? { delay: 6000, disableOnInteraction: false, pauseOnMouseEnter: true } : false}
           onSwiper={setSwiper}
           onSlideChange={(s) => setActive(s.realIndex)}
-          a11y={{ containerMessage: "Featured news" }}
+          a11y={{ containerMessage: t.media.featuredNews }}
           className="aspect-[4/5] sm:aspect-[16/10] lg:aspect-[17/10]"
         >
           {items.map((item, i) => (
             <SwiperSlide key={item.id} className="h-full">
-              <FeaturedSlide item={item} priority={i === 0} />
+              <FeaturedSlide item={item} priority={i === 0} readMore={t.common.readMore} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -49,7 +53,7 @@ export default function FeaturedNewsSlider({ items }: { items: NewsItem[] }) {
 
       {/* pagination */}
       {multiple && (
-        <div role="tablist" aria-label="Choose featured story" className="mt-6 md:mt-8 flex justify-center gap-2">
+        <div role="tablist" aria-label={t.media.chooseStory} className="mt-6 md:mt-8 flex justify-center gap-2">
           {items.map((item, i) => {
             const isActive = i === active;
             return (
@@ -58,7 +62,7 @@ export default function FeaturedNewsSlider({ items }: { items: NewsItem[] }) {
                 type="button"
                 role="tab"
                 aria-selected={isActive}
-                aria-label={`Show story ${i + 1}: ${item.title}`}
+                aria-label={fmt(t.media.showStory, { n: i + 1, title: item.title })}
                 onClick={() => swiper?.slideToLoop(i)}
                 className={
                   "h-[13px] w-[22px] md:h-[15px] md:w-[25px] rounded-[50%] cursor-pointer " +
@@ -74,7 +78,7 @@ export default function FeaturedNewsSlider({ items }: { items: NewsItem[] }) {
   );
 }
 
-function FeaturedSlide({ item, priority }: { item: NewsItem; priority: boolean }) {
+function FeaturedSlide({ item, priority, readMore }: { item: NewsItem; priority: boolean; readMore: string }) {
   return (
     <article className="group relative h-full w-full">
       <Image
@@ -86,16 +90,16 @@ function FeaturedSlide({ item, priority }: { item: NewsItem; priority: boolean }
         className="object-cover"
       />
 
-      {/* teal gradient: bottom-up on phones, left-to-right from tablet */}
+      {/* teal gradient: bottom-up on phones, from the text side (start) on tablets and up */}
       <div
         aria-hidden
         className={
           "absolute inset-0 bg-linear-to-t from-[#0F8E91] via-[#13999C]/85 via-45% to-[#13999C]/10 " +
-          "sm:bg-linear-to-r sm:from-[#13999C] sm:via-[#13999C]/80 sm:via-50% sm:to-transparent"
+          "sm:bg-linear-to-r sm:rtl:bg-linear-to-l sm:from-[#13999C] sm:via-[#13999C]/80 sm:via-50% sm:to-transparent"
         }
       />
 
-      <div className="absolute inset-0 flex flex-col justify-end p-6 pb-8 sm:justify-center sm:p-8 md:p-10 lg:pl-9 lg:pt-20">
+      <div className="absolute inset-0 flex flex-col justify-end p-6 pb-8 sm:justify-center sm:p-8 md:p-10 lg:ps-9 lg:pt-20">
         <div className="max-w-90 md:max-w-[380px] text-white">
           <p className="text-base md:text-lg">{item.category}</p>
           <h3 className="mt-1 text-2xl md:text-[28px] lg:text-[26px] xl:text-[30px] font-bold leading-tight">
@@ -108,23 +112,12 @@ function FeaturedSlide({ item, priority }: { item: NewsItem; priority: boolean }
           )}
 
           <div className="spacer-20"></div>
-           <div className="flex sm:flex-row md:flex-row justify-center">
-            
-              <div className="md:w-[100%]">
-                <div className="flex justify-start mt-auto">
-                    <Link href="" className="btn btn-transparent font-bold text-[15px]! remPad">
-                      Read More
-                      <Image
-                        src="/imgs/icons/icon-send-orange.png"
-                        alt="EWA"
-                        width={30}
-                        height={30}
-                        className="mar-left-5"
-                      />
-                    </Link>
-                  </div>                       
-              </div>
-            </div> 
+          <div className="flex justify-start">
+            <Link href={item.href} className="relative z-10 btn btn-transparent font-bold text-[15px]! remPad">
+              {item.ctaLabel ?? readMore}
+              <ArrowIcon color="orange" />
+            </Link>
+          </div>
         </div>
       </div>
     </article>

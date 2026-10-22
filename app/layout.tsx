@@ -2,14 +2,17 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Script from "next/script";
 import type { Metadata } from "next";
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Tajawal } from "next/font/google";
 import "./globals.css";
 import "./custom.css";
 import "./header.css";
 import "./responsive.css";
+import "./rtl.css";
 
 import Preloader from "@/components/preloader/Preloader";
+import { I18nProvider } from "@/components/i18n/I18nProvider";
+import { dirOf } from "@/lib/i18n/config";
+import { getI18n } from "@/lib/i18n/server";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,21 +22,36 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-}); 
+});
 
-export const metadata: Metadata = {
-  title: {
-    default: "EWA",
-    template: "EWA | %s",
-  },
-};
+/* Arabic typeface — Century Gothic has no Arabic glyphs */
+const tajawal = Tajawal({
+  variable: "--font-arabic",
+  subsets: ["arabic", "latin"],
+  weight: ["300", "400", "500", "700", "800"],
+  display: "swap",
+});
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+  return {
+    title: {
+      default: t.meta.siteName,
+      template: t.meta.titleTemplate,
+    },
+  };
+}
+
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const { locale, t } = await getI18n();
+
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`} >
-
+    <html
+      lang={locale}
+      dir={dirOf(locale)}
+      className={`${geistSans.variable} ${geistMono.variable} ${tajawal.variable} h-full antialiased scroll-smooth`}
+    >
       <head>
-        
         <link rel="apple-touch-icon" sizes="57x57" href="/imgs/favicons/apple-icon-57x57.png"/>
         <link rel="apple-touch-icon" sizes="60x60" href="/imgs/favicons/apple-icon-60x60.png"/>
         <link rel="apple-touch-icon" sizes="72x72" href="/imgs/favicons/apple-icon-72x72.png"/>
@@ -56,19 +74,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           src="https://kit.fontawesome.com/f34a816efd.js"
           crossOrigin="anonymous"
           strategy="afterInteractive"
-        />        
-
+        />
       </head>
 
       <body className="min-h-full flex flex-col bg-white">
+        <I18nProvider locale={locale} dictionary={t}>
+          <Preloader />
 
-         <Preloader />
+          <Header />
 
-        <Header />
+          {children}
 
-        {children}
-
-         <Footer />
+          <Footer />
+        </I18nProvider>
       </body>
     </html>
   );

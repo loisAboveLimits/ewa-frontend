@@ -3,20 +3,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useI18n } from "@/components/i18n/I18nProvider";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
 
-const navItems = [
-  { label: "About EWA", href: "/about" },
-  { label: "Why EWA", href: "/why" },
-  { label: "EWA Community", href: "/community" },
-  { label: "EWA Users", href: "/users" },
-  { label: "EWA Join", href: "/join" },
-  { label: "Contact", href: "/contact" },
-];
+const navHrefs = [
+  { key: "about", href: "/about" },
+  { key: "why", href: "/why" },
+  { key: "community", href: "/community" },
+  { key: "users", href: "/users" },
+  { key: "join", href: "/join" },
+  { key: "contact", href: "/contact" },
+] as const;
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { t } = useI18n();
 
+  const navItems = navHrefs.map((item) => ({ ...item, label: t.header.nav[item.key] }));
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
   const close = () => setMenuOpen(false);
 
@@ -48,11 +52,10 @@ export default function Header() {
         {/* Desktop (≥1024px) */}
         <div className="hidden lg:block nav-desktop">
 
+          {/* language tab — inline-end side (right in English, left in Arabic) */}
           <div className="lang-switcher">
-            <a href="">AR</a>
+            <LanguageSwitcher />
           </div>
-
-          <div className="clear-both"></div>
 
           <div className="flex w-full">
             <div className="flex flex-col item-center justify-center md:w-1/4 bar-logo">
@@ -72,7 +75,7 @@ export default function Header() {
 
             <div className="flex flex-col justify-center md:w-3/4 bar-nav">
 
-                <nav className="flex w-full items-center justify-between desktop-nav" aria-label="Main navigation">
+                <nav className="flex w-full items-center justify-between desktop-nav" aria-label={t.header.mainNav}>
                   {navItems.map((item) => (
                     <Link
                       key={item.href}
@@ -104,22 +107,27 @@ export default function Header() {
               />
             </Link>
 
-            <button
-              type="button"
-              className={`menu-toggle ${menuOpen ? "active" : ""}`}
-              onClick={() => setMenuOpen((open) => !open)}
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={menuOpen}
-              aria-controls="mobile-menu"
-            >
-              <span />
-              <span />
-              <span />
-            </button>
+            <div className="flex items-center gap-2">
+              {/* quick language toggle, always visible on phones */}
+              <LanguageSwitcher className="mobile-lang-quick" />
+
+              <button
+                type="button"
+                className={`menu-toggle ${menuOpen ? "active" : ""}`}
+                onClick={() => setMenuOpen((open) => !open)}
+                aria-label={menuOpen ? t.header.closeMenu : t.header.openMenu}
+                aria-expanded={menuOpen}
+                aria-controls="mobile-menu"
+              >
+                <span />
+                <span />
+                <span />
+              </button>
+            </div>
           </div>
 
           <div id="mobile-menu" className="mobile-nav" aria-hidden={!menuOpen} inert={!menuOpen}>
-            <nav aria-label="Mobile navigation">
+            <nav aria-label={t.header.mobileNav}>
               {navItems.map((item) => (
                 <Link
                   key={item.href}
@@ -133,7 +141,7 @@ export default function Header() {
               ))}
 
               <div className="mobile-lang">
-                <a href="">ENG</a>
+                <LanguageSwitcher variant="long" onSwitch={close} />
               </div>
             </nav>
           </div>

@@ -2,40 +2,70 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import PageBanner from "@/components/ui/PageBanner";
 import ProgramModules, { type Module } from "@/components/ProgramModules";
+import { fmt, type Localized } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { getI18n } from "@/lib/i18n/server";
 
 /* ------------------------------------------------------------------ */
 /*  Program data – swap for a CMS / lib/programs.ts lookup later       */
 /* ------------------------------------------------------------------ */
-const program = {
-  title: "Facilities Management",
-  subtitle: "Industrial Field - 24 Months Program",
+const programs: Localized<{
+  title: string;
+  subtitle: string;
+  description: string;
+  duration: string;
+  type: string;
+  eligibility: string;
+  nextIntake: string;
+  location: string;
+}> = {
+  en: {
+    title: "Facilities Management",
+    subtitle: "Industrial Field - 24 Months Program",
+    description:
+      "The Facilities Management Diploma is a two-year program that prepares students to maintain, operate, and manage the buildings and technical systems that keep industrial and energy facilities running safely and efficiently. Through a mix of classroom learning and hands-on training, students build practical skills in facility operations, preventive maintenance, safety, and team coordination. Graduates are ready to start careers as facilities technicians and supervisors, supporting the reliable day-to-day performance of industrial sites, power plants, and large commercial properties.",
+    duration: "Twenty Four Months",
+    type: "Diploma",
+    eligibility: "High School Diploma",
+    nextIntake: "23rd September",
+    location: "On-Site (Main Campus)",
+  },
+  ar: {
+    title: "إدارة المرافق",
+    subtitle: "المجال الصناعي - برنامج مدته 24 شهرًا",
+    description:
+      "دبلوم إدارة المرافق برنامج مدته سنتان يؤهّل المتدربين لصيانة المباني والأنظمة التقنية وتشغيلها وإدارتها، وهي الأنظمة التي تحافظ على تشغيل المنشآت الصناعية ومنشآت الطاقة بأمان وكفاءة. ومن خلال الجمع بين التعلّم في القاعات والتدريب العملي، يكتسب المتدربون مهارات تطبيقية في تشغيل المرافق والصيانة الوقائية والسلامة وتنسيق فرق العمل. ويكون الخريجون مستعدين لبدء مسيرتهم المهنية فنيين ومشرفين للمرافق، داعمين الأداء اليومي الموثوق للمواقع الصناعية ومحطات الطاقة والمنشآت التجارية الكبرى.",
+    duration: "أربعة وعشرون شهرًا",
+    type: "دبلوم",
+    eligibility: "شهادة الثانوية العامة",
+    nextIntake: "23 سبتمبر",
+    location: "حضوري (الحرم الرئيسي)",
+  },
+};
+
+const programMeta = {
   image: "/imgs/slides/slide1.jpg",
-  description:
-    "The Facilities Management Diploma is a two-year program that prepares students to maintain, operate, and manage the buildings and technical systems that keep industrial and energy facilities running safely and efficiently. Through a mix of classroom learning and hands-on training, students build practical skills in facility operations, preventive maintenance, safety, and team coordination. Graduates are ready to start careers as facilities technicians and supervisors, supporting the reliable day-to-day performance of industrial sites, power plants, and large commercial properties.",
-  duration: "Twenty Four Months",
-  type: "Diploma",
-  eligibility: "High School Diploma,",
-  nextIntake: "23rd September",
   credits: "3",
-  location: "On-Site (Main Campus)",
   applyHref: "/join/registration",
 };
 
-const placeholderCourse = (name: string) => ({
-  name,
-  items: Array.from({ length: 3 }, () => ({ name: "[Module name]", credits: "[X]" })),
-});
+function buildModules(t: Dictionary["programDetail"]): Module[] {
+  const placeholderCourse = (n: number) => ({
+    name: fmt(t.course, { n }),
+    items: Array.from({ length: 3 }, () => ({ name: t.moduleName, credits: "[X]" })),
+  });
+  return [1, 2, 3, 4].map((n) => ({
+    title: fmt(t.module, { n }),
+    courses: [placeholderCourse(1), placeholderCourse(2)],
+  }));
+}
 
-const modules: Module[] = [1, 2, 3, 4].map((n) => ({
-  title: `Module ${n}`,
-  courses: [placeholderCourse("Course 1"), placeholderCourse("Course 2")],
-}));
-
-export const metadata: Metadata = {
-  title: program.title,
-  description: program.subtitle,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale } = await getI18n();
+  return { title: programs[locale].title, description: programs[locale].subtitle };
+}
 
 /* ------------------------------------------------------------------ */
 /*  Icons                                                              */
@@ -108,26 +138,23 @@ function DetailItem({ label, value }: { label: string; value: string }) {
 /* ------------------------------------------------------------------ */
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
-export default function ProgramDetail() {
+export default async function ProgramDetail() {
+  const { locale, t } = await getI18n();
+  const d = t.programDetail;
+  const program = { ...programs[locale], ...programMeta };
+  const modules = buildModules(d);
+
   return (
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <section className="banner bg-[url(/imgs/banners/banner-programs.png)] bg-cover bg-center w-full vh-100">
-        <div className="banner-caption top-[20%] -translate-y-1/2 absolute inset-0 vh-100">
-          <div className="container mx-auto h-full px-4">
-            <h1 className="flex h-full items-end banner-title">{program.title}</h1>
-            <div className="spacer-10"></div>
-            <p className="banner-subtitle">{program.subtitle}</p>
-          </div>
-        </div>
-      </section>
+      <PageBanner image="/imgs/banners/banner-programs.png" title={program.title} subtitle={program.subtitle} />
 
       {/*<!--breadcrumps-->*/}
       <section className="breadcrumps">
         <div className="spacer-20"></div>
         <div className="container mx-auto h-full px-4">
-          <Breadcrumbs />
+          <Breadcrumbs currentTitle={program.title} />
         </div>
         <div className="spacer-20"></div>
       </section>
@@ -145,7 +172,7 @@ export default function ProgramDetail() {
 
             {/* Image */}
             <div className="lg:col-span-8">
-              <div className="relative aspect-[16/7] w-full overflow-hidden rounded-tl-[60px] rounded-br-[60px] md:rounded-tl-[90px] md:rounded-br-[90px]">
+              <div className="relative aspect-[16/9] md:aspect-[16/7] w-full overflow-hidden rounded-ss-[60px] rounded-ee-[60px] md:rounded-ss-[90px] md:rounded-ee-[90px]">
                 <Image
                   src={program.image}
                   alt={program.title}
@@ -159,11 +186,11 @@ export default function ProgramDetail() {
 
             {/* Info card */}
             <aside className="lg:col-span-4">
-              <div className="h-full rounded-tr-[60px] rounded-bl-[60px] border-2 border-[#14989A] border-b-[#F07B52] border-l-[#F07B52] bg-[#C8ECEA] px-6 py-8 md:rounded-tr-[90px] md:rounded-bl-[90px] md:px-12 md:py-10">
+              <div className="h-full rounded-se-[60px] rounded-es-[60px] border-2 border-[#14989A] border-b-[#F07B52] border-s-[#F07B52] bg-[#C8ECEA] px-6 py-8 md:rounded-se-[90px] md:rounded-es-[90px] md:px-12 md:py-10">
                 <div className="flex flex-col justify-center gap-6 h-full">
-                  <InfoRow icon={<ClockIcon />} label="Duration" value={program.duration} />
-                  <InfoRow icon={<CalendarIcon />} label="Program Type" value={program.type} />
-                  <InfoRow icon={<CertificateIcon />} label="Eligibility" value={program.eligibility} />
+                  <InfoRow icon={<ClockIcon />} label={d.duration} value={program.duration} />
+                  <InfoRow icon={<CalendarIcon />} label={d.type} value={program.type} />
+                  <InfoRow icon={<CertificateIcon />} label={d.eligibility} value={program.eligibility} />
                 </div>
               </div>
             </aside>
@@ -176,10 +203,10 @@ export default function ProgramDetail() {
             </div>
 
             {/* Details + CTA */}
-            <div className="lg:col-span-4 flex flex-col gap-6 sm:px-6 md:px-16 lg:px-16">
-              <DetailItem label="Next Intake" value={program.nextIntake} />
-              <DetailItem label="Credits" value={program.credits} />
-              <DetailItem label="Location" value={program.location} />
+            <div className="lg:col-span-4 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:flex lg:flex-col lg:px-16">
+              <DetailItem label={d.nextIntake} value={program.nextIntake} />
+              <DetailItem label={d.credits} value={program.credits} />
+              <DetailItem label={d.location} value={program.location} />
             </div>
           </div>
 
@@ -187,21 +214,21 @@ export default function ProgramDetail() {
           <div className="mt-10 grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-x-10">
             <div className="order-2 lg:order-1 lg:col-span-8 flex items-center gap-4">
               <ModulesMark />
-              <h2 className="text-2xl md:text-4xl font-semibold text-[#14989A]">Program Modules</h2>
+              <h2 className="text-2xl md:text-4xl font-semibold text-[#14989A]">{d.modules}</h2>
             </div>
             <div className="order-1 lg:order-2 lg:col-span-4 lg:self-start">
               <Link
                 href={program.applyHref}
                 className="block w-full rounded-2xl bg-[#F07B52] px-6 py-4 text-center text-lg md:text-xl font-semibold text-white transition hover:bg-[#e2683d] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#F07B52]/40"
               >
-                Apply to this course
+                {d.apply}
               </Link>
             </div>
           </div>
 
           {/* Accordion */}
           <div className="mt-8">
-            <ProgramModules modules={modules} />
+            <ProgramModules modules={modules} creditsLabel={d.creditsSuffix} />
           </div>
 
         </div>

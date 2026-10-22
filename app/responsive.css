@@ -353,7 +353,6 @@
   }
 
   .mobile-nav nav {
-    padding-left: 18px;
-    padding-right: 18px;
+    padding-inline: 18px;
   }
 }

@@ -149,6 +149,7 @@
 /* Opens to the right: starts hidden behind the avatar, reveals left → right */
 .cardRight {
   left: 50%;
+  text-align: start;
   padding: 0.75rem 1.5rem 0.75rem calc(clamp(32px, 7.5cqw, 48px) + 0.9rem);
   border-radius: 0 9999px 9999px 0;
   clip-path: inset(0 100% 0 0 round 0 9999px 9999px 0);

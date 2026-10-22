@@ -6,7 +6,10 @@ type Props = {
   title: string;
   images: SlideImage[];
   children: ReactNode;
-  /** "left" = slider left, text right. "right" = text left, slider right */
+  /**
+   * "left" = slider on the start side, text on the end side. "right" = the opposite.
+   * (start = left in English, right in Arabic — the grid mirrors automatically.)
+   */
   imageSide?: "left" | "right";
   priority?: boolean;
 };
@@ -26,18 +29,15 @@ export default function FacilitySection({ id, title, images, children, imageSide
         <div className={`lg:col-span-5 lg:pt-2 ${imageRight ? "lg:order-1" : "lg:order-2"}`}>
           <h2
             id={`${id}-title`}
-            className={
-              "text-[35px] fnt-green font-bold" +
-              (imageRight ? "lg:text-right" : "")
-            }
+            className={"text-[28px] md:text-[35px] fnt-green font-bold " + (imageRight ? "lg:text-end" : "")}
           >
             {title}
           </h2>
           <div
             className={
-              "mt-3 md:mt-4 space-y-4 text-[20px]! fnt-green " +
-              "[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-0.5 [&_ul]:text-left " +
-              "[&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:space-y-2"
+              "mt-3 md:mt-4 space-y-4 text-[17px]! md:text-[20px]! fnt-green " +
+              "[&_ul]:list-disc [&_ul]:ps-5 [&_ul]:space-y-0.5 [&_ul]:text-start " +
+              "[&_ol]:list-decimal [&_ol]:ps-5 [&_ol]:space-y-2"
             }
           >
             {children}

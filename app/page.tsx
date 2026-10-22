@@ -1,28 +1,30 @@
-import Link from "next/link";
 import Image from "next/image";
-// import StoriesCarousel from "@/components/Stories";
 import StoriesCarousel from "@/components/stories/Stories";
 import ContactForm from "@/components/Contact";
-import OrbitShowcase from "@/components/orbit/OrbitShowcase";
-import { orbitActions, team } from "@/components/orbit/team";
+import Testimonials from "@/components/orbit/Testimonials";
+import { getOrbitActions, getTeam } from "@/components/orbit/team";
 import ProgramsRoulette from "@/components/roulette/ProgramsRoulette";
+import PageBanner from "@/components/ui/PageBanner";
+import SectionTitle from "@/components/ui/SectionTitle";
+import LogoStrip from "@/components/ui/LogoStrip";
+import ArrowLink from "@/components/ui/ArrowLink";
+import { getI18n } from "@/lib/i18n/server";
 
-export default function Home(){
+export default async function Home() {
+  const { locale, t } = await getI18n();
+  const s = t.sections;
 
   return (
 
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <section className="banner bg-[url(/imgs/banners/banner-home.jpg)] bg-cover bg-center w-full vh-100">
-
-          <div className="banner-caption top-[40%] -translate-y-1/2 absolute inset-0 vh-100">
-            <div className="container mx-auto h-full px-4">
-              <h1 className="flex h-full items-center fnt-orange banner-title">Empowering Generation<br/>Powering The Nation</h1>
-            </div>
-          </div>
-
-      </section>
+      <PageBanner
+        image="/imgs/banners/banner-home.jpg"
+        align="center"
+        titleClassName="fnt-orange"
+        title={<>{t.home.bannerLine1}<br />{t.home.bannerLine2}</>}
+      />
 
       {/*<!--about-->*/}
       <section id="about" className="relative">
@@ -30,97 +32,63 @@ export default function Home(){
         <div className="spacer-40"></div>
 
         <div className="container mx-auto px-4">
-          
+
         <div className="flex flex-col md:flex-row items-stretch">
 
-          {/* LEFT */}
-          <div className="md:w-1/2 p-8 flex flex-col">
+          {/* START column (left in English, right in Arabic) */}
+          <div className="md:w-1/2 p-2 py-4 sm:p-6 lg:p-8 flex flex-col">
 
-            <div className="box box-green px-8 py-12">
-              <h3 className="font-bold sub-title">About EWA</h3>
-              <h2 className="font-bold title">Academy for Quality</h2>
+            <div className="box box-green px-6 py-10 md:px-8 md:py-12">
+              <h3 className="font-bold sub-title">{t.home.aboutKicker}</h3>
+              <h2 className="font-bold title">{t.home.aboutTitle}</h2>
 
               <div className="spacer-40"></div>
 
-              <p className="text-justify">
-                We Are a Non-Profit Training Academy That Offers High-Quality
-                Technical Training and Vocational Education Focused on Water,
-                Energy and Other Related Industrial Fields.
-              </p>
+              <p className="text-justify">{t.home.aboutText}</p>
 
               <div className="spacer-40"></div>
 
               <div className="flex justify-start">
-                <Link
-                  href=""
-                  className="btn btn-transparent font-bold remPad"
-                >
-                  Learn More
-
-                  <Image
-                    src="/imgs/icons/icon-send-green.png"
-                    alt="EWA"
-                    width={30}
-                    height={30}
-                    className="mar-left-5"
-                  />
-                </Link>
+                <ArrowLink href="/about">{t.common.learnMore}</ArrowLink>
               </div>
             </div>
 
             <div className="spacer-40"></div>
 
-            <div className="box box-orange px-8 py-12">
-              <h2 className="font-bold title">
-                Success Partner
-              </h2>
+            <div className="box box-orange px-6 py-10 md:px-8 md:py-12">
+              <h2 className="font-bold title">{t.home.partnerTitle}</h2>
 
               <div className="spacer-40"></div>
 
-              <p>
-                Leading the Way in Training and Developing Our National Workforce
-              </p>
+              <p>{t.home.partnerText}</p>
 
               <div className="spacer-40"></div>
 
               <div className="flex justify-end">
-                <Link
-                  href=""
-                  className="ml-auto btn btn-transparent font-bold remPad"
-                >
-                  Send a Request
-
-                  <Image
-                    src="/imgs/icons/icon-send-orange.png"
-                    alt="EWA"
-                    width={30}
-                    height={30}
-                    className="mar-left-5"
-                  />
-                </Link>
+                <ArrowLink href="/contact" color="orange" className="ms-auto">{t.common.sendRequest}</ArrowLink>
               </div>
             </div>
 
           </div>
 
-          {/* RIGHT */}
-          <div className="md:w-1/2 p-8 flex">
+          {/* END column */}
+          <div className="md:w-1/2 p-2 py-4 sm:p-6 lg:p-8 flex">
 
-            <div className="box box-mixed p-8 bg-[url(/imgs/bgs/home-about-bg.jpg)] bg-cover bg-center w-full flex">
+            <div className="box box-mixed p-8 bg-[url(/imgs/bgs/home-about-bg.jpg)] bg-cover bg-center w-full flex min-h-[320px]">
 
-              <div className="flex flex-col md:flex-row w-full">
+              <div className="flex flex-row w-full gap-4">
 
-                <div className="md:w-1/2 prog">
+                <div className="w-1/2 prog">
                   <div className="flex flex-col justify-end h-full text-center">
                     <p className="counter">20</p>
-                    <p>Diploma Programs</p>
+                    <p>{t.home.diplomaPrograms}</p>
                   </div>
                 </div>
 
-                <div className="md:w-1/2 prog">
+                <div className="w-1/2 prog">
                   <div className="flex flex-col justify-end h-full text-center">
                     <p className="counter">70</p>
-                    <p>Sponsorship Partners</p>
+                    <p>{t.home.sponsorshipPartners}</p>
                   </div>
                 </div>
 
@@ -133,8 +101,9 @@ export default function Home(){
         </div>
 
         </div>
- 
-        <Image src="/imgs/logos/logo-circle-white.svg" alt="EWA" width={150} height={150} className="h-auto w-auto absolute inset-0 top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover items-center justify-center"/>
+
+        {/* centre emblem — only where the two columns sit side by side */}
+        <Image src="/imgs/logos/logo-circle-white.svg" alt="" aria-hidden width={150} height={150} className="hidden md:block w-[110px] lg:w-[150px] h-auto absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2"/>
 
         <div className="spacer-40"></div>
       </section>
@@ -142,16 +111,7 @@ export default function Home(){
       {/*<!--partners-->*/}
       <section id="partners">
         <div className="spacer-20"></div>
-
-        <div className="flex flex-wrap">
-          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner1.svg" alt="partner" width={150} height={60} className="w-full"/></div>
-          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner2.svg" alt="partner" width={150} height={60} className="w-full"/></div>
-          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner3.svg" alt="partner" width={150} height={60} className="w-full"/></div>
-          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner4.svg" alt="partner" width={150} height={60} className="w-full"/></div>
-          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner5.svg" alt="partner" width={150} height={60} className="w-full"/></div>
-          <div className="flex-1 gap-4 p-4"><Image src="/imgs/partners/partner6.svg" alt="partner" width={150} height={60} className="w-full"/></div>
-        </div>
-
+        <LogoStrip logos={[1, 2, 3, 4, 5, 6]} alt={t.common.partner} />
         <div className="spacer-20"></div>
       </section>
 
@@ -169,61 +129,39 @@ export default function Home(){
         <div className="spacer-20"></div>
 
         <div className="container mx-auto px-4">
-
-          <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-            <div className="sm:w-[5%] text-center">
-              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
-            </div>
-          
-            <div className="sm:w-[95%]">
-              <h2 className="font-bold title fnt-green">Success Stories<br />EWA & <font className="fnt-orange">Partners</font></h2>
-            </div>
-          </div>
-
+          <SectionTitle>
+            {s.storiesA}<br />{s.storiesB} <span className="fnt-orange">{s.storiesHighlight}</span>
+          </SectionTitle>
         </div>
 
         <div className="spacer-40"></div>
 
-        <div className="">
-          <StoriesCarousel />
-        </div>
-
+        <StoriesCarousel />
 
          <div className="spacer-80"></div>
       </section>
 
-      {/*<!--testimmonies-->*/}
+      {/*<!--testimonies-->*/}
       <section id="testimonies">
         <div className="spacer-20"></div>
 
         <div className="container mx-auto px-4">
-
-          <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-            <div className="sm:w-[5%] text-center">
-              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
-            </div>
-          
-            <div className="sm:w-[95%]">
-              <h2 className="font-bold title fnt-green">Testimonials<br /> of our <font className="fnt-orange">Sponsors</font> & Alumni</h2>
-            </div>
-          </div>
-
+          <SectionTitle>
+            {s.testimonialsA}<br />{s.testimonialsB} <span className="fnt-orange">{s.testimonialsHighlight}</span> {s.testimonialsC}
+          </SectionTitle>
         </div>
 
         <div className="spacer-40"></div>
 
-        <OrbitShowcase
-          members={team}
-          actions={orbitActions}
-          outerDuration={60}
-          innerDuration={40}
+        {/* slider on phones, rotating orbit from tablets up */}
+        <Testimonials
+          members={getTeam(locale)}
+          actions={getOrbitActions(t)}
+          label={s.testimonialsA}
           center={
             <Image src="/imgs/logos/logo-circle-white.svg" alt="EWA" width={344} height={306} priority className="h-auto w-full" />
           }
         />
-
 
          <div className="spacer-80"></div>
       </section>
@@ -234,39 +172,20 @@ export default function Home(){
         <div className="spacer-20"></div>
 
         <div className="container mx-auto px-4">
-
-          <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-            <div className="sm:w-[5%] text-center">
-              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
-            </div>
-          
-            <div className="sm:w-[95%]">
-              <h2 className="font-bold title fnt-green">Contact Us<br /><font className="fnt-orange">Stay Connected</font></h2>
-            </div>
-          </div>
-
+          <SectionTitle>
+            {s.contactA}<br /><span className="fnt-orange">{s.contactHighlight}</span>
+          </SectionTitle>
         </div>
-
-
 
         <div className="spacer-40"></div>
 
-        <div className="contactus-form">
-
+        <div className="contactus-form px-4">
           <ContactForm />
-         
         </div>
-
 
          <div className="spacer-80"></div>
       </section>
 
-
     </div>
-
-
-
-    
   );
 }

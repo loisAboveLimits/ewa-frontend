@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { A11y, Keyboard } from "swiper/modules";
 import type { GalleryImage } from "@/lib/gallery";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 import "swiper/css";
 
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export default function Lightbox({ images, startIndex, onClose }: Props) {
+  const { t, dir } = useI18n();
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [current, setCurrent] = useState(startIndex);
   const [shown, setShown] = useState(false);
@@ -49,7 +51,8 @@ export default function Lightbox({ images, startIndex, onClose }: Props) {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Image viewer"
+      aria-label={t.media.imageViewer}
+      dir={dir}
       className={
         "fixed inset-0 z-[100] flex flex-col bg-[#0B4F51]/90 backdrop-blur-sm transition-opacity duration-300 " +
         (shown ? "opacity-100" : "opacity-0")
@@ -93,8 +96,8 @@ export default function Lightbox({ images, startIndex, onClose }: Props) {
 
         {multiple && (
           <>
-            <ModalNav dir="prev" disabled={current === 0} onClick={() => swiper?.slidePrev()} />
-            <ModalNav dir="next" disabled={current === images.length - 1} onClick={() => swiper?.slideNext()} />
+            <ModalNav dir="prev" label={t.common.previousImage} disabled={current === 0} onClick={() => swiper?.slidePrev()} />
+            <ModalNav dir="next" label={t.common.nextImage} disabled={current === images.length - 1} onClick={() => swiper?.slideNext()} />
           </>
         )}
       </div>
@@ -104,7 +107,7 @@ export default function Lightbox({ images, startIndex, onClose }: Props) {
         <p className="max-w-3xl text-center text-sm md:text-base text-white/85">{images[current]?.alt}</p>
         <div className="flex items-center gap-4 md:gap-5">
           <span
-            className="min-w-[64px] rounded-full bg-white/10 px-4 py-2 text-center text-sm md:text-base font-semibold tabular-nums"
+            className="min-w-[64px] rounded-full bg-white/10 px-4 py-2 text-center text-sm md:text-base font-semibold tabular-nums ltr-text"
             aria-live="polite"
           >
             {current + 1} / {images.length}
@@ -113,7 +116,7 @@ export default function Lightbox({ images, startIndex, onClose }: Props) {
             ref={closeRef}
             type="button"
             onClick={onClose}
-            aria-label="Close image viewer"
+            aria-label={t.media.closeViewer}
             className="flex h-11 w-11 md:h-12 md:w-12 items-center justify-center rounded-full bg-[#EE7A52] shadow-md transition hover:bg-[#E5683D] hover:rotate-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
@@ -127,22 +130,23 @@ export default function Lightbox({ images, startIndex, onClose }: Props) {
   );
 }
 
-function ModalNav({ dir, disabled, onClick }: { dir: "prev" | "next"; disabled: boolean; onClick: () => void }) {
+/** "prev" sits on the start side (left in EN, right in AR); the chevron mirrors with it. */
+function ModalNav({ dir, label, disabled, onClick }: { dir: "prev" | "next"; label: string; disabled: boolean; onClick: () => void }) {
   const prev = dir === "prev";
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      aria-label={prev ? "Previous image" : "Next image"}
+      aria-label={label}
       className={
         "absolute top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 md:h-14 md:w-14 items-center justify-center rounded-full " +
         "bg-white/15 text-white transition hover:bg-[#EE7A52] disabled:opacity-0 disabled:pointer-events-none " +
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white " +
-        (prev ? "left-3 md:left-6" : "right-3 md:right-6")
+        (prev ? "start-3 md:start-6" : "end-3 md:end-6")
       }
     >
-      <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6 md:h-7 md:w-7" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6 md:h-7 md:w-7 rtl-flip" fill="none" stroke="currentColor" strokeWidth="2">
         <path d={prev ? "m15 5-7 7 7 7" : "m9 5 7 7-7 7"} strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </button>

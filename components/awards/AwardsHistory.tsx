@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type ReactNode } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
 import {
   AnimatePresence,
   motion,
@@ -10,75 +10,8 @@ import {
   useTransform,
   type MotionValue,
 } from "motion/react";
-
-type Award = {
-  date: string;
-  title: string;
-  image: string;
-  body: ReactNode;
-};
-
-const awards: Award[] = [
-  {
-    date: "May 2025",
-    title: "ITEX Exhibition",
-    image: "/imgs/awards/awards1.png",
-    body: (
-      <>
-        <p className="fnt-green">Towards Empowerment Horizons... We are proud of global achievements by Saudi minds. <b className="fnt-green">EWA won five medals at ITEX 2025</b>, the Innovation and Inventions Expo in Kuala Lumpur,
-        Malaysia.</p>
-      </>
-    ),
-  },
-  {
-    date: "MM/YYYY",
-    title: "EWATHON",
-    image: "/imgs/awards/awards2.png",
-    body: (
-      <>
-        <p className="fnt-green">
-        Workshops were held to encourage participants to innovate sustainable solutions.{" "}
-        <b className="fnt-green">The top three projects were awarded and honored.</b></p>
-      </>
-    ),
-  },
-  {
-    date: "MM/YYYY",
-    title: "SIIF",
-    image: "/imgs/awards/awards3.png",
-    body: (
-      <>
-        <p className="fnt-green">
-          <b className="fnt-green">EWA has secured six medals at SIIF2025, including gold, silver and bronze medals.</b>
-          This achievement embodies our commitment to Vision2030 in supporting talents and empowering
-          national capabilities.
-        </p>
-      </>
-    ),
-  },
-  {
-    date: "MM/YYYY",
-    title: "Great Place to Work KSA",
-    image: "/imgs/awards/awards4.png",
-    body: (
-      <>
-      <p className="fnt-green">
-        <b className="fnt-green">
-          EWA was Ranked #9 in 2026 (and #25 in 2025) for Best Workplaces in Saudi Arabia (Small &amp;
-          Medium).
-        </b>
-      </p>
-      <p className="fnt-green">
-        <b className="fnt-green">#3 in 2025</b>
-      </p>
-      <p className="fnt-green">
-        <b className="fnt-green">#1 in 2024 for Saudi Nationals, and #1 in the Public Sector (2024).</b>
-      </p>
-
-      </>
-    ),
-  },
-];
+import { getAwards, type Award } from "@/lib/awards";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 /* Image column geometry (in vh so it scales with the screen) */
 const IMG_H = 46; // height of one photo
@@ -88,17 +21,19 @@ const STEP = IMG_H + GAP;
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function AwardsHistory() {
+  const { locale, t } = useI18n();
+  const awards = useMemo(() => getAwards(locale), [locale]);
   return (
     <>
-      <PinnedHistory />
-      <StackedHistory />
+      <PinnedHistory awards={awards} label={t.awards.historyAria} skipLabel={t.awards.skip} />
+      <StackedHistory awards={awards} label={t.awards.historyAria} />
     </>
   );
 }
 
 /* ---------------- Desktop / tablet: pinned scroll section ---------------- */
 
-function PinnedHistory() {
+function PinnedHistory({ awards, label, skipLabel }: { awards: Award[]; label: string; skipLabel: string }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
   const last = awards.length - 1;
@@ -132,16 +67,16 @@ function PinnedHistory() {
       ref={sectionRef}
       className="relative hidden bg-white md:block"
       style={{ height: `${awards.length * 100}vh` }}
-      aria-label="Awards history"
+      aria-label={label}
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="grid h-full max-w-7xl grid-cols-[1fr_minmax(0,60vh)_1fr] items-center gap-10 px-8 lg:gap-10">
           {/* Left: date + title */}
-          <div className="relative h-40 w-full text-left">
+          <div className="relative h-40 w-full text-start">
             <AnimatePresence initial={false}>
               <motion.div
                 key={active}
-                className="absolute inset-0 flex flex-col items-start justify-center text-left"
+                className="absolute inset-0 flex flex-col items-start justify-center text-start"
               >
                 <Reveal delay={0}>
                   <span className="block text-sm font-medium fnt-orange lg:text-base">
@@ -164,7 +99,7 @@ function PinnedHistory() {
               style={{ y: columnY, top: `calc(50% - ${IMG_H / 2}vh)` }}
             >
               {awards.map((a, i) => (
-                <ColumnImage key={a.title} award={a} index={i} position={position} />
+                <ColumnImage key={a.id} award={a} index={i} position={position} />
               ))}
             </motion.div>
           </div>
@@ -172,15 +107,15 @@ function PinnedHistory() {
           {/* Right: body text */}
           <div className="relative h-72 max-w-xs">
             <AnimatePresence initial={false}>
-              <motion.p
+              <motion.div
                 key={active}
                 className="absolute inset-0 flex text-sm leading-relaxed text-neutral-500 [&_b]:font-semibold [&_b]:text-neutral-700 fnt-green"
                 initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, delay: 0.12, ease } }}
                 exit={{ opacity: 0, y: -24, filter: "blur(6px)", transition: { duration: 0.4, ease } }}
               >
-                <span>{item.body}</span>
-              </motion.p>
+                <div>{item.body}</div>
+              </motion.div>
             </AnimatePresence>
           </div>
         </div>
@@ -191,18 +126,18 @@ function PinnedHistory() {
           onClick={skip}
           className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-sm bg-[#139a9d] px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white transition-colors hover:bg-[#0f7f82] hidden"
         >
-          Skip <span aria-hidden>»</span>
+          {skipLabel} <span aria-hidden className="rtl-flip">»</span>
         </button>
 
         {/* Counter */}
-        <div className="absolute bottom-8 right-8 flex items-center gap-2 text-sm font-bold text-[#139a9d] lg:right-12 hidden">
+        <div className="absolute bottom-8 end-8 flex items-center gap-2 text-sm font-bold text-[#139a9d] lg:end-12 hidden">
           <span aria-hidden className="grid grid-cols-2 gap-[2px]">
             <i className="h-1.5 w-1.5 bg-[#f0763b]" />
             <i className="h-1.5 w-1.5" />
             <i className="h-1.5 w-1.5" />
             <i className="h-1.5 w-1.5 bg-[#139a9d]" />
           </span>
-          <span className="relative inline-block h-5 w-4 overflow-hidden text-right">
+          <span className="relative inline-block h-5 w-4 overflow-hidden text-end">
             <AnimatePresence initial={false}>
               <motion.span
                 key={active}
@@ -270,12 +205,12 @@ function Reveal({ children, delay }: { children: ReactNode; delay: number }) {
 
 /* ---------------- Mobile: stacked list with scroll-in reveals ---------------- */
 
-function StackedHistory() {
+function StackedHistory({ awards, label }: { awards: Award[]; label: string }) {
   return (
-    <div className="space-y-14 bg-white px-5 py-12 md:hidden" aria-label="Awards history">
+    <div className="space-y-14 bg-white px-1 py-12 md:hidden" aria-label={label}>
       {awards.map((a) => (
         <motion.article
-          key={a.title}
+          key={a.id}
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -285,10 +220,10 @@ function StackedHistory() {
           <h3 className="text-2xl font-extrabold uppercase leading-tight fnt-green">
             {a.title}
           </h3>
-          <img src={a.image} alt={a.title} className="mb-4 aspect-[3/4] w-full object-cover" />
-          <p className="fnt-green">
+          <img src={a.image} alt={a.title} className="mb-4 aspect-[3/4] w-full object-cover box" />
+          <div className="fnt-green">
             {a.body}
-          </p>
+          </div>
         </motion.article>
       ))}
     </div>

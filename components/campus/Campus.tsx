@@ -1,20 +1,27 @@
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, EffectCoverflow } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 
 // Import Swiper styles
 import 'swiper/css';
-import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
+
+const slides = [
+  "/imgs/slides/slide1.jpg",
+  "/imgs/slides/slide2.jpg",
+  "/imgs/slides/slide3.jpg",
+  "/imgs/slides/slide4.jpg",
+  "/imgs/slides/slide3.jpg",
+];
 
 export default function CampusCarousel() {
   return (
     <Swiper
-
         grabCursor={true}
-        centeredSlides={true}     
-        spaceBetween={30}
+        centeredSlides={true}
+        spaceBetween={5}
+        slidesPerView={1}
         pagination={{
           clickable: true,
         }}
@@ -24,59 +31,18 @@ export default function CampusCarousel() {
         //   pauseOnMouseEnter: true,
         // }}
         loop={true}
-        spaceBetween={5}
-        modules={[EffectCoverflow, Pagination, Autoplay]}
-        className="campus-swiper gallery-swiper-orange box box-mixed "
-        breakpoints={{
-          640: {
-            slidesPerView: 1,
-          },
-          768: {
-            slidesPerView: 1,
-          },
-          1024: {
-            slidesPerView:1,
-          },
-        }}
+        modules={[Pagination, Autoplay]}
+        className="campus-swiper gallery-swiper-orange box box-mixed"
     >
-      <SwiperSlide>
-        <img
-          src="/imgs/slides/slide1.jpg"
-          alt=""
-          className="w-full h-[auto] object-cover"
-        />
-      </SwiperSlide>
-
-      <SwiperSlide>
-        <img
-          src="/imgs/slides/slide2.jpg"
-          alt=""
-          className="w-full h-[auto] object-cover"
-        />
-      </SwiperSlide>
-
-      <SwiperSlide>
-        <img
-          src="/imgs/slides/slide3.jpg"
-          alt=""
-          className="w-full h-[auto] object-cover"
-        />
-      </SwiperSlide>
-
-      <SwiperSlide>
-        <img
-          src="/imgs/slides/slide4.jpg"
-          alt=""
-          className="w-full h-[auto] object-cover"
-        />
-      </SwiperSlide>
-      <SwiperSlide>
-        <img
-          src="/imgs/slides/slide3.jpg"
-          alt=""
-          className="w-full h-[auto] object-cover"
-        />
-      </SwiperSlide>
+      {slides.map((src, i) => (
+        <SwiperSlide key={i}>
+          <img
+            src={src}
+            alt=""
+            className="w-full h-auto object-cover"
+          />
+        </SwiperSlide>
+      ))}
     </Swiper>
   );
 }

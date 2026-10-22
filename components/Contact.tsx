@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 export default function ContactForm() {
+  const { t } = useI18n();
+  const f = t.contact.form;
+
   const [formData, setFormData] = useState({
     sponsorship: "",
     fname: "",
@@ -50,24 +53,18 @@ export default function ContactForm() {
             name="sponsorship"
             value={formData.sponsorship}
             onChange={handleChange}
+            aria-label={f.sponsorship}
             className="w-full px-4 py-3 border  rounded-lg"
             required
           >
             <option value="" disabled>
-              Sponsorship
+              {f.sponsorship}
             </option>
-
-            <option value="option1">
-              Option 1
-            </option>
-
-            <option value="option2">
-              Option 2
-            </option>
-
-            <option value="option3">
-              Option 3
-            </option>
+            {f.sponsorshipOptions.map((label, i) => (
+              <option key={i} value={`option${i + 1}`}>
+                {label}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -78,7 +75,9 @@ export default function ContactForm() {
             name="fname"
             value={formData.fname}
             onChange={handleChange}
-            placeholder="First Name"
+            placeholder={f.firstName}
+            aria-label={f.firstName}
+            autoComplete="given-name"
             className="w-full px-4 py-3 border  rounded-lg"
             required
           />
@@ -91,7 +90,9 @@ export default function ContactForm() {
             name="lname"
             value={formData.lname}
             onChange={handleChange}
-            placeholder="Last Name"
+            placeholder={f.lastName}
+            aria-label={f.lastName}
+            autoComplete="family-name"
             className="w-full px-4 py-3 border  rounded-lg"
             required
           />
@@ -104,7 +105,9 @@ export default function ContactForm() {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="Email"
+            placeholder={f.email}
+            aria-label={f.email}
+            autoComplete="email"
             className="w-full px-4 py-3 border  rounded-lg"
             required
           />
@@ -117,7 +120,9 @@ export default function ContactForm() {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            placeholder="Telephone / Mobile"
+            placeholder={f.phoneAlt}
+            aria-label={f.phoneAlt}
+            autoComplete="tel"
             className="w-full px-4 py-3 border  rounded-lg"
             required
           />
@@ -129,7 +134,8 @@ export default function ContactForm() {
             name="message"
             value={formData.message}
             onChange={handleChange}
-            placeholder="Comments"
+            placeholder={f.comments}
+            aria-label={f.comments}
             rows={5}
             className="w-full px-4 py-3 border  rounded-lg resize-none"
             required
@@ -142,8 +148,8 @@ export default function ContactForm() {
             type="submit"
             className="btn btn-transparent fnt-orange remPad font-bold"
           >
-            Submit
-            <Image src="/imgs/icons/icon-send-orange.png" alt="EWA" width={30} height={30} className="mar-left-5"/>
+            {t.common.submit}
+            <Image src="/imgs/icons/icon-send-orange.png" alt="" width={30} height={30} className="mar-left-5 rtl-flip"/>
           </button>
         </div>
 

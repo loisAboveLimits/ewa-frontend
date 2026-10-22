@@ -9,84 +9,11 @@ import { A11y, Keyboard, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-/* ------------------------------------------------------------------ */
-/* Data                                                                */
-/* ------------------------------------------------------------------ */
-export type Program = {
-  id: string;
-  title: string;
-  category: string;
-  description: string;
-  image: string;
-  link: string;
-};
+import { getPrograms, type Program } from "@/lib/programs";
+import { useI18n } from "@/components/i18n/I18nProvider";
+import { fmt } from "@/lib/i18n/config";
 
-export const programs: Program[] = [
-  {
-    id: "ic-troubleshooting",
-    title: "Instrument & Control Troubleshooting",
-    category: "Technical Course – I&C Field",
-    description: "Build practical skills in industrial instrumentation, control systems, PLCs, and troubleshooting.",
-    image: "/imgs/bgs/campus-tech.png",
-    link: "/why/programs/instrument-control-troubleshooting",
-  },
-  {
-    id: "electrical-maintenance",
-    title: "Electrical Maintenance Fundamentals",
-    category: "Technical Course – Electrical Field",
-    description: "Learn safe isolation, motor control circuits, testing equipment and preventive maintenance.",
-    image: "/imgs/bgs/campus-simulation.png",
-    link: "/why/programs/electrical-maintenance",
-  },
-  {
-    id: "mechanical-pumps",
-    title: "Pumps & Rotating Equipment",
-    category: "Technical Course – Mechanical Field",
-    description: "Understand pump operation, alignment, seals and vibration basics for rotating machinery.",
-    image: "/imgs/bgs/campus-spaces.png",
-    link: "/why/programs/pumps-rotating-equipment",
-  },
-  {
-    id: "water-desalination",
-    title: "Desalination Plant Operations",
-    category: "Diploma Program – Water Field",
-    description: "Operate reverse-osmosis and thermal desalination units, from intake to product water quality.",
-    image: "/imgs/bgs/why-sec1.jpg",
-    link: "/why/programs/desalination-plant-operations",
-  },
-  {
-    id: "power-plant-ops",
-    title: "Power Plant Operations",
-    category: "Diploma Program – Energy Field",
-    description: "Gain hands-on knowledge of boilers, turbines, generators and control-room procedures.",
-    image: "/imgs/bgs/home-courses.jpg",
-    link: "/why/programs/power-plant-operations",
-  },
-  {
-    id: "hse-essentials",
-    title: "Health, Safety & Environment Essentials",
-    category: "Short Course – HSE",
-    description: "Apply permit-to-work, risk assessment and incident reporting in industrial sites.",
-    image: "/imgs/bgs/glance.jpg",
-    link: "/why/programs/hse-essentials",
-  },
-  {
-    id: "solar-pv",
-    title: "Solar PV Installation & Maintenance",
-    category: "Short Course – Renewable Energy",
-    description: "Design, install and maintain grid-tied photovoltaic systems to international standards.",
-    image: "/imgs/bgs/about-sec1.jpg",
-    link: "/why/programs/solar-pv",
-  },
-  {
-    id: "summer-stem",
-    title: "Summer STEM Discovery",
-    category: "Summer Course – High School",
-    description: "Explore energy and water engineering through labs, site visits and team projects.",
-    image: "/imgs/bgs/home-about-bg.jpg",
-    link: "/why/programs/summer-stem",
-  },
-];
+export type { Program };
 
 const PER_SLIDE = 4;
 
@@ -129,7 +56,7 @@ function ProgramCard({ program }: { program: Program }) {
           />
         </div>
 
-        <span className="absolute -bottom-5 left-2.5 grid size-10 place-items-center rounded-full border-[3px] border-white bg-[#ef7b52] text-white shadow-md sm:size-11">
+        <span className="absolute -bottom-5 start-2.5 grid size-10 place-items-center rounded-full border-[3px] border-white bg-[#ef7b52] text-white shadow-md sm:size-11">
           {/* award / ribbon icon */}
           <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="12" cy="9" r="5.5" />
@@ -143,14 +70,14 @@ function ProgramCard({ program }: { program: Program }) {
       <div className="relative flex flex-1 flex-col px-6 pb-6 pt-7">
         <h3 className="text-[20px]! font-bold leading-[1.1]! text-neutral-900">{program.title}</h3>
         <span className="mt-1.5 block text-[12px]! font-bold leading-tight text-[#ef5a24]">{program.category}</span>
-        <span className="mt-1.5 block pr-7 text-[15px]! leading-[1.25]! text-neutral-800">{program.description}</span>
+        <span className="mt-1.5 block pe-7 text-[15px]! leading-[1.25]! text-neutral-800">{program.description}</span>
 
         <Image
           src="/imgs/icons/title.svg"
           alt=""
           width={14}
           height={26}
-          className="absolute bottom-3 right-3 h-[26px] w-auto"
+          className="absolute bottom-3 end-3 h-[26px] w-auto"
         />
       </div>
     </Link>
@@ -165,14 +92,16 @@ type ProgramsSliderProps = {
   items?: Program[];
 };
 
-export default function ProgramsSlider({ items = programs }: ProgramsSliderProps) {
+export default function ProgramsSlider({ items: itemsProp }: ProgramsSliderProps) {
+  const { locale, t } = useI18n();
+  const items = useMemo(() => itemsProp ?? getPrograms(locale), [itemsProp, locale]);
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = query.trim().toLocaleLowerCase(locale);
     if (!q) return items;
     return items.filter((p) =>
-      [p.title, p.category, p.description].some((field) => field.toLowerCase().includes(q))
+      [p.title, p.category, p.description].some((field) => field.toLocaleLowerCase(locale).includes(q))
     );
   }, [items, query]);
 
@@ -182,19 +111,19 @@ export default function ProgramsSlider({ items = programs }: ProgramsSliderProps
     <div className="w-full">
       {/* Search */}
       <form role="search" onSubmit={(e) => e.preventDefault()} className="flex w-full items-stretch">
-        <label htmlFor="program-search" className="sr-only">Search for a program</label>
+        <label htmlFor="program-search" className="sr-only">{t.programs.searchLabel}</label>
         <input
           id="program-search"
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search for a program..."
-          className="h-[34px] min-w-0 flex-1 rounded-l-full border border-r-0 border-[#9fcfcf] bg-[#eaf4f4] px-3 text-[15px]! text-neutral-800 outline-none placeholder:text-neutral-700 focus:border-[#139a9d] focus:bg-white"
+          placeholder={t.programs.searchPlaceholder}
+          className="h-[40px] md:h-[34px] min-w-0 flex-1 rounded-s-full border border-e-0 border-[#9fcfcf] bg-[#eaf4f4] px-3 text-[15px]! text-neutral-800 outline-none placeholder:text-neutral-700 focus:border-[#139a9d] focus:bg-white"
         />
         <button
           type="submit"
-          aria-label="Search"
-          className="grid w-[38px] shrink-0 place-items-center rounded-r-lg bg-[#139a9d] text-white transition hover:bg-[#0f8487]"
+          aria-label={t.programs.search}
+          className="grid w-[42px] md:w-[38px] shrink-0 place-items-center rounded-e-lg bg-[#139a9d] text-white transition hover:bg-[#0f8487]"
         >
           <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             <circle cx="11" cy="11" r="6.5" />
@@ -207,7 +136,7 @@ export default function ProgramsSlider({ items = programs }: ProgramsSliderProps
 
       {pages.length === 0 ? (
         <div className="rounded-xl bg-[#eaf4f4] px-6 py-12 text-center text-[15px]! text-[#139a9d]" role="status">
-          No programs match “{query}”.
+          {fmt(t.programs.noResults, { query })}
         </div>
       ) : (
         <Swiper

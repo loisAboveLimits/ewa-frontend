@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,50 +7,29 @@ import {
   Autoplay,
 } from "swiper/modules";
 import Image from "next/image";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-// Slider data
-const slides = [
-  {
-    id: 1,
-    title: "Technical Training",
-    description: "High-quality technical education.",
-    image: "/imgs/slides/media1.jpg",
-  },
-  {
-    id: 2,
-    title: "Energy Programs",
-    description: "Developing future energy professionals.",
-    image: "/imgs/slides/media2.jpg",
-  },
-  {
-    id: 3,
-    title: "Water Technology",
-    description: "Building industry-ready skills.",
-    image: "/imgs/slides/media3.jpg",
-  },
-  {
-    id: 4,
-    title: "Innovation",
-    description: "Preparing the next generation.",
-    image: "/imgs/slides/media4.jpg",
-  },
-  {
-    id: 5,
-    title: "Career Development",
-    description: "Empowering future leaders.",
-    image: "/imgs/slides/media5.jpg",
-  },
+// Slider images — titles / descriptions come from the dictionary (community.mediaSlides)
+const images = [
+  "/imgs/slides/media1.jpg",
+  "/imgs/slides/media2.jpg",
+  "/imgs/slides/media3.jpg",
+  "/imgs/slides/media4.jpg",
+  "/imgs/slides/media5.jpg",
 ];
 
 export default function MediaCarousel() {
-  return (
-    <section className="w-full py-12">
+  const { t } = useI18n();
+  const slides = t.community.mediaSlides.map((copy, i) => ({ id: i + 1, ...copy, image: images[i] }));
 
-      <div className="container mx-auto px-4 relative">
+  return (
+    <section className="w-full py-6 md:py-12">
+
+      <div className="relative md:px-10 lg:px-4">
 
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
@@ -92,7 +70,7 @@ export default function MediaCarousel() {
                   className="w-full h-auto object-cover"
                 />
 
-                <div className="absolute bottom-0 left-0 w-full p-6">
+                <div className="absolute bottom-0 start-0 w-full p-6">
 
                   <h3 className="text-white text-[18px]! font-bold">
                     {slide.title}
@@ -108,39 +86,22 @@ export default function MediaCarousel() {
 
         </Swiper>
 
-     {/* Custom SVG Navigation */}
-      <div className="">
-        <div className="flex justify-center items-center gap-6 mt-10">
+        {/* Custom SVG navigation — "previous" sits on the start side and arrows mirror in Arabic */}
+        <button
+          type="button"
+          className="custom-prev absolute start-0 lg:start-[-5%] top-[40%] -translate-y-[40%] z-50 cursor-pointer w-10 md:w-[60px]"
+          aria-label={t.common.previousSlide}
+        >
+          <Image src="/imgs/icons/arrow-prev.svg" alt="" width={60} height={60} className="h-auto w-full rtl-flip" />
+        </button>
 
-          <button
-            type="button"
-            className="custom-prev absolute left-[-5%] top-[40%] -translate-y-[40%] z-50 cursor-pointer"
-            aria-label="Previous slide"
-          >
-            <Image
-              src="/imgs/icons/arrow-prev.svg"
-              alt=""
-              width={60}
-              height={60}
-            />
-          </button>
-
-          <button
-            type="button"
-            className="custom-next absolute right-[-5%] top-[40%] -translate-y-[40%] z-50 cursor-pointer"
-            aria-label="Next slide"
-          >
-            <Image
-              src="/imgs/icons/arrow-next.svg"
-              alt=""
-              width={60}
-              height={60}
-            />
-          </button>
-
-        </div>         
-      </div>
-       
+        <button
+          type="button"
+          className="custom-next absolute end-0 lg:end-[-5%] top-[40%] -translate-y-[40%] z-50 cursor-pointer w-10 md:w-[60px]"
+          aria-label={t.common.nextSlide}
+        >
+          <Image src="/imgs/icons/arrow-next.svg" alt="" width={60} height={60} className="h-auto w-full rtl-flip" />
+        </button>
 
       </div>
 

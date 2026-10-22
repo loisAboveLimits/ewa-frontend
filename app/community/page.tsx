@@ -1,47 +1,35 @@
-import Link from "next/link";
 import Image from "next/image";
-// import StoriesCarousel from "@/components/Stories";
 import StoriesCarousel from "@/components/stories/Stories";
 import MediaCarousel from "@/components/Media";
-import ContactForm from "@/components/Contact";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { pages } from "@/lib/pages";
+import Testimonials from "@/components/orbit/Testimonials";
+import { getOrbitActions, getTeam } from "@/components/orbit/team";
+import PageBanner from "@/components/ui/PageBanner";
+import SectionTitle from "@/components/ui/SectionTitle";
+import ArrowLink from "@/components/ui/ArrowLink";
+import { getI18n, pageMetadata } from "@/lib/i18n/server";
 
-import OrbitShowcase from "@/components/orbit/OrbitShowcase";
-import { orbitActions, team } from "@/components/orbit/team";
+export const generateMetadata = () => pageMetadata("community");
 
-export const metadata: Metadata = {
-  title: pages.why.title,
-  description: "",
-};
-
-export default function Community(){
+export default async function Community() {
+  const { locale, t } = await getI18n();
+  const s = t.sections;
 
   return (
 
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <section className="banner bg-[url(/imgs/banners/banner-community.png)] bg-cover bg-center w-full vh-100">
+      <PageBanner image="/imgs/banners/banner-community.png" title={t.pages.community.title} subtitle={t.pages.community.desc} />
 
-          <div className="banner-caption top-[20%] -translate-y-1/2 absolute inset-0 vh-100">
-            <div className="container mx-auto h-full px-4">
-              <h1 className="flex h-full items-end banner-title">EWA Community</h1>
-              <div className="spacer-10"></div>
-              <p className="banner-subtitle">Harbored By Success</p>
-            </div>
-          </div>
-
-      </section>
-
-      {/*<!--breadcrumps-->*/}
+      {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">
         <div className="spacer-20"></div>
         <div className="container mx-auto h-full px-4">
           <Breadcrumbs />
         </div>
         <div className="spacer-20"></div>
-      </section>  
+      </section>
 
       {/*<!--media center-->*/}
       <section id="media-center" className="relative">
@@ -50,36 +38,21 @@ export default function Community(){
 
         <div className="container mx-auto px-4">
 
-          <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-            <div className="sm:w-[5%] text-center">
-              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
-            </div>
-          
-            <div className="sm:w-[95%]">
-              <h2 className="font-bold title fnt-green">Media Center</h2>
-            </div>
-          </div>   
-          
+          <SectionTitle>{t.community.mediaTitle}</SectionTitle>
 
           <div className="spacer-40"></div>
 
           <MediaCarousel />
 
-          <div className="spacer-40"></div> 
+          <div className="spacer-40"></div>
 
-          <div className="md:col-span-2 flex justify-center">
-            <Link
-              href="/why/programs"
-              className="btn btn-transparent fnt-orange remPad font-bold"
-            >
-              View More
-              <Image src="/imgs/icons/icon-send-orange.png" alt="EWA" width={30} height={30} className="mar-left-5"/>
-            </Link>
-          </div>          
+          <div className="flex justify-center">
+            <ArrowLink href="/media-center" color="orange" className="fnt-orange">
+              {t.common.viewMore}
+            </ArrowLink>
+          </div>
 
         </div>
- 
 
         <div className="spacer-40"></div>
       </section>
@@ -89,70 +62,43 @@ export default function Community(){
         <div className="spacer-20"></div>
 
         <div className="container mx-auto px-4">
-
-          <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-            <div className="sm:w-[5%] text-center">
-              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
-            </div>
-          
-            <div className="sm:w-[95%]">
-              <h2 className="font-bold title fnt-green">Success Stories<br />EWA & <font className="fnt-orange">Partners</font></h2>
-            </div>
-          </div>
-
+          <SectionTitle>
+            {s.storiesA}<br />{s.storiesB} <span className="fnt-orange">{s.storiesHighlight}</span>
+          </SectionTitle>
         </div>
 
         <div className="spacer-40"></div>
 
-        <div className="">
-          <StoriesCarousel />
-        </div>
-
+        <StoriesCarousel />
 
          <div className="spacer-80"></div>
       </section>
 
-      {/*<!--testimmonies-->*/}
+      {/*<!--testimonies-->*/}
       <section id="testimonies">
         <div className="spacer-20"></div>
 
         <div className="container mx-auto px-4">
-
-          <div className="flex sm:flex-row md:flex-row justify-center items-center">
-
-            <div className="sm:w-[5%] text-center">
-              <Image src="/imgs/icons/title.svg" alt="EWA" width={150} height={150} className="h-auto w-auto"/>
-            </div>
-          
-            <div className="sm:w-[95%]">
-              <h2 className="font-bold title fnt-green">Testimonials<br /> of our <font className="fnt-orange">Sponsors</font> & Alumni</h2>
-            </div>
-          </div>
-
+          <SectionTitle>
+            {s.testimonialsA}<br />{s.testimonialsB} <span className="fnt-orange">{s.testimonialsHighlight}</span> {s.testimonialsC}
+          </SectionTitle>
         </div>
 
         <div className="spacer-40"></div>
 
-        <OrbitShowcase
-          members={team}
-          actions={orbitActions}
-          outerDuration={60}
-          innerDuration={40}
+        {/* slider on phones, rotating orbit from tablets up */}
+        <Testimonials
+          members={getTeam(locale)}
+          actions={getOrbitActions(t)}
+          label={s.testimonialsA}
           center={
             <Image src="/imgs/logos/logo-circle-white.svg" alt="EWA" width={344} height={306} priority className="h-auto w-full" />
           }
         />
 
          <div className="spacer-80"></div>
-      </section>      
-
-
+      </section>
 
     </div>
-
-
-
-    
   );
 }

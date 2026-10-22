@@ -17,6 +17,8 @@ import {
   type Errors,
   type RegistrationData,
 } from "@/lib/registration";
+import { useI18n } from "@/components/i18n/I18nProvider";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 /* The visual stepper has 3 phases; "Register" is split into 3 sub-steps. */
 const STEPS = ["personal", "academic", "eligibility", "courses", "done"] as const;
@@ -30,7 +32,7 @@ const PHASE: Record<StepKey, number> = {
   done: 2,
 };
 
-const VALIDATORS: Partial<Record<StepKey, (d: RegistrationData) => Errors>> = {
+const VALIDATORS: Partial<Record<StepKey, (d: RegistrationData, m: Dictionary["registration"]["errors"]) => Errors>> = {
   personal: validatePersonal,
   academic: validateAcademic,
   eligibility: validateEmployment,
@@ -49,6 +51,7 @@ export type StepProps = {
 const STORAGE_KEY = "ewa-registration-draft";
 
 export default function RegistrationForm({ signInHref = "/login", homeHref = "/" }: { signInHref?: string; homeHref?: string }) {
+  const { t } = useI18n();
   const [step, setStep] = useState<StepKey>("personal");
   const [data, setData] = useState<RegistrationData>(initialData);
   const [errors, setErrors] = useState<Errors>({});
@@ -95,7 +98,7 @@ export default function RegistrationForm({ signInHref = "/login", homeHref = "/"
     e.preventDefault();
 
     const validate = VALIDATORS[step];
-    const found = validate ? validate(data) : {};
+    const found = validate ? validate(data, t.registration.errors) : {};
     if (Object.keys(found).length) {
       setErrors(found);
       // focus the first invalid field
@@ -113,7 +116,7 @@ export default function RegistrationForm({ signInHref = "/login", homeHref = "/"
         sessionStorage.removeItem(STORAGE_KEY);
         setStep("done");
       } catch {
-        setErrors({ courses: "Something went wrong submitting your application. Please try again." });
+        setErrors({ courses: t.registration.errors.submit });
       } finally {
         setSubmitting(false);
       }

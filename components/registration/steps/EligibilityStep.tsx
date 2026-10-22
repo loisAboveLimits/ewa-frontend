@@ -2,55 +2,57 @@
 
 import Link from "next/link";
 import type { StepProps } from "../RegistrationForm";
-import { referralOptions, yesNoOptions, type YesNo } from "@/lib/registration";
+import { getOptions, type YesNo } from "@/lib/registration";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import { BackButton, Checkbox, PanelHeading, PrimaryButton, SelectInput } from "../ui";
 
 export default function EligibilityStep({ data, errors, update, onBack, signInHref = "/login" }: StepProps) {
+  const { t } = useI18n();
+  const r = t.registration;
+  const f = r.fields;
+  const { yesNo: yesNoOptions, referral: referralOptions } = getOptions(r);
   return (
     <>
-      <PanelHeading
-        title="Create your account"
-        subtitle="Create your free account in seconds to further your application."
-      />
+      <PanelHeading title={r.heading} subtitle={r.subheading} />
 
       <div className="grid gap-4 md:gap-5">
         <SelectInput
-          label="Are you Employed?"
+          label={f.employed}
           value={data.employed}
           onChange={(v) => update("employed", v as YesNo)}
           options={yesNoOptions}
           error={errors.employed}
         />
         <SelectInput
-          label="Are you registered in Social Insurance?"
+          label={f.socialInsurance}
           value={data.socialInsurance}
           onChange={(v) => update("socialInsurance", v as YesNo)}
           options={yesNoOptions}
           error={errors.socialInsurance}
         />
         <SelectInput
-          label="Do you have an active contract on Qiwa?"
+          label={f.qiwa}
           value={data.qiwa}
           onChange={(v) => update("qiwa", v as YesNo)}
           options={yesNoOptions}
           error={errors.qiwa}
         />
         <SelectInput
-          label="Do you have a commercial registration?"
+          label={f.commercialReg}
           value={data.commercialReg}
           onChange={(v) => update("commercialReg", v as YesNo)}
           options={yesNoOptions}
           error={errors.commercialReg}
         />
         <SelectInput
-          label="Have you ever received support from the Human Resources Development Funds?"
+          label={f.hrdf}
           value={data.hrdf}
           onChange={(v) => update("hrdf", v as YesNo)}
           options={yesNoOptions}
           error={errors.hrdf}
         />
         <SelectInput
-          label="How did you hear about the Energy and Water Academy?"
+          label={f.referral}
           value={data.referral}
           onChange={(v) => update("referral", v)}
           options={referralOptions}
@@ -60,16 +62,16 @@ export default function EligibilityStep({ data, errors, update, onBack, signInHr
 
       <div className="mt-6 md:mt-8">
         <Checkbox checked={data.dataConfirm} onChange={(v) => update("dataConfirm", v)} error={errors.dataConfirm}>
-          I confirm that the data entered above is correct
+          {r.dataConfirm}
         </Checkbox>
       </div>
 
       <div className="mt-10 md:mt-14 flex flex-col items-center gap-5 md:gap-6">
-        <PrimaryButton>Confirm Application</PrimaryButton>
+        <PrimaryButton>{r.confirmApplication}</PrimaryButton>
         <p className="text-base md:text-2xl text-[#13999C] text-center">
-          Already registered?{" "}
+          {r.alreadyRegistered}{" "}
           <Link href={signInHref} className="text-[#EE7A52] underline underline-offset-4 hover:text-[#E5683D]">
-            Sign in.
+            {r.signIn}
           </Link>
         </p>
         {onBack && (

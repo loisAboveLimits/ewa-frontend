@@ -1,93 +1,33 @@
-export const pages = {
-  home: {
-    title: "EWA",
-    path: "/",
-    desc: ""
-  },
-  about: {
-    title: "About EWA",
-    path: "/about",
-    desc: ""
-  },
-  why: {
-    title: "Why EWA",
-    path: "/why",
-    desc: "More Than Just An Academy"
-  },
-  programs: {
-    title: "Our Programs",
-    path: "/why/programs",
-    desc: ""
-  },
-  community: {
-    title: "EWA Community",
-    path: "/community",
-    desc: ""
-  },
-  users: {
-    title: "EWA Users",
-    path: "/users",
-    desc: ""
-  },
-  join: {
-    title: "EWA Join",
-    path: "/join",
-    desc: "Become Part of Success"
-  },
-  contact: {
-    title: "Contact Us",
-    path: "/contact",
-    desc: ""
-  },
-  rules: {
-    title: "Rules and Regulations",
-    path: "/rules-regulations",
-    desc: "Policies To Make EWA Stronger"
-  },
-  awards: {
-    title: "Awards",
-    path: "/awards",
-    desc: "Explore the moments, milestones and those behind them"
-  },
-  campus: {
-    title: "Campus & Facilities",
-    path: "/why/campus-facilities",
-    desc: "More Than Just An Academy"
-  },
-  registration: {
-    title: "Register in EWA",
-    path: "/join/registration",
-    desc: "Become Part of Success"
-  },
-  media: {
-    title: "Media Center",
-    path:  "/media-center",
-    desc: "Explore the moments, milestones and those behind them."
-  },
-  events: {
-    title: "Events",
-    path: "/media-center/events",
-    desc: "Explore the moments, milestones and those behind them."
-  },
-  news: {
-    title: "News and Articles",
-    path: "/media-center/news-articles",
-    desc: "Explore the moments, milestones and those behind them."
-  },
-  stories: {
-    title: "Success Stories",
-    path: "/media-center/success-stories",
-    desc: "Explore the moments, milestones and those behind them."
-  },
-  graduate: {
-    title: "Graduate Projects",
-    path: "/media-center/graduate-projects",
-    desc: "Explore the moments, milestones and those behind them."
-  },
-  gallery: {
-    title: "Gallery",
-    path: "/media-center/gallery",
-    desc: "Explore the moments, milestones and those behind them."
-  },
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
+/** Route of every page. Titles / descriptions come from the dictionaries (`pages` key). */
+export const pagePaths = {
+  home: "/",
+  about: "/about",
+  why: "/why",
+  programs: "/why/programs",
+  community: "/community",
+  users: "/users",
+  join: "/join",
+  contact: "/contact",
+  rules: "/rules-regulations",
+  awards: "/awards",
+  campus: "/why/campus-facilities",
+  registration: "/join/registration",
+  media: "/media-center",
+  events: "/media-center/events",
+  news: "/media-center/news-articles",
+  stories: "/media-center/success-stories",
+  graduate: "/media-center/graduate-projects",
+  gallery: "/media-center/gallery",
 } as const;
+
+export type PageKey = keyof typeof pagePaths;
+export type PageInfo = { title: string; desc: string; path: string };
+
+/** Combine routes with the translated titles: `buildPages(t.pages)` */
+export function buildPages(copy: Dictionary["pages"]): Record<PageKey, PageInfo> {
+  return Object.fromEntries(
+    (Object.keys(pagePaths) as PageKey[]).map((key) => [key, { ...copy[key], path: pagePaths[key] }])
+  ) as Record<PageKey, PageInfo>;
+}

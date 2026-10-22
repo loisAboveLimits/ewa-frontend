@@ -1,22 +1,25 @@
 "use client";
 
 import type { StepProps } from "../RegistrationForm";
-import { genderOptions } from "@/lib/registration";
+import { getOptions } from "@/lib/registration";
+import { useI18n } from "@/components/i18n/I18nProvider";
+import { fmt } from "@/lib/i18n/config";
 import { Checkbox, DateInput, NextButton, PanelHeading, PhoneInput, SelectInput, TextInput } from "../ui";
 
 export default function PersonalInfoStep({ data, errors, update }: StepProps) {
+  const { t } = useI18n();
+  const r = t.registration;
+  const f = r.fields;
+  const { gender: genderOptions } = getOptions(r);
   const today = new Date().toISOString().split("T")[0];
 
   return (
     <>
-      <PanelHeading
-        title="Create your account"
-        subtitle="Create your free account in seconds to further your application."
-      />
+      <PanelHeading title={r.heading} subtitle={r.subheading} />
 
       <div className="grid gap-4 md:gap-5">
         <TextInput
-          label="National ID"
+          label={f.nationalId}
           inputMode="numeric"
           maxLength={10}
           value={data.nationalId}
@@ -24,40 +27,40 @@ export default function PersonalInfoStep({ data, errors, update }: StepProps) {
           error={errors.nationalId}
         />
         <TextInput
-          label="First Name"
+          label={f.firstName}
           autoComplete="given-name"
           value={data.firstName}
           onChange={(e) => update("firstName", e.target.value)}
           error={errors.firstName}
         />
         <TextInput
-          label="Father's Name"
+          label={f.fatherName}
           value={data.fatherName}
           onChange={(e) => update("fatherName", e.target.value)}
           error={errors.fatherName}
         />
         <TextInput
-          label="Grandfather's Name"
+          label={f.grandfatherName}
           value={data.grandfatherName}
           onChange={(e) => update("grandfatherName", e.target.value)}
           error={errors.grandfatherName}
         />
         <TextInput
-          label="Last Name"
+          label={f.lastName}
           autoComplete="family-name"
           value={data.lastName}
           onChange={(e) => update("lastName", e.target.value)}
           error={errors.lastName}
         />
         <SelectInput
-          label="Gender"
+          label={f.gender}
           value={data.gender}
           onChange={(v) => update("gender", v)}
           options={genderOptions}
           error={errors.gender}
         />
         <DateInput
-          label="Date of Birth"
+          label={f.dob}
           value={data.dob}
           max={today}
           onChange={(v) => update("dob", v)}
@@ -65,7 +68,7 @@ export default function PersonalInfoStep({ data, errors, update }: StepProps) {
         />
 
         <TextInput
-          label="Height (cm)"
+          label={f.height}
           inputMode="numeric"
           maxLength={3}
           value={data.height}
@@ -73,7 +76,7 @@ export default function PersonalInfoStep({ data, errors, update }: StepProps) {
           error={errors.height}
         />
         <TextInput
-          label="Weight (kg)"
+          label={f.weight}
           inputMode="numeric"
           maxLength={3}
           value={data.weight}
@@ -82,25 +85,25 @@ export default function PersonalInfoStep({ data, errors, update }: StepProps) {
         />
 
         <PhoneInput
-          label="Mobile Number"
+          label={f.mobile}
           value={data.mobile}
           onChange={(v) => update("mobile", v)}
           error={errors.mobile}
         />
         <PhoneInput
-          label="Additional Contact"
+          label={f.altMobile}
           value={data.altMobile}
           onChange={(v) => update("altMobile", v)}
           error={errors.altMobile}
         />
         <TextInput
-          label="Relation to Contact"
+          label={f.relation}
           value={data.relation}
           onChange={(e) => update("relation", e.target.value)}
           error={errors.relation}
         />
         <TextInput
-          label="E-mail"
+          label={f.email}
           type="email"
           autoComplete="email"
           value={data.email}
@@ -115,15 +118,12 @@ export default function PersonalInfoStep({ data, errors, update }: StepProps) {
           onChange={(v) => update("healthDeclaration", v)}
           error={errors.healthDeclaration}
         >
-          I, the undersigned, whose details are provided above, declare that my health is sound and that I have no
-          illnesses or health problems that would prevent me from joining the training program. I also accept full
-          responsibility if I fail to disclose any health condition that affects my participation or performance during
-          the training.
+          {r.healthDeclaration}
         </Checkbox>
       </div>
 
       <div className="mt-8 md:mt-10 flex items-center justify-between gap-4">
-        <span className="text-sm md:text-base text-[#13999C]/80">Step 1 of 3</span>
+        <span className="text-sm md:text-base text-[#13999C]/80">{fmt(r.stepOf, { n: 1, total: 3 })}</span>
         <NextButton />
       </div>
     </>

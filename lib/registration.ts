@@ -1,4 +1,6 @@
 // Types, options, initial state and per-step validation for the Join EWA registration flow.
+import { fmt } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 export type YesNo = "" | "yes" | "no";
 
@@ -77,50 +79,33 @@ export const initialData: RegistrationData = {
 
 export type Option = { value: string; label: string };
 
-export const yesNoOptions: Option[] = [
-  { value: "yes", label: "Yes" },
-  { value: "no", label: "No" },
-];
+type RegistrationCopy = Dictionary["registration"];
+type ErrorCopy = RegistrationCopy["errors"];
 
-export const genderOptions: Option[] = [
-  { value: "male", label: "Male" },
-  { value: "female", label: "Female" },
-];
+const toOptions = (labels: Record<string, string>): Option[] =>
+  Object.entries(labels).map(([value, label]) => ({ value, label }));
 
-export const qualificationOptions: Option[] = [
-  { value: "high-school", label: "High School" },
-  { value: "diploma", label: "Diploma" },
-  { value: "bachelor", label: "Bachelor's Degree" },
-  { value: "master", label: "Master's Degree" },
-  { value: "other", label: "Other" },
-];
-
-export const majorOptions: Option[] = [
-  { value: "science", label: "Natural Sciences" },
-  { value: "engineering", label: "Engineering" },
-  { value: "technology", label: "Technology" },
-  { value: "business", label: "Business / Administration" },
-  { value: "humanities", label: "Humanities" },
-  { value: "other", label: "Other" },
-];
-
-export const englishOptions: Option[] = [
-  { value: "beginner", label: "Beginner" },
-  { value: "intermediate", label: "Intermediate" },
-  { value: "advanced", label: "Advanced" },
-  { value: "fluent", label: "Fluent" },
-];
-
-export const referralOptions: Option[] = [
-  { value: "social-media", label: "Social Media" },
-  { value: "website", label: "EWA Website" },
-  { value: "friend", label: "Friend or Family" },
-  { value: "employer", label: "Employer" },
-  { value: "event", label: "Event / Exhibition" },
-  { value: "other", label: "Other" },
-];
+/** Select options in the current language: `getOptions(t.registration)` */
+export function getOptions(r: RegistrationCopy) {
+  const o = r.options;
+  return {
+    yesNo: [
+      { value: "yes", label: o.yes },
+      { value: "no", label: o.no },
+    ] as Option[],
+    gender: [
+      { value: "male", label: o.male },
+      { value: "female", label: o.female },
+    ] as Option[],
+    qualification: toOptions(o.qualification),
+    major: toOptions(o.major),
+    english: toOptions(o.english),
+    referral: toOptions(o.referral),
+  };
+}
 
 /* ---------------- validation ---------------- */
+/* Each validator receives the translated messages (t.registration.errors). */
 
 const required = (v: string) => v.trim().length > 0;
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -130,52 +115,51 @@ const inRange = (v: string, min: number, max: number) => {
   return v.trim() !== "" && !Number.isNaN(n) && n >= min && n <= max;
 };
 
-export function validatePersonal(d: RegistrationData): Errors {
+export function validatePersonal(d: RegistrationData, m: ErrorCopy): Errors {
   const e: Errors = {};
-  if (!/^[12]\d{9}$/.test(d.nationalId)) e.nationalId = "Enter a valid 10-digit National ID / Iqama.";
-  if (!required(d.firstName)) e.firstName = "First name is required.";
-  if (!required(d.fatherName)) e.fatherName = "Father's name is required.";
-  if (!required(d.grandfatherName)) e.grandfatherName = "Grandfather's name is required.";
-  if (!required(d.lastName)) e.lastName = "Last name is required.";
-  if (!d.gender) e.gender = "Please select your gender.";
-  if (!d.dob) e.dob = "Date of birth is required.";
-  if (!inRange(d.height, 100, 250)) e.height = "Enter height in cm (100–250).";
-  if (!inRange(d.weight, 30, 250)) e.weight = "Enter weight in kg (30–250).";
-  if (!isSaudiMobile(d.mobile)) e.mobile = "Enter a 9-digit mobile number starting with 5.";
-  if (d.altMobile && !isSaudiMobile(d.altMobile)) e.altMobile = "Enter a 9-digit number starting with 5.";
-  if (d.altMobile && !required(d.relation)) e.relation = "Tell us how this contact is related to you.";
-  if (!isEmail(d.email)) e.email = "Enter a valid e-mail address.";
-  if (!d.healthDeclaration) e.healthDeclaration = "You must accept the health declaration to continue.";
+  if (!/^[12]\d{9}$/.test(d.nationalId)) e.nationalId = m.nationalId;
+  if (!required(d.firstName)) e.firstName = m.firstName;
+  if (!required(d.fatherName)) e.fatherName = m.fatherName;
+  if (!required(d.grandfatherName)) e.grandfatherName = m.grandfatherName;
+  if (!required(d.lastName)) e.lastName = m.lastName;
+  if (!d.gender) e.gender = m.gender;
+  if (!d.dob) e.dob = m.dob;
+  if (!inRange(d.height, 100, 250)) e.height = m.height;
+  if (!inRange(d.weight, 30, 250)) e.weight = m.weight;
+  if (!isSaudiMobile(d.mobile)) e.mobile = m.mobile;
+  if (d.altMobile && !isSaudiMobile(d.altMobile)) e.altMobile = m.altMobile;
+  if (d.altMobile && !required(d.relation)) e.relation = m.relation;
+  if (!isEmail(d.email)) e.email = m.email;
+  if (!d.healthDeclaration) e.healthDeclaration = m.healthDeclaration;
   return e;
 }
 
-export function validateAcademic(d: RegistrationData): Errors {
+export function validateAcademic(d: RegistrationData, m: ErrorCopy): Errors {
   const e: Errors = {};
   const thisYear = new Date().getFullYear();
-  if (!d.qualification) e.qualification = "Please select your qualification.";
-  if (!d.major) e.major = "Please select your major.";
+  if (!d.qualification) e.qualification = m.qualification;
+  if (!d.major) e.major = m.major;
   if (!inRange(d.graduationYear, 1970, thisYear + 1) || d.graduationYear.length !== 4)
-    e.graduationYear = `Enter a year between 1970 and ${thisYear + 1}.`;
-  if (!d.englishLevel) e.englishLevel = "Please select your English level.";
-  if (d.stepGrade && !inRange(d.stepGrade, 0, 100)) e.stepGrade = "STEP grade must be between 0 and 100.";
-  if (!inRange(d.gpa, 0, 5)) e.gpa = "Enter your GPA (0–5).";
-  if (!required(d.university)) e.university = "University / college name is required.";
+    e.graduationYear = fmt(m.graduationYear, { max: thisYear + 1 });
+  if (!d.englishLevel) e.englishLevel = m.englishLevel;
+  if (d.stepGrade && !inRange(d.stepGrade, 0, 100)) e.stepGrade = m.stepGrade;
+  if (!inRange(d.gpa, 0, 5)) e.gpa = m.gpa;
+  if (!required(d.university)) e.university = m.university;
   return e;
 }
 
-export function validateEmployment(d: RegistrationData): Errors {
+export function validateEmployment(d: RegistrationData, m: ErrorCopy): Errors {
   const e: Errors = {};
-  const pick = "Please choose an answer.";
-  if (!d.employed) e.employed = pick;
-  if (!d.socialInsurance) e.socialInsurance = pick;
-  if (!d.qiwa) e.qiwa = pick;
-  if (!d.commercialReg) e.commercialReg = pick;
-  if (!d.hrdf) e.hrdf = pick;
-  if (!d.referral) e.referral = pick;
-  if (!d.dataConfirm) e.dataConfirm = "Please confirm your data is correct.";
+  if (!d.employed) e.employed = m.pick;
+  if (!d.socialInsurance) e.socialInsurance = m.pick;
+  if (!d.qiwa) e.qiwa = m.pick;
+  if (!d.commercialReg) e.commercialReg = m.pick;
+  if (!d.hrdf) e.hrdf = m.pick;
+  if (!d.referral) e.referral = m.pick;
+  if (!d.dataConfirm) e.dataConfirm = m.dataConfirm;
   return e;
 }
 
-export function validateCourses(d: RegistrationData): Errors {
-  return d.courses.length === 0 ? { courses: "Add at least one course to continue." } : {};
+export function validateCourses(d: RegistrationData, m: ErrorCopy): Errors {
+  return d.courses.length === 0 ? { courses: m.courses } : {};
 }

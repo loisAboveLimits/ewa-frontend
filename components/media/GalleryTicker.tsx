@@ -6,7 +6,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { Autoplay } from "swiper/modules";
 import Lightbox from "./Lightbox";
-import { galleryRows, type GalleryImage } from "@/lib/gallery";
+import { getGalleryRows, type GalleryImage } from "@/lib/gallery";
+import { useI18n } from "@/components/i18n/I18nProvider";
+import { fmt } from "@/lib/i18n/config";
 
 import "swiper/css";
 
@@ -20,7 +22,10 @@ type Props = {
   className?: string;
 };
 
-export default function GalleryTicker({ rows = galleryRows, speed = 45, className = "" }: Props) {
+export default function GalleryTicker({ rows: rowsProp, speed = 45, className = "" }: Props) {
+  const { locale, t } = useI18n();
+  const rows = useMemo(() => rowsProp ?? getGalleryRows(locale), [rowsProp, locale]);
+  const viewLarger = (alt: string) => fmt(t.media.viewLarger, { alt });
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const reduceMotion = usePrefersReducedMotion();
 
@@ -38,7 +43,7 @@ export default function GalleryTicker({ rows = galleryRows, speed = 45, classNam
   const close = useCallback(() => setOpenIndex(null), []);
 
   return (
-    <section aria-label="Photo gallery" className={`w-full overflow-hidden py-6 md:py-8 ${className}`}>
+    <section aria-label={t.media.photoGallery} className={`w-full overflow-hidden py-6 md:py-8 ${className}`}>
       <div className="space-y-3 sm:space-y-4 lg:space-y-6">
         {rows.map((row, r) => (
           <TickerRow
@@ -49,6 +54,7 @@ export default function GalleryTicker({ rows = galleryRows, speed = 45, classNam
             paused={openIndex !== null}
             reduceMotion={reduceMotion}
             onOpen={(i) => setOpenIndex(offsets[r] + i)}
+            viewLarger={viewLarger}
           />
         ))}
       </div>
@@ -67,8 +73,10 @@ function TickerRow({
   paused,
   reduceMotion,
   onOpen,
+  viewLarger,
 }: {
   images: GalleryImage[];
+  viewLarger: (alt: string) => string;
   reverse: boolean;
   pxPerSecond: number;
   paused: boolean;
@@ -121,7 +129,7 @@ function TickerRow({
           <ul className="flex gap-3 sm:gap-4 lg:gap-6">
             {images.map((img, i) => (
               <li key={img.src + i} className="shrink-0">
-                <Thumb image={img} onClick={() => onOpen(i)} focusable={copy === 0} />
+                <Thumb image={img} onClick={() => onOpen(i)} focusable={copy === 0} label={viewLarger(img.alt)} />
               </li>
             ))}
           </ul>
@@ -131,17 +139,17 @@ function TickerRow({
   );
 }
 
-function Thumb({ image, onClick, focusable }: { image: GalleryImage; onClick: () => void; focusable: boolean }) {
+function Thumb({ image, onClick, focusable, label }: { image: GalleryImage; onClick: () => void; focusable: boolean; label: string }) {
   return (
     <button
       type="button"
       tabIndex={focusable ? undefined : -1}
       onClick={onClick}
-      aria-label={`View larger: ${image.alt}`}
+      aria-label={label}
       style={{ aspectRatio: image.ratio }}
       className={
         "group relative block h-[130px] sm:h-[160px] md:h-[180px] lg:h-[200px] overflow-hidden " +
-        "rounded-tl-[32px] rounded-br-[32px] md:rounded-tl-[48px] md:rounded-br-[48px] lg:rounded-tl-[56px] lg:rounded-br-[56px] " +
+        "rounded-ss-[32px] rounded-ee-[32px] md:rounded-ss-[48px] md:rounded-ee-[48px] lg:rounded-ss-[56px] lg:rounded-ee-[56px] " +
         "bg-[#C8EAE8] cursor-zoom-in focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#EE7A52]/60"
       }
     >

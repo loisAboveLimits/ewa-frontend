@@ -1,0 +1,52 @@
+/* =====================================================================
+   Arabic / RTL support
+   The <html> element gets lang="ar" dir="rtl" from app/layout.tsx.
+   Layout mirroring is done with logical properties (margin-inline,
+   inset-inline, Tailwind ms-/ps-/start-/end-…); this file only holds
+   what can't be expressed that way.
+   ===================================================================== */
+
+/* ---------- typography ---------- */
+html[lang="ar"] body {
+  font-family: var(--font-arabic), "Century Gothic", CenturyGothic, AppleGothic, Arial, sans-serif;
+}
+
+/* Arabic script has tall ascenders/descenders — tight Latin line-heights clip it */
+[dir="rtl"] :is(h1, h2, h3, h4, h5, h6, .title, .sub-title, .banner-title, .banner-subtitle) {
+  line-height: 1.35;
+}
+
+[dir="rtl"] :is(p, li) {
+  line-height: 1.75;
+}
+
+/* letter-spacing breaks the joins between Arabic letters */
+[dir="rtl"] * {
+  letter-spacing: 0 !important;
+}
+
+/* ---------- direction helpers ---------- */
+
+/* Mirror arrow / chevron / "send" icons that point forward */
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* Phone numbers, e-mails and codes always read left-to-right */
+.ltr-text {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+/* Justified Arabic leaves large gaps on narrow screens */
+@media (max-width: 767px) {
+  [dir="rtl"] .text-justify {
+    text-align: start;
+  }
+}
+
+/* Footer decoration sits on the inline-end corner */
+[dir="rtl"] footer {
+  background-position: left bottom;
+}

@@ -2,6 +2,7 @@
 
 import { useId, useRef, type ReactNode, type InputHTMLAttributes, type ButtonHTMLAttributes } from "react";
 import type { Option } from "@/lib/registration";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 /* ---------- design tokens (from the Figma) ---------- */
 // teal text  #13999C | panel #C8EAE8 | field #94D3D1 | bubble #CDF3F3
@@ -28,22 +29,22 @@ export function Panel({
   return (
     <div
       className={
-        "relative overflow-hidden bg-[#C8EAE8] rounded-tr-[40px] rounded-bl-[40px] md:rounded-tr-[70px] md:rounded-bl-[70px] " +
+        "relative overflow-hidden bg-[#C8EAE8] rounded-se-[40px] rounded-es-[40px] md:rounded-se-[70px] md:rounded-es-[70px] " +
         "px-5 py-8 sm:px-8 md:px-12 md:py-12 " +
         className
       }
     >
       {bubbles === "bottom" && (
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <span className="absolute -bottom-24 right-24 h-56 w-80 rounded-full bg-[#CDF3F3]" />
-          <span className="absolute bottom-24 -right-16 h-40 w-40 rounded-full bg-[#CDF3F3]" />
-          <span className="absolute -bottom-10 -right-10 h-24 w-32 rounded-full bg-[#CDF3F3]" />
+          <span className="absolute -bottom-24 end-24 h-56 w-80 rounded-full bg-[#CDF3F3]" />
+          <span className="absolute bottom-24 -end-16 h-40 w-40 rounded-full bg-[#CDF3F3]" />
+          <span className="absolute -bottom-10 -end-10 h-24 w-32 rounded-full bg-[#CDF3F3]" />
         </div>
       )}
       {bubbles === "top" && (
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <span className="absolute -top-28 right-24 h-64 w-80 rounded-full bg-[#CDF3F3]" />
-          <span className="absolute top-16 -right-20 h-48 w-48 rounded-full bg-[#CDF3F3]" />
+          <span className="absolute -top-28 end-24 h-64 w-80 rounded-full bg-[#CDF3F3]" />
+          <span className="absolute top-16 -end-20 h-48 w-48 rounded-full bg-[#CDF3F3]" />
         </div>
       )}
       <div className="relative">{children}</div>
@@ -124,7 +125,7 @@ export function SelectInput({
           aria-invalid={!!error}
           aria-describedby={error ? `${id}-err` : undefined}
           className={
-            `${fieldBase} ${error ? errorRing : ""} appearance-none cursor-pointer pr-14 truncate ` +
+            `${fieldBase} ${error ? errorRing : ""} appearance-none cursor-pointer pe-14 truncate ` +
             `${value ? "text-white" : "text-white/90"} [&>option]:text-[#13999C] [&>option]:bg-white`
           }
         >
@@ -140,7 +141,7 @@ export function SelectInput({
         <svg
           aria-hidden
           viewBox="0 0 24 24"
-          className="pointer-events-none absolute right-5 md:right-10 top-1/2 h-6 w-6 -translate-y-1/2 text-white"
+          className="pointer-events-none absolute end-5 md:end-10 top-1/2 h-6 w-6 -translate-y-1/2 text-white"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.8"
@@ -167,6 +168,7 @@ export function DateInput({
   error?: string;
   max?: string;
 }) {
+  const { t } = useI18n();
   const id = useId();
   const ref = useRef<HTMLInputElement>(null);
   const openPicker = () => {
@@ -193,21 +195,21 @@ export function DateInput({
           onChange={(e) => onChange(e.target.value)}
           aria-invalid={!!error}
           className={
-            `${fieldBase} ${error ? errorRing : ""} pr-14 [color-scheme:light] ` +
+            `${fieldBase} ${error ? errorRing : ""} pe-14 [color-scheme:light] ` +
             `[&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:hidden ` +
             `${value ? "text-white" : "text-transparent"}`
           }
         />
         {!value && (
-          <span className="pointer-events-none absolute left-6 md:left-12 top-1/2 -translate-y-1/2 text-base md:text-xl text-white/90">
+          <span className="pointer-events-none absolute start-6 md:start-12 top-1/2 -translate-y-1/2 text-base md:text-xl text-white/90">
             {label}
           </span>
         )}
         <button
           type="button"
           onClick={openPicker}
-          aria-label="Open calendar"
-          className="absolute right-4 md:right-9 top-1/2 -translate-y-1/2 p-1 text-white"
+          aria-label={t.registration.openCalendar}
+          className="absolute end-4 md:end-9 top-1/2 -translate-y-1/2 p-1 text-white"
         >
           <CalendarIcon />
         </button>
@@ -243,6 +245,8 @@ export function PhoneInput({
         }
       >
         <span className="shrink-0 text-base md:text-xl text-white/90 hidden sm:inline">{label}</span>
+        {/* the number itself always reads left-to-right: +966 5XXXXXXXX */}
+        <span dir="ltr" className="flex min-w-0 flex-1 items-center gap-3 md:gap-6">
         <span className="shrink-0 text-base md:text-xl font-bold text-white">+966</span>
         <input
           id={id}
@@ -256,6 +260,7 @@ export function PhoneInput({
           aria-invalid={!!error}
           className="min-w-0 flex-1 bg-transparent text-base md:text-xl text-white placeholder:text-white/60 outline-none"
         />
+        </span>
       </div>
       <FieldError id={`${id}-err`} message={error} />
     </div>
@@ -310,19 +315,20 @@ export function Checkbox({
 }
 
 /* ---------- buttons ---------- */
-export function NextButton({ children = "Next", ...rest }: { children?: ReactNode } & ButtonHTMLAttributes<HTMLButtonElement>) {
+export function NextButton({ children, ...rest }: { children?: ReactNode } & ButtonHTMLAttributes<HTMLButtonElement>) {
+  const { t } = useI18n();
   return (
     <button
       type="submit"
       {...rest}
       className={
-        "inline-flex h-12 md:h-[54px] items-center justify-center gap-6 md:gap-10 rounded-full bg-[#EE7A52] pl-8 pr-5 md:pl-14 md:pr-6 " +
+        "inline-flex h-12 md:h-[54px] items-center justify-center gap-6 md:gap-10 rounded-full bg-[#EE7A52] ps-8 pe-5 md:ps-14 md:pe-6 " +
         "text-lg md:text-2xl font-bold text-white shadow-md transition hover:bg-[#E5683D] active:scale-[0.98] " +
         "disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#EE7A52]/30"
       }
     >
-      <span>{children}</span>
-      <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
+      <span>{children ?? t.registration.next}</span>
+      <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6 rtl-flip" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="m9 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </button>
@@ -346,16 +352,17 @@ export function PrimaryButton({ children, ...rest }: { children: ReactNode } & B
 }
 
 export function BackButton({ onClick }: { onClick: () => void }) {
+  const { t } = useI18n();
   return (
     <button
       type="button"
       onClick={onClick}
       className="inline-flex items-center gap-2 text-base md:text-lg font-medium text-[#13999C] hover:underline"
     >
-      <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5 rtl-flip" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="m15 6-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
-      Back
+      {t.registration.back}
     </button>
   );
 }
