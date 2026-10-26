@@ -1,12 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   allowedDevOrigins: [
     "192.168.100.158",
     "localhost",
     "127.0.0.1",
-  ]
+  ],
+  images: {
+    remotePatterns: [
+      { protocol: "http", hostname: "localhost", pathname: "/ewa/sites/default/files/**" },
+    ],
+  },
 };
 
 export default nextConfig;

@@ -10,9 +10,15 @@ import LogoStrip from "@/components/ui/LogoStrip";
 import ArrowLink from "@/components/ui/ArrowLink";
 import { getI18n } from "@/lib/i18n/server";
 
-export default async function Home() {
+import { getPage, absoluteUrl } from "@/lib/drupal";
+
+export default async function Home({ params }:{ params: Promise<{ nid: string }> }) {
   const { locale, t } = await getI18n();
   const s = t.sections;
+
+  const { nid } = await params;
+  const page = await getPage(1);
+  if (!page) notFound();  
 
   return (
 
@@ -20,7 +26,7 @@ export default async function Home() {
 
       {/*<!--banner-->*/}
       <PageBanner
-        image="/imgs/banners/banner-home.jpg"
+        image={absoluteUrl(page.banner)}
         align="center"
         titleClassName="fnt-orange"
         title={<>{t.home.bannerLine1}<br />{t.home.bannerLine2}</>}
