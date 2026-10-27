@@ -1,13 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from "@/components/i18n/Link";
+import { useLocalePathname } from "@/components/i18n/navigation";
 import { buildPages } from "@/lib/pages";
 import { useI18n } from "@/components/i18n/I18nProvider";
 
 /** `currentTitle` overrides the last crumb (e.g. an article title instead of its URL slug). */
 export default function Breadcrumbs({ currentTitle }: { currentTitle?: string } = {}) {
-  const pathname = usePathname();
+  const pathname = useLocalePathname();
   const { t } = useI18n();
   const pages = buildPages(t.pages);
 

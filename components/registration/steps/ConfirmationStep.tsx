@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import { Panel } from "../ui";
 import { useI18n } from "@/components/i18n/I18nProvider";
 

@@ -46,6 +46,8 @@ export const en = {
     switchShort: "AR",
     switchLong: "العربية",
     switchLabel: "Switch to Arabic",
+    welcome: "Welcome,",
+    signIn: "Sign in",
   },
 
   footer: {
@@ -110,6 +112,7 @@ export const en = {
     awards: { title: "Awards", desc: "Explore the moments, milestones and those behind them" },
     campus: { title: "Campus & Facilities", desc: "More Than Just An Academy" },
     registration: { title: "Register in EWA", desc: "Become Part of Success" },
+    login: { title: "Sign in to EWA", desc: "Welcome Back to Success" },
     media: { title: "Media Center", desc: "Explore the moments, milestones and those behind them." },
     events: { title: "Events", desc: "Explore the moments, milestones and those behind them." },
     news: { title: "News and Articles", desc: "Explore the moments, milestones and those behind them." },
@@ -141,6 +144,9 @@ export const en = {
     partnerText: "Leading the Way in Training and Developing Our National Workforce",
     diplomaPrograms: "Diploma Programs",
     sponsorshipPartners: "Sponsorship Partners",
+    accreditedPrograms: "Accredited Programs",
+    numbersTitleA: "EWA",
+    numbersTitleB: "in Numbers",
   },
 
   about: {
@@ -225,10 +231,13 @@ export const en = {
     ],
   },
 
-  users: {
-    cardTitle: "Trainee Management System",
-    cardText: "Access your training programs, schedules, assessments and more",
-  },
+  users: [
+    {cardTitle: "EWA Administration", cardText: "Find all your administrative needs.", link: "https://ewa-sys.info/apex/r/ewa/dashboard188/login" },
+    {cardTitle: "EWA Staff", cardText: "Manage user accounts, update directory information.", link: "https://ewa-sys.info/apex/r/ewa/training/login?tz=Asia/Riyadh;3:00" },
+    {cardTitle: "Sponsor Gate", cardText: "Manage your company’s participation and related services.", link: "https://ewa-sys.info/apex/r/ewa/sponsor-gate411185/login?session=15761565319096" },
+    {cardTitle: "Trainee Portal", cardText: "Access training materials, attendance and certification tools.", link: "https://ewa-sys.info/apex/r/ewa/trainee-portal245157183/login?session=9393783054156&tz=Asia/Riyadh;3:00" },
+    {cardTitle: "Alumni Gate", cardText: "Access oversee graduate profiles, track career pathways, and alumni connections.", link: "https://ewa-sys.info/apex/r/ewa/alumni_portal/login?session=18466126581805&tz=Asia/Riyadh;3:00" },
+  ],
 
   join: {
     traineeTitle: "Become a Trainee",
@@ -347,6 +356,26 @@ export const en = {
   orbit: {
     joinTeam: "Join the team",
     seeAll: "See all members",
+  },
+
+  login: {
+    heading: "Sign in to your account",
+    subheading: "Welcome back! Sign in to follow up on your application and courses.",
+    identifier: "National ID / Iqama or E-mail",
+    password: "Password",
+    showPassword: "Show password",
+    hidePassword: "Hide password",
+    remember: "Remember me",
+    forgot: "Forgot your password?",
+    submit: "Sign In",
+    submitting: "Signing in...",
+    noAccount: "Don't have an account?",
+    register: "Register now.",
+    errors: {
+      identifier: "Enter your National ID / Iqama or e-mail.",
+      password: "Enter your password.",
+      failed: "We couldn't sign you in. Check your details and try again.",
+    },
   },
 
   registration: {

@@ -1,8 +1,14 @@
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import Image from "next/image";
 import { getI18n } from "@/lib/i18n/server";
+import { getNavMenu, MENUS, type NavItem } from "@/lib/menus";
 
-/* Link targets per footer item — "#" = page not built yet */
+/*
+ * Footer link columns come from the Drupal menu "frontend-footer":
+ *   top-level items = column headings, their child items = the links.
+ * The list below is only the fallback used when Drupal can't be reached or the menu is empty.
+ * Link targets per footer item — "#" = page not built yet.
+ */
 const hrefs = {
   about: {
     aboutUs: "/about",
@@ -35,10 +41,25 @@ const hrefs = {
 
 type ColumnKey = keyof typeof hrefs;
 
+/** Built-in columns (fallback) in the same shape as the Drupal menu. */
+function fallbackColumns(f: Awaited<ReturnType<typeof getI18n>>["t"]["footer"]): NavItem[] {
+  return (Object.keys(hrefs) as ColumnKey[]).map((col) => {
+    const links = hrefs[col] as Record<string, string>;
+    const labels = f.columns[col].links as Record<string, string>;
+    return {
+      key: col,
+      label: f.columns[col].title,
+      href: "#",
+      children: Object.keys(links).map((key) => ({ key: `${col}-${key}`, label: labels[key], href: links[key], children: [] })),
+    };
+  });
+}
+
 export default async function Footer() {
-  const { t } = await getI18n();
+  const { locale, t } = await getI18n();
   const f = t.footer;
-  const columns = Object.keys(hrefs) as ColumnKey[];
+  const drupalColumns = await getNavMenu(MENUS.footer, locale);
+  const columns = drupalColumns.length ? drupalColumns : fallbackColumns(f);
 
   return (
     <footer
@@ -95,25 +116,27 @@ export default async function Footer() {
 
           {/* Link columns: 2 per row on phones, 4 from tablets up */}
           <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:col-span-3 lg:p-8">
-            {columns.map((col) => {
-              const copy = f.columns[col];
-              const links = hrefs[col] as Record<string, string>;
-              const labels = copy.links as Record<string, string>;
-              return (
-                <div key={col} className="footer-column">
-                  <h3 className="mb-5 text-lg font-semibold">{copy.title}</h3>
+            {columns.map((col) => (
+              <div key={col.key} className="footer-column">
+                <h3 className="mb-5 text-lg font-semibold">
+                  {/* a heading that points somewhere real becomes a link */}
+                  {col.href && col.href !== "#" && col.children.length === 0 ? (
+                    <FooterLink item={col} />
+                  ) : (
+                    col.label
+                  )}
+                </h3>
+                {col.children.length > 0 && (
                   <ul className="space-y-3">
-                    {Object.keys(links).map((key) => (
-                      <li key={key} className={col === "support" && key === "contact" ? "pt-5" : undefined}>
-                        <Link href={links[key]} className="transition hover:text-gray-300">
-                          {labels[key]}
-                        </Link>
+                    {col.children.map((link) => (
+                      <li key={link.key}>
+                        <FooterLink item={link} />
                       </li>
                     ))}
                   </ul>
-                </div>
-              );
-            })}
+                )}
+              </div>
+            ))}
           </div>
 
         </div>
@@ -125,5 +148,17 @@ export default async function Footer() {
 
       <div className="spacer-40"></div>
     </footer>
+  );
+}
+
+function FooterLink({ item }: { item: NavItem }) {
+  return (
+    <Link
+      href={item.href}
+      className="transition hover:text-gray-300"
+      {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+    >
+      {item.label}
+    </Link>
   );
 }

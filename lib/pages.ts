@@ -14,6 +14,7 @@ export const pagePaths = {
   awards: "/awards",
   campus: "/why/campus-facilities",
   registration: "/join/registration",
+  login: "/login",
   media: "/media-center",
   events: "/media-center/events",
   news: "/media-center/news-articles",

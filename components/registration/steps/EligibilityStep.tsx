@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import type { StepProps } from "../RegistrationForm";
 import { getOptions, type YesNo } from "@/lib/registration";
 import { useI18n } from "@/components/i18n/I18nProvider";

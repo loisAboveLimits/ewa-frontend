@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, type ReactNode, type InputHTMLAttributes, type ButtonHTMLAttributes } from "react";
+import { useId, useRef, useState, type ReactNode, type InputHTMLAttributes, type ButtonHTMLAttributes } from "react";
 import type { Option } from "@/lib/registration";
 import { useI18n } from "@/components/i18n/I18nProvider";
 
@@ -261,6 +261,62 @@ export function PhoneInput({
           className="min-w-0 flex-1 bg-transparent text-base md:text-xl text-white placeholder:text-white/60 outline-none"
         />
         </span>
+      </div>
+      <FieldError id={`${id}-err`} message={error} />
+    </div>
+  );
+}
+
+/* ---------- password with show / hide toggle ---------- */
+export function PasswordInput({
+  label,
+  value,
+  onChange,
+  error,
+  showLabel,
+  hideLabel,
+  autoComplete = "current-password",
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  error?: string;
+  showLabel: string;
+  hideLabel: string;
+  autoComplete?: string;
+}) {
+  const id = useId();
+  const [visible, setVisible] = useState(false);
+  return (
+    <div>
+      <label htmlFor={id} className="sr-only">
+        {label}
+      </label>
+      <div className="relative">
+        <input
+          id={id}
+          type={visible ? "text" : "password"}
+          value={value}
+          placeholder={label}
+          autoComplete={autoComplete}
+          onChange={(e) => onChange(e.target.value)}
+          aria-invalid={!!error}
+          aria-describedby={error ? `${id}-err` : undefined}
+          className={`${fieldBase} ${error ? errorRing : ""} pe-14 md:pe-20`}
+        />
+        <button
+          type="button"
+          onClick={() => setVisible((v) => !v)}
+          aria-label={visible ? hideLabel : showLabel}
+          aria-pressed={visible}
+          className="absolute end-4 md:end-9 top-1/2 -translate-y-1/2 p-1 text-white"
+        >
+          <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+            <circle cx="12" cy="12" r="3" />
+            {visible && <path d="M3 3l18 18" />}
+          </svg>
+        </button>
       </div>
       <FieldError id={`${id}-err`} message={error} />
     </div>

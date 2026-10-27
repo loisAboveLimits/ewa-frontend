@@ -205,3 +205,74 @@
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
+
+/* =====================================================================
+   "Welcome, Sign in" tab — hangs under the logo bar on the start side
+   (left in English, right in Arabic). Mirrors the orange language tab.
+   ===================================================================== */
+.login-tab-wrap {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.login-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 34px;
+  padding-block: 0.35rem 0.45rem;
+  padding-inline: 1.1rem 1.75rem;
+  color: #fff;
+  font-size: 14px !important;
+  line-height: 1.2;
+  white-space: nowrap;
+  background-color: rgba(239, 89, 33, 1);
+  border-end-end-radius: 2rem;
+  box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.35);
+  transition: background-color 0.2s ease;
+}
+
+.login-tab:hover,
+.login-tab[aria-current="page"] {
+  background-color: rgba(220, 72, 22, 1);
+}
+
+.login-tab:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+
+.login-tab svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  margin-inline-end: 0.2rem;
+}
+
+.login-tab-link {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Phones & tablets: smaller tab tucked under the rounded menu bar */
+@media (max-width: 1023px) {
+  .login-tab-wrap--mobile {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-inline-start: 1.75rem;
+  }
+
+  .login-tab {
+    min-height: 30px;
+    padding-inline: 0.9rem 1.1rem;
+    font-size: 13px !important;
+    border-end-start-radius: 1rem;
+    border-end-end-radius: 1rem;
+  }
+
+  .login-tab svg {
+    width: 15px;
+    height: 15px;
+  }
+}

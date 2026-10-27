@@ -20,7 +20,7 @@ export function LoaderMark({ size = 150 }: { size?: number }) {
 const MIN_VISIBLE = 600; // ms — avoid a flash on fast connections
 const MAX_VISIBLE = 8000; // ms — never block the page longer than this
 const ASSET_TIMEOUT = 4000; // ms — stop waiting for slow images after a page change
-const FADE = 500; // ms — keep in sync with the CSS transition
+const FADE = 800; // ms — keep in sync with the CSS transitions (Preloader.module.css + custom.css)
 
 type Phase = "visible" | "leaving" | "gone";
 
@@ -165,14 +165,26 @@ export default function Preloader() {
 
   // Stop the page scrolling underneath while the loader is up
   useEffect(() => {
-    if (phase === "gone") return;
     const html = document.documentElement;
-    const prev = html.style.overflow;
+    if (phase === "gone") {
+      html.style.removeProperty("overflow"); // always release the lock
+      return;
+    }
     html.style.overflow = "hidden";
-    return () => {
-      html.style.overflow = prev;
-    };
   }, [phase]);
+
+  // …and if the loader is ever removed while showing
+  useEffect(() => () => document.documentElement.style.removeProperty("overflow"), []);
+
+  // Page fade-in: while the loader is up, <html data-loading> keeps the page transparent
+  // (see "Page reveal" in app/custom.css). Removing it as the loader starts leaving makes
+  // the page fade + rise in at the same moment the loader fades out.
+  useEffect(() => {
+    const html = document.documentElement;
+    if (phase === "visible") html.setAttribute("data-loading", "true");
+    else html.removeAttribute("data-loading");
+  }, [phase]);
+  useEffect(() => () => document.documentElement.removeAttribute("data-loading"), []);
 
   if (phase === "gone") return null;
 

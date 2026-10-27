@@ -1,11 +1,11 @@
-// Server-only helpers: read the visitor's language from the cookie.
+// Server-only helpers: the language comes from the URL (set as a request header by proxy.ts).
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
-import { defaultLocale, isLocale, LOCALE_COOKIE, type Locale } from "./config";
+import { headers } from "next/headers";
+import { defaultLocale, isLocale, LOCALE_HEADER, type Locale } from "./config";
 import { getDictionary } from "./dictionaries";
 
 export async function getLocale(): Promise<Locale> {
-  const value = (await cookies()).get(LOCALE_COOKIE)?.value;
+  const value = (await headers()).get(LOCALE_HEADER);
   return isLocale(value) ? value : defaultLocale;
 }
 

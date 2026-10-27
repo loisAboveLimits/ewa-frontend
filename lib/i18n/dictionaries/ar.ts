@@ -45,6 +45,8 @@ export const ar: Dictionary = {
     switchShort: "EN",
     switchLong: "English",
     switchLabel: "التبديل إلى الإنجليزية",
+    welcome: "مرحبًا،",
+    signIn: "تسجيل الدخول",
   },
 
   footer: {
@@ -109,6 +111,7 @@ export const ar: Dictionary = {
     awards: { title: "الجوائز", desc: "استكشف اللحظات والإنجازات ومن يقف خلفها" },
     campus: { title: "الحرم والمرافق", desc: "أكثر من مجرد أكاديمية" },
     registration: { title: "التسجيل في الأكاديمية", desc: "كن جزءًا من النجاح" },
+    login: { title: "تسجيل الدخول", desc: "مرحبًا بعودتك إلى النجاح" },
     media: { title: "المركز الإعلامي", desc: "استكشف اللحظات والإنجازات ومن يقف خلفها." },
     events: { title: "الفعاليات", desc: "استكشف اللحظات والإنجازات ومن يقف خلفها." },
     news: { title: "الأخبار والمقالات", desc: "استكشف اللحظات والإنجازات ومن يقف خلفها." },
@@ -140,6 +143,9 @@ export const ar: Dictionary = {
     partnerText: "روّاد في تدريب وتطوير كوادرنا الوطنية",
     diplomaPrograms: "برنامج دبلوم",
     sponsorshipPartners: "شريك راعٍ",
+    accreditedPrograms: "برنامج معتمد",
+    numbersTitleA: "الأكاديمية",
+    numbersTitleB: "بالأرقام",
   },
 
   about: {
@@ -224,10 +230,13 @@ export const ar: Dictionary = {
     ],
   },
 
-  users: {
-    cardTitle: "نظام إدارة المتدربين",
-    cardText: "اطّلع على برامجك التدريبية وجداولك وتقييماتك والمزيد",
-  },
+  users: [
+    { cardTitle: "إدارة الأكاديمية", cardText: "اعثر على جميع احتياجاتك الإدارية.", link: "https://ewa-sys.info/apex/r/ewa/dashboard188/login" },
+    { cardTitle: "منسوبو الأكاديمية", cardText: "إدارة حسابات المستخدمين وتحديث بيانات الدليل.", link: "https://ewa-sys.info/apex/r/ewa/training/login?tz=Asia/Riyadh;3:00" },
+    { cardTitle: "بوابة الرعاة", cardText: "إدارة مشاركة شركتك والخدمات ذات الصلة.", link: "https://ewa-sys.info/apex/r/ewa/sponsor-gate411185/login?session=15761565319096" },
+    { cardTitle: "بوابة المتدربين", cardText: "الوصول إلى المواد التدريبية وأدوات الحضور والشهادات.", link: "https://ewa-sys.info/apex/r/ewa/trainee-portal245157183/login?session=9393783054156&tz=Asia/Riyadh;3:00" },
+    { cardTitle: "بوابة الخريجين", cardText: "الاطلاع على ملفات الخريجين، ومتابعة المسارات المهنية، والتواصل مع الخريجين.", link: "https://ewa-sys.info/apex/r/ewa/alumni_portal/login?session=18466126581805&tz=Asia/Riyadh;3:00" },
+  ],
 
   join: {
     traineeTitle: "كن متدربًا",
@@ -345,6 +354,26 @@ export const ar: Dictionary = {
   orbit: {
     joinTeam: "انضم إلى الفريق",
     seeAll: "عرض جميع الأعضاء",
+  },
+
+  login: {
+    heading: "سجّل الدخول إلى حسابك",
+    subheading: "مرحبًا بعودتك! سجّل الدخول لمتابعة طلبك وبرامجك.",
+    identifier: "رقم الهوية / الإقامة أو البريد الإلكتروني",
+    password: "كلمة المرور",
+    showPassword: "إظهار كلمة المرور",
+    hidePassword: "إخفاء كلمة المرور",
+    remember: "تذكّرني",
+    forgot: "نسيت كلمة المرور؟",
+    submit: "تسجيل الدخول",
+    submitting: "جارٍ تسجيل الدخول...",
+    noAccount: "ليس لديك حساب؟",
+    register: "سجّل الآن.",
+    errors: {
+      identifier: "أدخل رقم الهوية / الإقامة أو البريد الإلكتروني.",
+      password: "أدخل كلمة المرور.",
+      failed: "تعذّر تسجيل دخولك. تحقّق من بياناتك وحاول مرة أخرى.",
+    },
   },
 
   registration: {

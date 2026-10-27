@@ -555,3 +555,89 @@ section .box-mixed{
 
 
 
+
+/* =====================================================================
+   Slider pagination dots — one style for every slider on the site:
+   small tilted ovals, grey inactive, teal active.
+   Covers Swiper's own bullets and the custom dot buttons (.ewa-dot)
+   used by the featured-news slider and the news list.
+   ===================================================================== */
+.swiper-pagination-bullet,
+.ewa-dot {
+  display: inline-block;
+  width: 20px !important;
+  height: 11px !important;
+  margin: 0 3px !important;
+  padding: 0;
+  border: 0;
+  border-radius: 50% !important;
+  background: #d6d6d6 !important;
+  opacity: 1 !important;
+  transform: rotate(-20deg);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.swiper-pagination-bullet:hover,
+.ewa-dot:hover {
+  background: #b9dfde !important;
+}
+
+.swiper-pagination-bullet-active,
+.swiper-pagination-bullet-active:hover,
+.ewa-dot.is-active,
+.ewa-dot.is-active:hover {
+  background: #13999c !important;
+}
+
+@media (max-width: 639px) {
+  .swiper-pagination-bullet,
+  .ewa-dot {
+    width: 18px !important;
+    height: 10px !important;
+  }
+}
+
+/* No justified text anywhere — also overrides justify coming from CMS (Drupal) HTML */
+.text-justify,
+p[style*="justify"],
+li[style*="justify"],
+div[style*="justify"] {
+  text-align: start !important;
+}
+
+/* =====================================================================
+   Page reveal — fades the page in as the preloader fades out.
+   components/preloader/Preloader.tsx sets <html data-loading="true">
+   while the loader is showing and removes it when the loader leaves.
+   The header only fades (moving it would shift its fixed menu bar);
+   the page content and footer fade and rise slightly.
+   ===================================================================== */
+/* only animate on the way IN (when data-loading is removed); hiding is instant, behind the loader */
+html:not([data-loading]) body > header {
+  transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+}
+
+html:not([data-loading]) body > :not(header):not(.ewa-preloader):not(script) {
+  transition:
+    opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.1s,
+    transform 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+}
+
+html[data-loading="true"] body > header,
+html[data-loading="true"] body > :not(header):not(.ewa-preloader):not(script) {
+  opacity: 0;
+}
+
+html[data-loading="true"] body > :not(header):not(.ewa-preloader):not(script) {
+  transform: translateY(18px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-loading]) body > :not(header):not(.ewa-preloader):not(script) {
+    transition: opacity 0.4s ease;
+  }
+  html[data-loading="true"] body > :not(header):not(.ewa-preloader):not(script) {
+    transform: none;
+  }
+}

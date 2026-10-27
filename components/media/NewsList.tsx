@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { A11y, EffectFade, Keyboard } from "swiper/modules";
@@ -83,9 +83,8 @@ export default function NewsList({ items, perPage = 8, className = "" }: Props) 
                 aria-current={isActive ? "page" : undefined}
                 onClick={() => goTo(i)}
                 className={
-                  "h-[13px] w-[22px] md:h-[15px] md:w-[25px] rounded-[50%] cursor-pointer " +
-                  "transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE7A52] focus-visible:ring-offset-2 " +
-                  (isActive ? "bg-[#13999C]" : "bg-[#DDDDDD] hover:bg-[#B9DFDE]")
+                  "ewa-dot " + (isActive ? "is-active " : "") +
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE7A52] focus-visible:ring-offset-2"
                 }
               />
             );

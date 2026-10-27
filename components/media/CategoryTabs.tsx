@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from "@/components/i18n/Link";
+import { useLocalePathname } from "@/components/i18n/navigation";
 import { useI18n } from "@/components/i18n/I18nProvider";
 
 export type TabLink = {
@@ -32,7 +32,7 @@ export default function CategoryTabs({
 }) {
   const { t } = useI18n();
   const tabs: TabLink[] = tabsProp ?? defaultTabs.map((tab) => ({ ...tab, label: t.media.tabs[tab.key] }));
-  const pathname = usePathname();
+  const pathname = useLocalePathname();
   const activeRef = useRef<HTMLAnchorElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 

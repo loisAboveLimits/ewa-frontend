@@ -13,6 +13,7 @@ import Preloader from "@/components/preloader/Preloader";
 import { I18nProvider } from "@/components/i18n/I18nProvider";
 import { dirOf } from "@/lib/i18n/config";
 import { getI18n } from "@/lib/i18n/server";
+import { getNavMenu, MENUS } from "@/lib/menus";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const { locale, t } = await getI18n();
+  // Drupal "front" menu → header links (Header falls back to its built-in list if this is empty)
+  const menu = await getNavMenu(MENUS.header, locale);
 
   return (
     <html
@@ -81,11 +84,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <I18nProvider locale={locale} dictionary={t}>
           <Preloader />
 
-          <Header />
+          <Header menu={menu} />
 
           {children}
 
-          <Footer />
+         <Footer />
         </I18nProvider>
       </body>
     </html>

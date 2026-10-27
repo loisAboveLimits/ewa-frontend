@@ -39,13 +39,6 @@ html[lang="ar"] body {
   display: inline-block;
 }
 
-/* Justified Arabic leaves large gaps on narrow screens */
-@media (max-width: 767px) {
-  [dir="rtl"] .text-justify {
-    text-align: start;
-  }
-}
-
 /* Footer decoration sits on the inline-end corner */
 [dir="rtl"] footer {
   background-position: left bottom;
