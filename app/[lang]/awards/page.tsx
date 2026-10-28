@@ -14,7 +14,7 @@ export default async function Awards() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-programs.png" title={t.pages.awards.title} subtitle={t.pages.awards.desc} />
+      <PageBanner page="awards" image="/imgs/banners/banner-programs.png" title={t.pages.awards.title} subtitle={t.pages.awards.desc} />
 
       {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">

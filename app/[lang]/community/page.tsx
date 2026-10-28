@@ -20,7 +20,7 @@ export default async function Community() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-community.png" title={t.pages.community.title} subtitle={t.pages.community.desc} />
+      <PageBanner page="community" image="/imgs/banners/banner-community.png" title={t.pages.community.title} subtitle={t.pages.community.desc} />
 
       {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">

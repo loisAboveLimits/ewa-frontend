@@ -3,11 +3,11 @@ import Footer from "@/components/Footer";
 import Script from "next/script";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Tajawal } from "next/font/google";
-import "./globals.css";
-import "./custom.css";
-import "./header.css";
-import "./responsive.css";
-import "./rtl.css";
+import "../globals.css";
+import "../custom.css";
+import "../header.css";
+import "../responsive.css";
+import "../rtl.css";
 
 import Preloader from "@/components/preloader/Preloader";
 import { I18nProvider } from "@/components/i18n/I18nProvider";

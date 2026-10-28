@@ -641,3 +641,24 @@ html[data-loading="true"] body > :not(header):not(.ewa-preloader):not(script) {
     transform: none;
   }
 }
+
+/* ---------- body text coming from Drupal (CKEditor) ----------
+   Tailwind resets lists, headings and links — give the editor's HTML readable defaults. */
+.drupal-content > * + * { margin-block-start: 1rem; }
+.drupal-content :is(h2, h3, h4) { font-weight: 700; line-height: 1.25; }
+.drupal-content h2 { font-size: 1.75rem; }
+.drupal-content h3 { font-size: 1.4rem; }
+.drupal-content h4 { font-size: 1.2rem; }
+.drupal-content ul { list-style: disc; padding-inline-start: 1.5rem; }
+.drupal-content ol { list-style: decimal; padding-inline-start: 1.5rem; }
+.drupal-content li + li { margin-block-start: .35rem; }
+.drupal-content a { color: #EE7A52; text-decoration: underline; text-underline-offset: 4px; }
+.drupal-content a:hover { color: #E5683D; }
+.drupal-content img { max-width: 100%; height: auto; border-radius: 1.5rem; }
+.drupal-content table { width: 100%; border-collapse: collapse; display: block; overflow-x: auto; }
+.drupal-content :is(th, td) { border: 1px solid #13999C33; padding: .5rem .75rem; text-align: start; }
+.drupal-content blockquote { border-inline-start: 4px solid #EE7A52; padding-inline-start: 1rem; font-style: italic; }
+
+/* ---------- partner logo ticker (components/ui/LogoTicker.tsx) ----------
+   Constant speed instead of Swiper's ease-out between slides */
+.logo-ticker .swiper-wrapper { transition-timing-function: linear !important; }

@@ -18,7 +18,7 @@ export default async function MediaCenter() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-media-center.jpg" title={t.pages.media.title} subtitle={t.pages.media.desc} />
+      <PageBanner page="media" image="/imgs/banners/banner-media-center.jpg" title={t.pages.media.title} subtitle={t.pages.media.desc} />
 
       {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">

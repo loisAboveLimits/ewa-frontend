@@ -42,7 +42,7 @@ export default async function Contact() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-contact.png" title={c.pageTitle} subtitle={t.pages.contact.desc} />
+      <PageBanner page="contact" image="/imgs/banners/banner-contact.png" title={c.pageTitle} subtitle={t.pages.contact.desc} />
 
       {/*<!--breadcrumbs + title + help card-->*/}
       <section className="relative">

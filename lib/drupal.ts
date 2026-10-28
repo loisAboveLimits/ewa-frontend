@@ -57,3 +57,60 @@ export async function getMenu(menu = "main", lang = "en"): Promise<DrupalMenuIte
 // "URL to image" gives a relative path, so make it absolute
 export const absoluteUrl = (path?: string) =>
   path ? (path.startsWith("http") ? path : `${ORIGIN}${path}`) : "";
+
+/* ------------------------------------------------------------------ */
+/* Any Views "REST export" display                                     */
+/* ------------------------------------------------------------------ */
+
+export type ViewRequest = {
+  /** The display's path without "api/" or the "%" parts, e.g. "section" for api/section/%/% */
+  path: string;
+  /** Contextual filters in order, e.g. [12] for the nid. */
+  args?: (string | number)[];
+  /** Language, appended as the LAST contextual filter. `false` = the view has no language argument. */
+  lang?: string | false;
+  /** Extra query string, e.g. exposed filters or { page: 1 } */
+  params?: Record<string, string | number | boolean>;
+  /** Seconds to cache the response (default 60). */
+  revalidate?: number;
+};
+
+/**
+ * GET {DRUPAL_BASE_URL}/api/{path}/{...args}/{lang}?_format=json
+ * fetchView({ path: "section", args: [12], lang: "ar" }) → rows of the view (always an array).
+ * Throws on network / HTTP errors — <DrupalView> catches them for you.
+ */
+export async function fetchView<T = Record<string, string>>({
+  path,
+  args = [],
+  lang = "en",
+  params = {},
+  revalidate = 60,
+}: ViewRequest): Promise<T[]> {
+  const segments = [path.replace(/^\/?(api\/)?|\/$/g, ""), ...args, ...(lang ? [lang] : [])]
+    .map((s) => String(s).split("/").map(encodeURIComponent).join("/"))
+    .join("/");
+  const query = new URLSearchParams({ _format: "json", ...Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)])) });
+  const url = `${BASE}/api/${segments}?${query}`;
+
+  const res = await fetch(url, { next: { revalidate, tags: [`view:${path}`] } });
+  if (!res.ok) throw new Error(`Drupal view error ${res.status} — ${url}`);
+  const data = await res.json();
+  return Array.isArray(data) ? data : [];
+}
+
+/**
+ * Field HTML from Drupal ready for dangerouslySetInnerHTML:
+ * file / image links (/ewa/sites/default/files/…) become absolute so they load from Drupal.
+ */
+export function drupalHtml(html?: string): string {
+  return (html ?? "").replace(/(src|href)="(\/[^"\/][^"]*\/sites\/[^"]*|\/sites\/[^"]*)"/g, (_, attr, path) => `${attr}="${absoluteUrl(path)}"`);
+}
+
+/** Removes the <p> wrapper Drupal puts around short text fields (titles), keeping inline markup. */
+export function inlineHtml(html?: string): string {
+  return drupalHtml(html)
+    .replace(/<\/p>\s*<p[^>]*>/gi, "<br>")
+    .replace(/<\/?p[^>]*>/gi, "")
+    .trim();
+}

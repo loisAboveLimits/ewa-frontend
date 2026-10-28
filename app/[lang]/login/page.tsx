@@ -12,7 +12,7 @@ export default async function Login() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-programs.png" title={t.pages.login.title} subtitle={t.pages.login.desc} />
+      <PageBanner page="login" image="/imgs/banners/banner-programs.png" title={t.pages.login.title} subtitle={t.pages.login.desc} />
 
       {/*<!--content-body-->*/}
       <section id="content-body" className="relative -top-10 md:-top-15">

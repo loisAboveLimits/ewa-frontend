@@ -14,7 +14,7 @@ export default async function Programs() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-programs.png" title={t.pages.programs.title} subtitle={t.pages.programs.desc} />
+      <PageBanner page="programs" image="/imgs/banners/banner-programs.png" title={t.pages.programs.title} subtitle={t.pages.programs.desc} />
 
       {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">

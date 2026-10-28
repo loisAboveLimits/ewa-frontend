@@ -14,7 +14,7 @@ export default async function Rules() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/rules.jpg" title={t.pages.rules.title} subtitle={t.pages.rules.desc} />
+      <PageBanner page="rules" image="/imgs/banners/rules.jpg" title={t.pages.rules.title} subtitle={t.pages.rules.desc} />
 
       {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">

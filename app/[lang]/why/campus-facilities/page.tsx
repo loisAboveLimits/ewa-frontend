@@ -15,7 +15,7 @@ export default async function CampusFacilities() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-campus.jpg" title={t.pages.campus.title} subtitle={t.pages.campus.desc} />
+      <PageBanner page="campus" image="/imgs/banners/banner-campus.jpg" title={t.pages.campus.title} subtitle={t.pages.campus.desc} />
 
       {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">

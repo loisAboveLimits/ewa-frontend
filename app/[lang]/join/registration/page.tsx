@@ -12,7 +12,7 @@ export default async function Registration() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-programs.png" title={t.pages.registration.title} subtitle={t.pages.registration.desc} />
+      <PageBanner page="registration" image="/imgs/banners/banner-programs.png" title={t.pages.registration.title} subtitle={t.pages.registration.desc} />
 
       {/*<!--content-body-->*/}
       <section id="content-body" className="relative -top-10 md:-top-15">

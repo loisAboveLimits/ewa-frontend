@@ -43,3 +43,15 @@ html[lang="ar"] body {
 [dir="rtl"] footer {
   background-position: left bottom;
 }
+
+/* ---------- mirrored pictures ----------
+   Every image file (jpg, png, svg, bmp, webp) is flipped horizontally on Arabic pages.
+   Works for <img> and next/image (its src is /_next/image?url=…photo.jpg…).
+   Uses the `scale` property, so it doesn't clash with `transform` animations.
+   Not flipped:
+   - .rtl-flip images (they already mirror themselves)
+   - logos and partner logos (their text would read backwards)
+   - anything with class "no-flip" — add it to keep a picture as it is (e.g. images with text) */
+[dir="rtl"] img:is([src*=".jpg" i], [src*=".jpeg" i], [src*=".png" i], [src*=".svg" i], [src*=".bmp" i], [src*=".webp" i]):not(.rtl-flip, .no-flip, [src*="logos"], [src*="partners"]) {
+  scale: -1 1;
+}

@@ -3,7 +3,7 @@ import CampusCarousel from "@/components/campus/Campus";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import PageBanner from "@/components/ui/PageBanner";
 import SectionTitle from "@/components/ui/SectionTitle";
-import LogoStrip from "@/components/ui/LogoStrip";
+import LogoTicker from "@/components/ui/LogoTicker";
 import ArrowLink from "@/components/ui/ArrowLink";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
 
@@ -44,7 +44,7 @@ export default async function Why() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-why.png" title={t.pages.why.title} subtitle={t.pages.why.desc} />
+      <PageBanner page="why" image="/imgs/banners/banner-why.png" title={t.pages.why.title} subtitle={t.pages.why.desc} />
 
       {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">
@@ -124,7 +124,7 @@ export default async function Why() {
 
         <div className="spacer-20"></div>
 
-        <LogoStrip logos={[13, 14, 15, 16, 17]} alt={t.common.partner} />
+        <LogoTicker logos={[13, 14, 15, 16, 17]} alt={t.common.partner} />
 
         <div className="spacer-40"></div>
       </section>

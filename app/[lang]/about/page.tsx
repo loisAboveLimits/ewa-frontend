@@ -3,7 +3,7 @@ import DirectorsCarousel from "@/components/directors/Directors";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import PageBanner from "@/components/ui/PageBanner";
 import SectionTitle from "@/components/ui/SectionTitle";
-import LogoStrip from "@/components/ui/LogoStrip";
+import LogoTicker from "@/components/ui/LogoTicker";
 import ArrowLink from "@/components/ui/ArrowLink";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
 
@@ -27,7 +27,7 @@ export default async function About() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-about.png" title={t.pages.about.title} subtitle={t.pages.about.desc} />
+      <PageBanner page="about" image="/imgs/banners/banner-about.png" title={t.pages.about.title} subtitle={t.pages.about.desc} />
 
       {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">
@@ -209,7 +209,7 @@ export default async function About() {
           <div className="text-center">
             <p className="font-thin fnt-green text-[20px]! md:text-[28px]! px-2 py-8 md:p-8">{a.timelineText}</p>
 
-            <div className="flex justify-end">
+            <div className="flex justify-center">
               <ArrowLink href="#" color="orange" className="fnt-orange text-[22px]! md:text-[25px]!">
                 {t.common.download}
               </ArrowLink>
@@ -232,8 +232,8 @@ export default async function About() {
 
         <div className="spacer-20"></div>
 
-        <LogoStrip logos={[1, 2, 3, 4, 5, 6]} alt={t.common.partner} />
-        <LogoStrip logos={[7, 8, 9, 10, 11, 12]} alt={t.common.partner} />
+        {/* all 12 partner logos in one ticker: right → left in English, left → right in Arabic */}
+        <LogoTicker logos={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]} alt={t.common.partner} />
 
         <div className="spacer-40"></div>
       </section>

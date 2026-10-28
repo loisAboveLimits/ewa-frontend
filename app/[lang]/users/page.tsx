@@ -18,7 +18,7 @@ export default async function Users() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-users.png" title={t.pages.users.title} subtitle={t.pages.users.desc} />
+      <PageBanner page="users" image="/imgs/banners/banner-users.png" title={t.pages.users.title} subtitle={t.pages.users.desc} />
 
       {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">

@@ -23,7 +23,7 @@ export default async function Join() {
     <div className="w-full wrapper bg-white">
 
       {/*<!--banner-->*/}
-      <PageBanner image="/imgs/banners/banner-join.png" title={t.pages.join.title} subtitle={t.pages.join.desc} />
+      <PageBanner page="join" image="/imgs/banners/banner-join.png" title={t.pages.join.title} subtitle={t.pages.join.desc} />
 
       {/*<!--breadcrumbs-->*/}
       <section className="breadcrumps">
