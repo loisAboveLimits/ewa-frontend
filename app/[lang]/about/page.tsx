@@ -233,8 +233,8 @@ export default async function About() {
         <div className="spacer-20"></div>
 
         {/* all 12 partner logos in one ticker: right → left in English, left → right in Arabic */}
-        <LogoTicker logos={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]} alt={t.common.partner} />
-
+        {/*<LogoTicker logos={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]} alt={t.common.partner} />*/}
+        <LogoTicker nid={22}  alt={t.common.partner} />
         <div className="spacer-40"></div>
       </section>
 

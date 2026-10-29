@@ -124,7 +124,8 @@ export default async function Why() {
 
         <div className="spacer-20"></div>
 
-        <LogoTicker logos={[13, 14, 15, 16, 17]} alt={t.common.partner} />
+        {/*<LogoTicker logos={[13, 14, 15, 16, 17]} alt={t.common.partner} />*/}
+        <LogoTicker nid={23}  alt={t.common.partner} />
 
         <div className="spacer-40"></div>
       </section>

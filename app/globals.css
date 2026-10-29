@@ -23,3 +23,10 @@ body {
   /*background: var(--background);*/
   color: var(--foreground);
 }
+
+/* Always keep room for the scrollbar, so the page width never changes when it appears or
+   disappears (preloader / mobile menu lock scrolling with overflow:hidden). Without this the
+   whole layout jumps ~15px and sliders re-measure, which looks like a glitch. */
+html {
+  scrollbar-gutter: stable;
+}

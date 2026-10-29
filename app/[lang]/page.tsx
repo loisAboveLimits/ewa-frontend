@@ -4,7 +4,7 @@ import StoriesCarousel from "@/components/stories/Stories";
 import ContactForm from "@/components/Contact";
 import Testimonials from "@/components/orbit/Testimonials";
 import { getOrbitActions, getTeam } from "@/components/orbit/team";
-import ProgramsRoulette from "@/components/roulette/ProgramsRoulette";
+import DrupalProgramsRoulette from "@/components/roulette/DrupalProgramsRoulette";
 import PageBanner from "@/components/ui/PageBanner";
 import SectionTitle from "@/components/ui/SectionTitle";
 import LogoTicker from "@/components/ui/LogoTicker";
@@ -15,11 +15,11 @@ import { getPageMeta } from "@/lib/banners";
 
 import DrupalSection from "@/components/drupal/DrupalSection";
 
-/* Home: Drupal main title / sub title when set, otherwise the site name from the layout */
+/* Home: the tab title is just "EWA" (absolute = no " | site name" suffix); description from the Drupal sub title */
 export async function generateMetadata(): Promise<Metadata> {
   const { locale } = await getI18n();
-  const { title, description } = await getPageMeta("home", locale);
-  return { ...(title && { title }), ...(description && { description }) };
+  const { description } = await getPageMeta("home", locale);
+  return { title: { absolute: "EWA" }, ...(description && { description }) };
 }
 
 /* sections
@@ -47,6 +47,7 @@ export default async function Home() {
         titleClassName="fnt-orange"
         title={<>{t.home.bannerLine1}<br />{t.home.bannerLine2}</>}
       />
+
 
       {/*<!--about-->*/}
       {/* <section id="about" className="relative">
@@ -128,17 +129,18 @@ export default async function Home() {
 
       {/*<!--partners-->*/}
       <section id="partners">
-        <div className="spacer-20"></div>
         {/* partner logos — ticker: right → left in English, left → right in Arabic */}
-        <LogoTicker logos={[1, 2, 3, 4, 5, 6]} alt={t.common.partner} />
-        <div className="spacer-20"></div>
+        {/*<LogoTicker logos={[1, 2, 3, 4, 5, 6]} alt={t.common.partner} />*/}
+        <LogoTicker nid={21}  alt={t.common.partner} />
+        <div className="spacer-80"></div>
       </section>
 
       {/*<!--courses-->*/}
         <section id="courses">
           <div className="spacer-20"></div>
           <div className="container mx-auto px-4">
-            <ProgramsRoulette />
+            {/* program types from the Drupal "Programs" taxonomy (built-in list if Drupal is down) */}
+            <DrupalProgramsRoulette />
           </div>
           <div className="spacer-20"></div>
         </section>
