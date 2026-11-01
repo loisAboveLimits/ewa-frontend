@@ -25,8 +25,8 @@ function FeatureCard({ icon, title, text }: { icon: string; title: string; text:
   return (
     <div className="box box-green p-6">
       <div className="flex flex-row items-center gap-4">
-        <div className="w-[56px] shrink-0 sm:w-[20%]">
-          <Image src={`/imgs/icons/${icon}.svg`} alt="" width={150} height={150} className="mx-auto h-auto w-full max-w-[64px]"/>
+        <div className="w-14 shrink-0 sm:w-[20%]">
+          <Image src={`/imgs/icons/${icon}.svg`} alt="" width={150} height={150} className="mx-auto h-auto w-full max-w-16"/>
         </div>
         <div className="flex-1">
           <h4 className="text-[15px]! font-bold">{title}</h4>
