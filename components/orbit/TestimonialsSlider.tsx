@@ -67,7 +67,7 @@ export default function TestimonialsSlider({
                   className="relative block h-24 w-24 shrink-0 overflow-hidden rounded-full border-4 border-white"
                   style={{ outline: `2px dashed ${color}`, outlineOffset: "3px" }}
                 >
-                  <Image src={m.image} alt={m.name} fill sizes="96px" className="object-cover" />
+                  <Image src={m.image} alt={m.name} fill sizes="96px" unoptimized={/^https?:\/\//.test(m.image)} className="object-cover" />
                 </span>
 
                 <figcaption className="mt-5">

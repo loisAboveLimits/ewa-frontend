@@ -50,6 +50,8 @@ type Props = {
  *   <DrupalSection nid={12} showSubTitle={false} />          // main title + content
  *   <DrupalSection nid={12} showContent={false} />           // titles only
  *   <DrupalSection nid={12} title="Our Values" subTitle="…" /> // own titles, Drupal content
+ *   <DrupalSection nid={12} showTitle={false} showSubTitle={false} />
+ *     // only the content: <div className="drpl-view-section">…</div> (no section, id, spacers or children)
  */
 export default function DrupalSection({
   nid,
@@ -75,6 +77,11 @@ export default function DrupalSection({
         const content = showContent ? drupalHtml(row.field_content).trim() : "";
         const hasTitle = showTitle && (customTitle != null || !!title);
         const hasSubTitle = showSubTitle && (customSubTitle != null || !!subTitle);
+
+        // titles switched off → only the Drupal content, no section / container / spacers
+        if (!showTitle && !showSubTitle) {
+          return content ? <div className="drpl-view-section" dangerouslySetInnerHTML={{ __html: content }} /> : null;
+        }
 
         return (
           <section id={id} className={`relative ${className}`}>

@@ -68,7 +68,8 @@ const opposite = (d: "normal" | "reverse") => (d === "normal" ? "reverse" : "nor
 
 function pointOnRing(radius: number, angleDeg: number) {
   const a = (angleDeg * Math.PI) / 180;
-  return { left: `${50 + radius * Math.cos(a)}%`, top: `${50 + radius * Math.sin(a)}%` };
+  // rounded: long decimals get shortened by the browser and cause a hydration mismatch
+  return { left: `${(50 + radius * Math.cos(a)).toFixed(2)}%`, top: `${(50 + radius * Math.sin(a)).toFixed(2)}%` };
 }
 
 function resolveAngles(members: OrbitMember[]) {
@@ -204,7 +205,7 @@ export default function OrbitShowcase({
                         }}
                         onBlur={close}
                       >
-                        <Image src={m.image} alt={m.name} fill sizes="(max-width: 640px) 64px, 96px" className={styles.avatarImg} />
+                        <Image src={m.image} alt={m.name} fill sizes="(max-width: 640px) 64px, 96px" unoptimized={/^https?:\/\//.test(m.image)} className={styles.avatarImg} />
                       </button>
 
                       <div

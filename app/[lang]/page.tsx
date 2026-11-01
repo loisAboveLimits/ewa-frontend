@@ -2,7 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import StoriesCarousel from "@/components/stories/Stories";
 import ContactForm from "@/components/Contact";
-import Testimonials from "@/components/orbit/Testimonials";
+import DrupalTestimonials from "@/components/orbit/DrupalTestimonials";
 import { getOrbitActions, getTeam } from "@/components/orbit/team";
 import DrupalProgramsRoulette from "@/components/roulette/DrupalProgramsRoulette";
 import PageBanner from "@/components/ui/PageBanner";
@@ -50,81 +50,6 @@ export default async function Home() {
 
 
       {/*<!--about-->*/}
-      {/* <section id="about" className="relative">
-
-        <div className="spacer-40"></div>
-
-        <div className="container mx-auto px-4">
-
-          <div className="flex flex-col md:flex-row items-stretch">
-
-            <div className="md:w-1/2 p-2 py-4 sm:p-6 lg:p-8 flex flex-col">
-
-              <div className="box box-green px-6 py-10 md:px-8 md:py-12">
-                <h3 className="font-bold sub-title">{t.home.aboutKicker}</h3>
-                <h2 className="font-bold title">{t.home.aboutTitle}</h2>
-
-                <div className="spacer-40"></div>
-
-                <p>{t.home.aboutText}</p>
-
-                <div className="spacer-40"></div>
-
-                <div className="flex justify-end">
-                  <ArrowLink href="/about">{t.common.learnMore}</ArrowLink>
-                </div>
-              </div>
-
-              <div className="spacer-40"></div>
-
-              <div className="box box-orange px-6 py-10 md:px-8 md:py-12">
-                <h2 className="font-bold title">{t.home.partnerTitle}</h2>
-
-                <div className="spacer-40"></div>
-
-                <p>{t.home.partnerText}</p>
-
-                <div className="spacer-40"></div>
-
-                <div className="flex justify-end">
-                  <ArrowLink href="/contact" color="orange">{t.common.sendRequest}</ArrowLink>
-                </div>
-              </div>
-
-            </div>
-
-            <div className="md:w-1/2 p-2 py-4 sm:p-6 lg:p-8 flex">
-
-              <div className="box box-mixed p-6 sm:p-8 bg-[url(/imgs/bgs/home-about-bg.jpg)] bg-cover bg-center w-full flex flex-col min-h-[320px]">
-
-                <h2 className="font-bold sub-title text-white">{t.home.numbersTitleA}<br />{t.home.numbersTitleB}</h2>
-
-                <div className="mt-auto grid grid-cols-3 gap-2 pt-10 sm:gap-4">
-                  {[
-                    { value: "20", label: t.home.diplomaPrograms },
-                    { value: "70", label: t.home.sponsorshipPartners },
-                    { value: "25", label: t.home.accreditedPrograms },
-                  ].map((stat) => (
-                    <div key={stat.label} className="prog flex flex-col items-center justify-end text-center">
-                      <p className="counter ltr-text text-[38px]! sm:text-[46px]! md:text-[38px]! lg:text-[50px]! xl:text-[56px]! leading-none!">{stat.value}</p>
-                      <p className="mt-2 text-[13px]! sm:text-[15px]! md:text-[13px]! lg:text-[15px]! leading-tight!">{stat.label}</p>
-                    </div>
-                  ))}
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <Image src="/imgs/logos/logo-circle-white.svg" alt="" aria-hidden width={150} height={150} className="hidden md:block w-[110px] lg:w-[150px] h-auto absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2"/>
-
-        <div className="spacer-40"></div>
-      </section>*/}
-
       <DrupalSection nid={2} id="about" showSubTitle={false} showTitle={false} />
 
       {/*<!--partners-->*/}
@@ -174,9 +99,10 @@ export default async function Home() {
 
         <div className="spacer-40"></div>
 
-        {/* slider on phones, rotating orbit from tablets up */}
-        <Testimonials
-          members={getTeam(locale)}
+        {/* testimonies from Drupal by language — slider on phones, rotating orbit from tablets up.
+            The built-in team is shown if Drupal has none. */}
+        <DrupalTestimonials
+          fallback={getTeam(locale)}
           actions={getOrbitActions(t)}
           label={s.testimonialsA}
           center={

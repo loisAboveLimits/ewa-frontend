@@ -2,7 +2,7 @@ import Image from "next/image";
 import StoriesCarousel from "@/components/stories/Stories";
 import MediaCarousel from "@/components/Media";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import Testimonials from "@/components/orbit/Testimonials";
+import DrupalTestimonials from "@/components/orbit/DrupalTestimonials";
 import { getOrbitActions, getTeam } from "@/components/orbit/team";
 import PageBanner from "@/components/ui/PageBanner";
 import SectionTitle from "@/components/ui/SectionTitle";
@@ -87,8 +87,9 @@ export default async function Community() {
         <div className="spacer-40"></div>
 
         {/* slider on phones, rotating orbit from tablets up */}
-        <Testimonials
-          members={getTeam(locale)}
+        {/* testimonies from Drupal by language (built-in team if Drupal has none) */}
+        <DrupalTestimonials
+          fallback={getTeam(locale)}
           actions={getOrbitActions(t)}
           label={s.testimonialsA}
           center={

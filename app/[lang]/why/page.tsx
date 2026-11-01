@@ -7,6 +7,9 @@ import LogoTicker from "@/components/ui/LogoTicker";
 import ArrowLink from "@/components/ui/ArrowLink";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
 
+import DrupalContent from "@/components/drupal/DrupalContent";
+import DrupalSection from "@/components/drupal/DrupalSection";
+
 export const generateMetadata = () => pageMetadata("why");
 
 const featureIcons = ["grad-cap", "calendar", "dart"];
@@ -56,71 +59,89 @@ export default async function Why() {
       </section>
 
       {/*<!--why-->*/}
-      <section id="why" className="relative lg:pb-[5%]">
 
-        <div className="spacer-40"></div>
+         <DrupalContent
+          nid={4}
+          id="about"
+          fallback={
+            <section id="why" className="relative lg:pb-[5%]">
 
-        <div className="container mx-auto px-4">
+              <div className="spacer-40"></div>
 
-          <div className="flex flex-col lg:flex-row">
+              <div className="container mx-auto px-4">
 
-            {/* START */}
-            <div className="lg:w-1/3 py-4 lg:p-6 flex flex-col">
+                <div className="flex flex-col lg:flex-row">
 
-              <SectionTitle>{w.title}</SectionTitle>
+                  {/* START */}
+                  <div className="lg:w-1/3 py-4 lg:p-6 flex flex-col">
 
-              <div className="spacer-20"></div>
+                    <SectionTitle>{w.title}</SectionTitle>
 
-              <p className="text-base! fnt-green">{w.intro}</p>
+                    <div className="spacer-20"></div>
 
-              <div className="spacer-20"></div>
+                    <p className="text-base! fnt-green">{w.intro}</p>
 
-              <div className="flex justify-end">
-                <ArrowLink href="/why/programs" color="orange" className="fnt-orange text-[18px]!">
-                  {t.common.viewPrograms}
-                </ArrowLink>
-              </div>
+                    <div className="spacer-20"></div>
 
-            </div>
+                    <div className="flex justify-end">
+                      <ArrowLink href="/why/programs" color="orange" className="fnt-orange text-[18px]!">
+                        {t.common.viewPrograms}
+                      </ArrowLink>
+                    </div>
 
-             {/* CENTER */}
-            <div className="lg:w-1/3 py-4 lg:p-6 flex">
-              <div className="box box-mixed p-8 bg-[url(/imgs/bgs/why-sec1.jpg)] bg-cover bg-center w-full flex min-h-[260px]"></div>
-            </div>
+                  </div>
 
-            {/* END */}
-            <div className="lg:w-1/3 py-4 lg:p-6 grid relative gap-[10px]">
+                   {/* CENTER */}
+                  <div className="lg:w-1/3 py-4 lg:p-6 flex">
+                    <div className="box box-mixed p-8 bg-[url(/imgs/bgs/why-sec1.jpg)] bg-cover bg-center w-full flex min-h-[260px]"></div>
+                  </div>
 
-                <FeatureCard icon={featureIcons[0]} title={f1.title} text={f1.text} />
-                <FeatureCard icon={featureIcons[1]} title={f2.title} text={f2.text} />
+                  {/* END */}
+                  <div className="lg:w-1/3 py-4 lg:p-6 grid relative gap-[10px]">
 
-                {/* third card overlaps the image column on large screens only */}
-                <div className="lg:w-[150%] lg:absolute lg:end-0 lg:top-[90%] framed-10 lg:z-10">
-                  <FeatureCard icon={featureIcons[2]} title={f3.title} text={f3.text} />
+                      <FeatureCard icon={featureIcons[0]} title={f1.title} text={f1.text} />
+                      <FeatureCard icon={featureIcons[1]} title={f2.title} text={f2.text} />
+
+                      {/* third card overlaps the image column on large screens only */}
+                      <div className="lg:w-[150%] lg:absolute lg:end-0 lg:top-[90%] framed-10 lg:z-10">
+                        <FeatureCard icon={featureIcons[2]} title={f3.title} text={f3.text} />
+                      </div>
+
+                  </div>
+
                 </div>
 
-            </div>
+              </div>
 
-          </div>
+              <div className="spacer-40"></div>
+            </section>
+          }
+        />     
 
-        </div>
-
-        <div className="spacer-40"></div>
-      </section>
 
       {/*<!--accreditation-->*/}
       <section id="accreditation">
         <div className="spacer-40"></div>
 
-        <div className="container mx-auto px-4">
+        <DrupalSection 
+          nid={37} 
+          showSubTitle={false} 
+          showTitle={false}
+          fallback={
+            <div className="container mx-auto px-4">
 
-          <SectionTitle>{w.accreditationTitle}</SectionTitle>
+              <SectionTitle>{w.accreditationTitle}</SectionTitle>
 
-          <div className="spacer-20"></div>
+              <div className="spacer-20"></div>
 
-          <p className="fnt-green">{w.accreditationText}</p>
+              <p className="fnt-green">{w.accreditationText}</p>
 
-        </div>
+            </div>
+          }
+
+         />        
+
+
 
         <div className="spacer-20"></div>
 
@@ -131,53 +152,62 @@ export default async function Why() {
       </section>
 
       {/*<!--glance-->*/}
-      <section id="glance">
-        <div className="spacer-40"></div>
 
-        <div className="bg-[url('/imgs/bgs/glance.jpg')] bg-cover bg-center w-full">
+        <DrupalSection 
+          nid={38} 
+          id="glance" 
+          showSubTitle={false} 
+          showTitle={false}
+          fallback={
+            <section id="glance">
+              <div className="spacer-40"></div>
 
-          <div className="flex flex-col md:flex-row md:min-h-[150px]">
+              <div className="bg-[url('/imgs/bgs/glance.jpg')] bg-cover bg-center w-full">
 
-            {/* START */}
-            <div className="w-full md:w-[18%] lg:w-[15%]">
-              <div className="glance-left p-6 md:p-8 min-h-[90px] md:min-h-[150px] h-full w-full flex flex-col justify-center">
-                <h4 className="font-bold text-[22px] md:text-[25px] leading-tight">{w.glanceTitle}</h4>
+                <div className="flex flex-col md:flex-row md:min-h-[150px]">
+
+
+                  <div className="w-full md:w-[18%] lg:w-[15%]">
+                    <div className="glance-left p-6 md:p-8 min-h-[90px] md:min-h-[150px] h-full w-full flex flex-col justify-center">
+                      <h4 className="font-bold text-[22px] md:text-[25px] leading-tight">{w.glanceTitle}</h4>
+                    </div>
+                  </div>
+
+        
+                  <div className="w-full md:w-[64%] lg:w-[70%] flex items-center">
+                    <div className="container mx-auto px-4">
+                       <div className="grid grid-cols-2 lg:grid-cols-4">
+                          {glance.map((g) => (
+                            <div key={g.key} className="p-3 lg:p-4">
+                              <div className="flex flex-col items-center gap-2 text-center lg:flex-row lg:text-start">
+                                <Image src={`/imgs/icons/${g.icon}.svg`} alt="" width={150} height={150} className="h-auto w-12 shrink-0 lg:w-[25%]"/>
+                                <div className="lg:px-3">
+                                  <h4 className="text-[22px]! md:text-[25px]! leading-tight ltr-text">{g.value}</h4>
+                                  <p className="text-[12px]!">{w.glance[g.key]}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                       </div>
+                    </div>
+                  </div>
+
+
+                  <div className="w-full md:w-[18%] lg:w-[15%]">
+                    <div className="glance-right p-6 md:p-8 min-h-[110px] md:min-h-[150px] h-full w-full flex flex-col justify-center items-center text-center">
+                      <p className="text-[28px]! md:text-[32px]! leading-tight ltr-text">4,130,814</p>
+                      <p className="text-[12px]! leading-tight">{w.glance.safeHours}</p>
+                    </div>
+                  </div>
+
+                </div>
               </div>
-            </div>
 
-            {/* CENTER */}
-            <div className="w-full md:w-[64%] lg:w-[70%] flex items-center">
-              <div className="container mx-auto px-4">
-                 <div className="grid grid-cols-2 lg:grid-cols-4">
-                    {glance.map((g) => (
-                      <div key={g.key} className="p-3 lg:p-4">
-                        <div className="flex flex-col items-center gap-2 text-center lg:flex-row lg:text-start">
-                          <Image src={`/imgs/icons/${g.icon}.svg`} alt="" width={150} height={150} className="h-auto w-12 shrink-0 lg:w-[25%]"/>
-                          <div className="lg:px-3">
-                            <h4 className="text-[22px]! md:text-[25px]! leading-tight ltr-text">{g.value}</h4>
-                            <p className="text-[12px]!">{w.glance[g.key]}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                 </div>
-              </div>
-            </div>
+              <div className="spacer-40"></div>
+            </section>
+          }
 
-            {/* END */}
-            <div className="w-full md:w-[18%] lg:w-[15%]">
-              <div className="glance-right p-6 md:p-8 min-h-[110px] md:min-h-[150px] h-full w-full flex flex-col justify-center items-center text-center">
-                <p className="text-[28px]! md:text-[32px]! leading-tight ltr-text">4,130,814</p>
-                <p className="text-[12px]! leading-tight">{w.glance.safeHours}</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <div className="spacer-40"></div>
-      </section>
-
+         /> 
 
       {/*<!--campus-->*/}
       <section id="campus" className="relative">
