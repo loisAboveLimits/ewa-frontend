@@ -140,9 +140,7 @@ export default async function Why() {
           }
 
          />        
-
-
-
+         
         <div className="spacer-20"></div>
 
         {/*<LogoTicker logos={[13, 14, 15, 16, 17]} alt={t.common.partner} />*/}
@@ -152,7 +150,6 @@ export default async function Why() {
       </section>
 
       {/*<!--glance-->*/}
-
         <DrupalSection 
           nid={38} 
           id="glance" 
@@ -262,7 +259,7 @@ export default async function Why() {
 
           </div>
 
-          <Image src="/imgs/logos/logo-circle-white.svg" alt="" aria-hidden width={150} height={150} className="hidden md:block w-[110px] lg:w-[150px] h-auto absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100]"/>
+          <Image src="/imgs/logos/logo-circle-white.svg" alt="" aria-hidden width={150} height={150} className="hidden md:block w-27.5 lg:w-37.5 h-auto absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-100"/>
 
         <div className="spacer-40"></div>
       </section>
