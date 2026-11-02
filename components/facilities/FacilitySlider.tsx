@@ -54,6 +54,8 @@ export default function FacilitySlider({ images, side = "left", priority = false
                 fill
                 priority={priority && i === 0}
                 sizes="(min-width: 1024px) 58vw, 100vw"
+                // Drupal photos are used as they are (no Next.js optimizer / remotePatterns needed)
+                unoptimized={/^https?:\/\//.test(img.src)}
                 className="object-cover"
               />
               {/* teal tint from the design */}

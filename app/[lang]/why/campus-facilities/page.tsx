@@ -2,13 +2,17 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import FacilitySection from "@/components/facilities/FacilitySection";
 import PageBanner from "@/components/ui/PageBanner";
 import { getFacilities } from "@/lib/facilities";
+import { getCampusFacilities } from "@/lib/campus";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
 
 export const generateMetadata = () => pageMetadata("campus");
 
 export default async function CampusFacilities() {
   const { locale, t } = await getI18n();
-  const facilities = getFacilities(locale);
+  // Drupal "Campus & Facilities" (ewa_content_api → /api/media/campus/{lang}), sorted by weight;
+  // the built-in list is used when Drupal has none or can't be reached
+  const drupal = await getCampusFacilities(locale);
+  const facilities = drupal.length ? drupal : getFacilities(locale);
 
   return (
 

@@ -1,6 +1,7 @@
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Tabs from "@/components/rules/Tabs";
 import PageBanner from "@/components/ui/PageBanner";
+import DrupalContent from "@/components/drupal/DrupalContent";
 import { getPolicyTabs } from "@/lib/rules";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
 
@@ -26,16 +27,24 @@ export default async function Rules() {
       </section>
 
       {/*<!--rules-->*/}
-      <section id="rules-regulations">
+      {/* content of Drupal page node 12 by language (tabs work through DrupalHtml);
+          the Next.js tabs are shown when Drupal has no content in this language */}
+      <DrupalContent
+        nid={12}
+        id="rules-regulations"
+        fallback={
+          <section id="rules-regulations">
 
-        <div className="spacer-40"></div>
+            <div className="spacer-40"></div>
 
-        <div className="container mx-auto px-4">
-          <Tabs tabs={getPolicyTabs(locale)} />
-        </div>
+            <div className="container mx-auto px-4">
+              <Tabs tabs={getPolicyTabs(locale)} />
+            </div>
 
-        <div className="spacer-40"></div>
-      </section>
+            <div className="spacer-40"></div>
+          </section>
+        }
+      />
 
     </div>
   );

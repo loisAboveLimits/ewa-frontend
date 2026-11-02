@@ -662,3 +662,8 @@ html[data-loading="true"] body > :not(header):not(.ewa-preloader):not(script) {
 /* ---------- partner logo ticker (components/ui/LogoTicker.tsx) ----------
    Constant speed instead of Swiper's ease-out between slides */
 .logo-ticker .swiper-wrapper { transition-timing-function: linear !important; }
+
+/* DrupalSection with showTitle/showSubTitle off renders <div class="drpl-view-section">…</div>.
+   display: contents lets the Drupal markup take part in the parent's layout (flex/grid gaps),
+   exactly as if it were written in the page. */
+.drpl-view-section { display: contents; }

@@ -1,6 +1,7 @@
 import Breadcrumbs from "@/components/Breadcrumbs";
 import PageBanner from "@/components/ui/PageBanner";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
+import { assetBg } from "@/lib/assets";
 
 export const generateMetadata = () => pageMetadata("users");
 
@@ -11,7 +12,7 @@ export const generateMetadata = () => pageMetadata("users");
 const icons = ["building", "building", "building", "cap", "cap"] as const;
 
 export default async function Users() {
-  const { t } = await getI18n();
+  const { locale, t } = await getI18n();
 
   return (
 
@@ -45,6 +46,7 @@ export default async function Users() {
                   text={portal.cardText}
                   href={portal.link}
                   cta={t.common.visitPortal}
+                  bubbles={assetBg("box-user-bg.svg", locale)}
                 />
               </li>
             ))}
@@ -69,20 +71,24 @@ function PortalCard({
   text,
   href,
   cta,
+  bubbles,
 }: {
   icon: (typeof icons)[number];
   title: string;
   text: string;
   href: string;
   cta: string;
+  /** background image of the peach bubbles (language version from public/imgs/assets) */
+  bubbles: string;
 }) {
   return (
     <div className="relative isolate flex h-full min-h-47.5 flex-col overflow-hidden rounded-[1.75rem] border-2 border-[#F6A181] bg-white px-5 pt-5 pb-5 sm:px-6 md:min-h-52.5">
 
-      {/* peach bubbles in the bottom start corner (mirrors in Arabic) */}
+      {/* peach bubbles in the bottom start corner — the Arabic file is already mirrored */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[60%] bg-[url(/imgs/assets/box-user-bg.svg)] bg-no-repeat bg-bottom-left bg-size-[100%_auto] rtl:-scale-x-100"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[60%] bg-no-repeat bg-bottom-left bg-size-[100%_auto]"
+        style={{ backgroundImage: bubbles }}
       />
 
       <div className="flex items-start gap-4">

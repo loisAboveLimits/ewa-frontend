@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "@/components/i18n/Link";
 import { useLocalePathname } from "@/components/i18n/navigation";
 import { useI18n } from "@/components/i18n/I18nProvider";
+import { assetBg } from "@/lib/assets";
 
 export type TabLink = {
   label: string;
@@ -30,7 +31,7 @@ export default function CategoryTabs({
   ariaLabel?: string;
   className?: string;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const tabs: TabLink[] = tabsProp ?? defaultTabs.map((tab) => ({ ...tab, label: t.media.tabs[tab.key] }));
   const pathname = useLocalePathname();
   const activeRef = useRef<HTMLAnchorElement>(null);
@@ -54,7 +55,8 @@ export default function CategoryTabs({
   return (
     <nav
       aria-label={ariaLabel ?? t.media.tabsAria}
-      className={`relative isolate overflow-hidden bg-[url(/imgs/assets/box-leaf-bg.svg)] bg-no-repeat bg-right-bottom rtl:bg-left-bottom bg-[#F0F7F7] ${className}`}
+      className={`relative isolate overflow-hidden bg-no-repeat bg-right-bottom rtl:bg-left-bottom bg-[#F0F7F7] ${className}`}
+      style={{ backgroundImage: assetBg("box-leaf-bg.svg", locale) }}
     >
       {/* decorative bubbles on the right */}
       <div className="container mx-auto px-4"> 

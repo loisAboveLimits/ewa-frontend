@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import SectionTitle from "@/components/ui/SectionTitle";
+import { assetBg } from "@/lib/assets";
+import { getLocale } from "@/lib/i18n/server";
 
 /* Building blocks for the policy panels (used by lib/rules.tsx in both languages). */
 
@@ -22,18 +24,26 @@ export function Gap({ size = 40 }: { size?: 20 | 40 }) {
 }
 
 /** Light-green card with the leaf watermark in the bottom inline-end corner. */
-export function LeafBox({ children }: { children: ReactNode }) {
+export async function LeafBox({ children }: { children: ReactNode }) {
+  const locale = await getLocale();
   return (
-    <div className="box-leaf-green py-6 px-5 md:py-8 md:px-10 bg-[url(/imgs/assets/box-leaf-bg.svg)] bg-no-repeat bg-right-bottom rtl:bg-left-bottom">
+    <div
+      className="box-leaf-green py-6 px-5 md:py-8 md:px-10 bg-no-repeat bg-right-bottom rtl:bg-left-bottom"
+      style={{ backgroundImage: assetBg("box-leaf-bg.svg", locale) }}
+    >
       <div className="md:w-[80%] fnt-green">{children}</div>
     </div>
   );
 }
 
 /** Orange outlined note with an asterisk; text sits on the inline-end side like the design. */
-export function NoteBox({ children }: { children: ReactNode }) {
+export async function NoteBox({ children }: { children: ReactNode }) {
+  const locale = await getLocale();
   return (
-    <div className="box-leaf-orange py-6 px-5 md:py-8 md:px-10 bg-[url(/imgs/assets/box-leaf-orange-bg.svg)] bg-no-repeat bg-left-bottom rtl:bg-right-bottom">
+    <div
+      className="box-leaf-orange py-6 px-5 md:py-8 md:px-10 bg-no-repeat bg-left-bottom rtl:bg-right-bottom"
+      style={{ backgroundImage: assetBg("box-leaf-orange-bg.svg", locale) }}
+    >
       <div className="md:ms-[20%] md:w-[80%] fnt-orange">
         <p>
           <i className="fa-solid fa-asterisk mar-right-5"></i> {children}

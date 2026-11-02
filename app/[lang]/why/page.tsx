@@ -1,5 +1,5 @@
 import Image from "next/image";
-import CampusCarousel from "@/components/campus/Campus";
+import DrupalCampusCarousel from "@/components/campus/DrupalCampusCarousel";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import PageBanner from "@/components/ui/PageBanner";
 import SectionTitle from "@/components/ui/SectionTitle";
@@ -59,64 +59,62 @@ export default async function Why() {
       </section>
 
       {/*<!--why-->*/}
+      <DrupalContent
+        nid={4}
+        id="about"
+        fallback={
+          <section id="why" className="relative lg:pb-[5%]">
 
-         <DrupalContent
-          nid={4}
-          id="about"
-          fallback={
-            <section id="why" className="relative lg:pb-[5%]">
+            <div className="spacer-40"></div>
 
-              <div className="spacer-40"></div>
+            <div className="container mx-auto px-4">
 
-              <div className="container mx-auto px-4">
+              <div className="flex flex-col lg:flex-row">
 
-                <div className="flex flex-col lg:flex-row">
+                {/* START */}
+                <div className="lg:w-1/3 py-4 lg:p-6 flex flex-col">
 
-                  {/* START */}
-                  <div className="lg:w-1/3 py-4 lg:p-6 flex flex-col">
+                  <SectionTitle>{w.title}</SectionTitle>
 
-                    <SectionTitle>{w.title}</SectionTitle>
+                  <div className="spacer-20"></div>
 
-                    <div className="spacer-20"></div>
+                  <p className="text-base! fnt-green">{w.intro}</p>
 
-                    <p className="text-base! fnt-green">{w.intro}</p>
+                  <div className="spacer-20"></div>
 
-                    <div className="spacer-20"></div>
+                  <div className="flex justify-end">
+                    <ArrowLink href="/why/programs" color="orange" className="fnt-orange text-[18px]!">
+                      {t.common.viewPrograms}
+                    </ArrowLink>
+                  </div>
 
-                    <div className="flex justify-end">
-                      <ArrowLink href="/why/programs" color="orange" className="fnt-orange text-[18px]!">
-                        {t.common.viewPrograms}
-                      </ArrowLink>
+                </div>
+
+                 {/* CENTER */}
+                <div className="lg:w-1/3 py-4 lg:p-6 flex">
+                  <div className="box box-mixed p-8 bg-[url(/imgs/bgs/why-sec1.jpg)] bg-cover bg-center w-full flex min-h-[260px]"></div>
+                </div>
+
+                {/* END */}
+                <div className="lg:w-1/3 py-4 lg:p-6 grid relative gap-[10px]">
+
+                    <FeatureCard icon={featureIcons[0]} title={f1.title} text={f1.text} />
+                    <FeatureCard icon={featureIcons[1]} title={f2.title} text={f2.text} />
+
+                    {/* third card overlaps the image column on large screens only */}
+                    <div className="lg:w-[150%] lg:absolute lg:end-0 lg:top-[90%] framed-10 lg:z-10">
+                      <FeatureCard icon={featureIcons[2]} title={f3.title} text={f3.text} />
                     </div>
-
-                  </div>
-
-                   {/* CENTER */}
-                  <div className="lg:w-1/3 py-4 lg:p-6 flex">
-                    <div className="box box-mixed p-8 bg-[url(/imgs/bgs/why-sec1.jpg)] bg-cover bg-center w-full flex min-h-[260px]"></div>
-                  </div>
-
-                  {/* END */}
-                  <div className="lg:w-1/3 py-4 lg:p-6 grid relative gap-[10px]">
-
-                      <FeatureCard icon={featureIcons[0]} title={f1.title} text={f1.text} />
-                      <FeatureCard icon={featureIcons[1]} title={f2.title} text={f2.text} />
-
-                      {/* third card overlaps the image column on large screens only */}
-                      <div className="lg:w-[150%] lg:absolute lg:end-0 lg:top-[90%] framed-10 lg:z-10">
-                        <FeatureCard icon={featureIcons[2]} title={f3.title} text={f3.text} />
-                      </div>
-
-                  </div>
 
                 </div>
 
               </div>
 
-              <div className="spacer-40"></div>
-            </section>
-          }
-        />     
+            </div>
+
+            <div className="spacer-40"></div>
+          </section>
+        } />     
 
 
       {/*<!--accreditation-->*/}
@@ -150,7 +148,7 @@ export default async function Why() {
       </section>
 
       {/*<!--glance-->*/}
-        <DrupalSection 
+      <DrupalSection 
           nid={38} 
           id="glance" 
           showSubTitle={false} 
@@ -222,35 +220,61 @@ export default async function Why() {
               {/* START */}
               <div className="w-full md:w-1/2 py-4 md:p-8 flex flex-col gap-6 md:gap-10">
 
-                {[
-                  { bg: "campus-tech", label: w.campusCards.labs },
-                  { bg: "campus-simulation", label: w.campusCards.simulation },
-                  { bg: "campus-spaces", label: w.campusCards.spaces },
-                ].map((card) => (
-                  <div
-                    key={card.bg}
-                    className="box bg-cover bg-center w-full flex flex-col justify-end min-h-[160px] md:min-h-[180px] px-6 py-8 md:px-8 md:py-12"
-                    style={{ backgroundImage: `url('/imgs/bgs/${card.bg}.png')` }}
-                  >
-                    <h3 className="font-bold sub-title mt-auto">{card.label}</h3>
-                  </div>
-                ))}
+                <DrupalSection 
+                  nid={40} 
+                  id="campus-left" 
+                  showSubTitle={false} 
+                  showTitle={false}
+                  fallback={
+                    <>
+                      {[
+                        { bg: "campus-tech", label: w.campusCards.labs },
+                        { bg: "campus-simulation", label: w.campusCards.simulation },
+                        { bg: "campus-spaces", label: w.campusCards.spaces },
+                      ].map((card) => (
+                        <div
+                          key={card.bg}
+                          className="box bg-cover bg-center w-full flex flex-col justify-end min-h-40 md:min-h-45 px-6 py-8 md:px-8 md:py-12"
+                          style={{ backgroundImage: `url('/imgs/bgs/${card.bg}.png')` }}
+                        >
+                          <h3 className="font-bold sub-title mt-auto">{card.label}</h3>
+                        </div>
+                      ))}
+                    </>
+                  }
+
+                 />                 
 
               </div>
 
               {/* END */}
               <div className="w-full md:w-1/2 py-4 md:p-8 flex flex-col gap-6 md:gap-10">
 
-                <div className="flex-1 min-h-[220px]">
-                  <CampusCarousel />
+                {/* height = the first two campus cards + the gap between them
+                    (phones: 2 × 10rem + 1.5rem, tablets and up: 2 × 11.25rem + 2.5rem),
+                    so "Built for hands-on learning" lines up with the third card */}
+                <div className="h-[21.5rem] md:h-[25rem] shrink-0">
+                  {/* photos from the gallery of Drupal Media Center node 39 (built-in photos if empty) */}
+                  <DrupalCampusCarousel nid={39} />
                 </div>
 
                 <div className="box box-orange p-6 md:p-8">
-                  <h2 className="font-bold title text-[24px]! md:text-[27px]!">{w.handsOnTitle}</h2>
 
-                  <div className="spacer-10"></div>
+                  <DrupalSection 
+                    nid={41} 
+                    id="campus-right" 
+                    showSubTitle={false} 
+                    showTitle={false}
+                    fallback={
+                      <>
+                      <h2 className="font-bold title text-[24px]! md:text-[27px]!">{w.handsOnTitle}</h2>
+                      <div className="spacer-10"></div>
+                       <p className="text-[16px]! md:text-[18px]!">{w.handsOnText}</p>
+                      </>
+                    }
 
-                  <p className="text-[16px]! md:text-[18px]!">{w.handsOnText}</p>
+                   />                   
+
                 </div>
 
               </div>

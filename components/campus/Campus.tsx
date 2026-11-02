@@ -7,15 +7,20 @@ import { Pagination, Autoplay } from "swiper/modules";
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-const slides = [
-  "/imgs/slides/slide1.jpg",
-  "/imgs/slides/slide2.jpg",
-  "/imgs/slides/slide3.jpg",
-  "/imgs/slides/slide4.jpg",
-  "/imgs/slides/slide3.jpg",
+/** One photo of the campus carousel (from Drupal, see DrupalCampusCarousel, or the built-in list). */
+export type CampusSlide = { src: string; alt?: string };
+
+/* Built-in photos — used when no `slides` are passed (Drupal down…) */
+const builtIn: CampusSlide[] = [
+  { src: "/imgs/slides/slide1.jpg" },
+  { src: "/imgs/slides/slide2.jpg" },
+  { src: "/imgs/slides/slide3.jpg" },
+  { src: "/imgs/slides/slide4.jpg" },
 ];
 
-export default function CampusCarousel() {
+export default function CampusCarousel({ slides: items }: { slides?: CampusSlide[] }) {
+  const slides = items?.length ? items : builtIn;
+
   return (
     <Swiper
         grabCursor={true}
@@ -30,16 +35,18 @@ export default function CampusCarousel() {
         //   disableOnInteraction: false,
         //   pauseOnMouseEnter: true,
         // }}
-        loop={true}
+        loop={slides.length > 2}
         modules={[Pagination, Autoplay]}
-        className="campus-swiper gallery-swiper-orange box box-mixed"
+        className="campus-swiper gallery-swiper-orange box box-mixed h-full"
     >
-      {slides.map((src, i) => (
+      {slides.map((slide, i) => (
         <SwiperSlide key={i}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={src}
-            alt=""
-            className="w-full h-auto object-cover"
+            src={slide.src}
+            alt={slide.alt ?? ""}
+            // fill the carousel's height (set by the page) — cropped, never stretched
+            className="w-full h-full object-cover"
           />
         </SwiperSlide>
       ))}

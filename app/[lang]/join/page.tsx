@@ -5,11 +5,12 @@ import CareersCarousel from "@/components/Careers";
 import PageBanner from "@/components/ui/PageBanner";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
+import { assetBg } from "@/lib/assets";
 
 export const generateMetadata = () => pageMetadata("join");
 
 export default async function Join() {
-  const { t } = await getI18n();
+  const { locale, t } = await getI18n();
   const j = t.join;
 
   const requirements = [
@@ -47,7 +48,7 @@ export default async function Join() {
 
           <div
             className="box box-orange p-6 sm:p-10 md:p-12 w-full bg-bottom-right rtl:bg-bottom-left bg-no-repeat"
-            style={{ backgroundImage: "url('/imgs/assets/footer-bg.png')" }}
+            style={{ backgroundImage: assetBg("footer-bg.png", locale) }}
           >
             <div className="md:w-[70%]">
               <h2 className="font-bold text-[28px] md:text-[35px]">{j.whyJoinTitle}</h2>

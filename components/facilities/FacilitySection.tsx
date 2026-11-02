@@ -19,14 +19,16 @@ export default function FacilitySection({ id, title, images, children, imageSide
 
   return (
     <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-28">
-      <div className="grid items-start gap-6 md:gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-14">
+      {/* grid-cols-1 + min-w-0: without them the single mobile column grows to the width of
+          the Swiper track (all slides side by side) and the page becomes thousands of px wide */}
+      <div className="grid grid-cols-1 items-start gap-6 md:gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-14">
         {/* slider – always first on mobile */}
-        <div className={`lg:col-span-7 ${imageRight ? "lg:order-2" : "lg:order-1"}`}>
+        <div className={`min-w-0 lg:col-span-7 ${imageRight ? "lg:order-2" : "lg:order-1"}`}>
           <FacilitySlider images={images} side={imageSide} priority={priority} label={title} />
         </div>
 
         {/* text */}
-        <div className={`lg:col-span-5 lg:pt-2 ${imageRight ? "lg:order-1" : "lg:order-2"}`}>
+        <div className={`min-w-0 lg:col-span-5 lg:pt-2 ${imageRight ? "lg:order-1" : "lg:order-2"}`}>
           <h2
             id={`${id}-title`}
             className={"text-[28px] md:text-[35px] fnt-green font-bold " + (imageRight ? "lg:text-end" : "")}

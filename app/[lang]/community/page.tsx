@@ -44,9 +44,9 @@ export default async function Community() {
 
           <MediaCarousel />
 
-          <div className="spacer-40"></div>
+          <div className="spacer-80"></div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-center">
             <ArrowLink href="/media-center" color="orange" className="fnt-orange">
               {t.common.viewMore}
             </ArrowLink>

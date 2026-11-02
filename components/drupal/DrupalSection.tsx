@@ -80,7 +80,7 @@ export default function DrupalSection({
 
         // titles switched off → only the Drupal content, no section / container / spacers
         if (!showTitle && !showSubTitle) {
-          return content ? <div className="drpl-view-section" dangerouslySetInnerHTML={{ __html: content }} /> : null;
+          return content ? <div className="drpl-view-section" dangerouslySetInnerHTML={{ __html: content }} /> : <>{fallback}</>;
         }
 
         return (

@@ -7,6 +7,7 @@ import PageBanner from "@/components/ui/PageBanner";
 import { getAllNews } from "@/lib/newslist";
 import { buildPages, type PageKey } from "@/lib/pages";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
+import { assetBg } from "@/lib/assets";
 
 type Props = { params: Promise<{ category: string }> };
 
@@ -51,7 +52,11 @@ export default async function MediaCategory({ params }: Props) {
       </div>
 
       {/*<!--latest-news-->*/}
-      <section id="latest-news" className="w-full min-h-125 bg-[url(/imgs/assets/news-bg.svg)] bg-size-[100%_auto] bg-no-repeat bg-position-[center_-100px]">
+      <section
+        id="latest-news"
+        className="w-full min-h-125 bg-size-[100%_auto] bg-no-repeat bg-position-[center_-100px]"
+        style={{ backgroundImage: assetBg("news-bg.svg", locale) }}
+      >
         <div className="container mx-auto px-4">
           <NewsSection />
         </div>

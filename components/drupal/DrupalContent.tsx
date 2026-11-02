@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import DrupalHtml from "@/components/drupal/DrupalHtml";
 import { getPageContent } from "@/lib/pageContent";
 import { getLocale } from "@/lib/i18n/server";
 
@@ -46,8 +47,8 @@ export default async function DrupalContent({
         ? html.replace(/^(<section\b[^>]*\sid=")[^"]*"/i, `$1${id}"`)
         : html.replace(/^<section\b/i, `<section id="${id}"`);
     }
-    return <div className="drpl-view-contents" dangerouslySetInnerHTML={{ __html: html }} />;
+    return <DrupalHtml html={html} className="drpl-view-contents" />;
   }
 
-  return <section id={id} className={className} dangerouslySetInnerHTML={{ __html: html }} />;
+  return <DrupalHtml as="section" html={html} id={id} className={className} />;
 }

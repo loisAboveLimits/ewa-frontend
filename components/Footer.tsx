@@ -1,6 +1,7 @@
 import Link from "@/components/i18n/Link";
 import Image from "next/image";
 import { getI18n } from "@/lib/i18n/server";
+import { assetBg } from "@/lib/assets";
 import { getNavMenu, MENUS, type NavItem } from "@/lib/menus";
 
 /*
@@ -63,8 +64,8 @@ export default async function Footer() {
 
   return (
     <footer
-      className="text-white bg-right-bottom bg-no-repeat"
-      style={{ backgroundImage: "url('/imgs/assets/footer-bg.png')" }}
+      className="text-white bg-bottom-right bg-no-repeat"
+      style={{ backgroundImage: assetBg("footer-bg.png", locale) }}
     >
       <div className="spacer-80"></div>
 
@@ -73,7 +74,7 @@ export default async function Footer() {
 
           {/* Brand + contact */}
           <div className="lg:p-8">
-            <Image src="/imgs/logos/logo.svg" alt="EWA" width={150} height={60} className="h-auto w-[150px]" />
+            <Image src="/imgs/logos/logo.svg" alt="EWA" width={150} height={60} className="h-auto w-37.5" />
 
             <div className="spacer-20"></div>
 
