@@ -1,5 +1,5 @@
 import Image from "next/image";
-import StoriesCarousel from "@/components/stories/Stories";
+import DrupalStories from "@/components/stories/DrupalStories";
 import MediaCarousel from "@/components/Media";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import DrupalTestimonials from "@/components/orbit/DrupalTestimonials";
@@ -8,6 +8,20 @@ import PageBanner from "@/components/ui/PageBanner";
 import SectionTitle from "@/components/ui/SectionTitle";
 import ArrowLink from "@/components/ui/ArrowLink";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
+import { getMediaSection } from "@/lib/mediaPosts";
+import { MAX_SLIDER_POSTS } from "@/lib/news";
+
+/** Up to 5 random Media Center posts (all categories) for the media carousel; null → built-in slides */
+async function randomMediaPosts(locale: string) {
+  const posts = await getMediaSection("posts", "all", locale);
+  if (!posts?.length) return null;
+  const shuffled = [...posts];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled.slice(0, MAX_SLIDER_POSTS);
+}
 
 export const generateMetadata = () => pageMetadata("community");
 
@@ -42,7 +56,8 @@ export default async function Community() {
 
           <div className="spacer-40"></div>
 
-          <MediaCarousel />
+          {/* random Media Center posts, picked on the server (a new mix on every visit) */}
+          <MediaCarousel items={(await randomMediaPosts(locale)) ?? undefined} />
 
           <div className="spacer-80"></div>
 
@@ -69,7 +84,8 @@ export default async function Community() {
 
         <div className="spacer-40"></div>
 
-        <StoriesCarousel />
+        {/* main images of the Success Stories posts (term 3), built-in photos if none */}
+        <DrupalStories />
 
          <div className="spacer-80"></div>
       </section>

@@ -87,6 +87,7 @@ export default function Lightbox({ images, startIndex, onClose }: Props) {
                   fill
                   sizes="100vw"
                   priority={i === startIndex}
+                  unoptimized={/^https?:\/\//.test(img.src)}
                   className="object-contain select-none"
                 />
               </div>

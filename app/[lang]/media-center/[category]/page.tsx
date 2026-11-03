@@ -8,6 +8,8 @@ import { getAllNews } from "@/lib/newslist";
 import { buildPages, type PageKey } from "@/lib/pages";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
 import { assetBg } from "@/lib/assets";
+import { getMediaSection } from "@/lib/mediaPosts";
+import { MAX_SLIDER_POSTS } from "@/lib/news";
 
 type Props = { params: Promise<{ category: string }> };
 
@@ -29,6 +31,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function MediaCategory({ params }: Props) {
   const { category } = await params;
   const { locale, key, page } = await categoryPage(category);
+
+  // the 3 sections from Drupal (ewa_content_api), in the visitor's language:
+  // 1 featured (slider, up to 5) · 2 upcoming (events) / latest · 3 all — Events dated by their Date field,
+  // other categories by publishing date. null everywhere = Drupal unreachable → built-in demo content
+  const [featured, latest, all] = await Promise.all([
+    getMediaSection("featured", category, locale, MAX_SLIDER_POSTS),
+    getMediaSection("latest", category, locale),
+    getMediaSection("posts", category, locale),
+  ]);
+  const fromDrupal = featured !== null || latest !== null || all !== null;
 
   return (
 
@@ -58,7 +70,11 @@ export default async function MediaCategory({ params }: Props) {
         style={{ backgroundImage: assetBg("news-bg.svg", locale) }}
       >
         <div className="container mx-auto px-4">
-          <NewsSection />
+          {/* section 1 (featured slider) + section 2 (upcoming / latest) */}
+          <NewsSection
+            featured={fromDrupal ? featured ?? [] : undefined}
+            latest={fromDrupal ? latest ?? [] : undefined}
+          />
         </div>
       </section>
 
@@ -67,7 +83,8 @@ export default async function MediaCategory({ params }: Props) {
         <div className="spacer-40"></div>
 
         <div className="container mx-auto px-4">
-          <NewsList items={getAllNews(locale)} perPage={6} />
+          {/* section 3: all posts */}
+          <NewsList items={fromDrupal ? all ?? [] : getAllNews(locale)} perPage={6} />
         </div>
 
         <div className="spacer-80"></div>

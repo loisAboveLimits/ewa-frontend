@@ -6,7 +6,7 @@ import Link from "@/components/i18n/Link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { A11y, Autoplay, EffectFade, Keyboard } from "swiper/modules";
-import type { NewsItem } from "@/lib/news";
+import { MAX_SLIDER_POSTS, type NewsItem } from "@/lib/news";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import { fmt } from "@/lib/i18n/config";
 import { ArrowIcon } from "@/components/ui/ArrowLink";
@@ -14,7 +14,8 @@ import { ArrowIcon } from "@/components/ui/ArrowLink";
 import "swiper/css";
 import "swiper/css/effect-fade";
 
-export default function FeaturedNewsSlider({ items }: { items: NewsItem[] }) {
+export default function FeaturedNewsSlider({ items: all }: { items: NewsItem[] }) {
+  const items = all.slice(0, MAX_SLIDER_POSTS); // 5 slides at most
   const { t } = useI18n();
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [active, setActive] = useState(0);
@@ -79,9 +80,11 @@ export default function FeaturedNewsSlider({ items }: { items: NewsItem[] }) {
 
 function FeaturedSlide({ item, priority, readMore }: { item: NewsItem; priority: boolean; readMore: string }) {
   return (
-    <article className="group relative h-full w-full">
+    <article className="relative h-full w-full">
       <Image
         src={item.image}
+        // Drupal images load as they are: Next 16 refuses to optimize images from localhost
+        unoptimized={/^https?:\/\//.test(item.image)}
         alt=""
         fill
         priority={priority}
@@ -101,10 +104,9 @@ function FeaturedSlide({ item, priority, readMore }: { item: NewsItem; priority:
       <div className="absolute inset-0 flex flex-col justify-end p-6 pb-8 sm:justify-center sm:p-8 md:p-10 lg:ps-9 lg:pt-20">
         <div className="max-w-90 md:max-w-[380px] text-white">
           <p className="text-base md:text-lg">{item.category}</p>
+          {/* title is plain text: only the Read More button links to the post */}
           <h3 className="mt-1 text-2xl md:text-[28px] lg:text-[26px] xl:text-[30px] font-bold leading-tight">
-            <Link href={item.href} className="after:absolute after:inset-0 focus-visible:outline-none focus-visible:underline decoration-[#EE7A52] underline-offset-4">
-              {item.title}
-            </Link>
+            {item.title}
           </h3>
           {item.excerpt && (
             <p className="mt-4 text-sm leading-snug text-white/95 line-clamp-4">{item.excerpt}</p>

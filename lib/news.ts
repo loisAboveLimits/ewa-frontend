@@ -1,12 +1,17 @@
 // News data for the media-center news section. Replace with your CMS / API data.
 import { formatDate, type Locale, type Localized } from "@/lib/i18n/config";
 
+/** Most posts any slider shows (community + Media Center carousels, featured sliders, stories) */
+export const MAX_SLIDER_POSTS = 5;
+
 export type NewsItem = {
   id: string;
   category: string;
   title: string;
   excerpt?: string;
   date: string; // ISO date, e.g. "2023-09-08"
+  /** publishing date (Drupal "Authored on") — differs from `date` for events */
+  published?: string;
   image: string;
   href: string;
   /** label for the featured slide link, e.g. "Read her story" */

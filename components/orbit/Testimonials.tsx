@@ -24,7 +24,9 @@ export default function Testimonials({
         <TestimonialsSlider members={members} actions={actions} label={label} />
       </div>
 
-      <div className="hidden md:block px-4">
+      {/* overflow-x-clip: a member's (hidden) quote card can stick out past the screen edge on
+          tablets and make the page scroll sideways; open cards already flip to the side with room */}
+      <div className="hidden md:block px-4 overflow-x-clip">
         <OrbitShowcase members={members} actions={actions} outerDuration={60} innerDuration={40} center={center} />
       </div>
     </>

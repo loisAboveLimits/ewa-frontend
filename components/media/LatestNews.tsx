@@ -21,6 +21,8 @@ export default function LatestNews({ items, locale }: { items: NewsItem[]; local
             >
               <Image
                 src={item.image}
+        // Drupal images load as they are: Next 16 refuses to optimize images from localhost
+        unoptimized={/^https?:\/\//.test(item.image)}
                 alt=""
                 fill
                 sizes="140px"

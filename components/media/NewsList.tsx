@@ -105,6 +105,8 @@ function NewsRow({ item, locale }: { item: NewsItem; locale: Locale }) {
       <span className="relative shrink-0 w-[110px] sm:w-[160px] md:w-[180px] aspect-[180/112] overflow-hidden border-2 border-[#13999C] bg-[#C8EAE8]">
         <Image
           src={item.image}
+        // Drupal images load as they are: Next 16 refuses to optimize images from localhost
+        unoptimized={/^https?:\/\//.test(item.image)}
           alt=""
           fill
           sizes="(min-width: 768px) 180px, (min-width: 640px) 160px, 110px"

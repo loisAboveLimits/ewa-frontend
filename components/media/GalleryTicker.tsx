@@ -84,22 +84,54 @@ function TickerRow({
   onOpen: (index: number) => void;
 }) {
   const swiperRef = useRef<SwiperType | null>(null);
+  const ready = useRef(false); // true once the speed has been worked out from a real width
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
 
   // Each slide is a whole group of images, so every autoplay step moves the same distance.
   // Swiper's `speed` is per slide, so derive it from the group width → constant px/second.
+  // Returns false while the slide has no width yet (page still laying out / hidden).
   const syncSpeed = useCallback(
     (s: SwiperType) => {
       const slide = s.slides?.[0] as HTMLElement | undefined;
-      if (!slide) return;
-      s.params.speed = Math.max(1000, (slide.offsetWidth / pxPerSecond) * 1000);
+      const width = slide?.offsetWidth ?? 0;
+      if (width < 50) return false;
+      s.params.speed = (width / pxPerSecond) * 1000;
+      return true;
     },
     [pxPerSecond]
   );
 
-  // pause while the lightbox is open
+  // Don't let autoplay run until the real speed is known: before the layout is ready the width
+  // is 0, which gave a 1-second pass — the "fast at load" jump. Start once a width is measured.
   useEffect(() => {
     const s = swiperRef.current;
     if (!s || reduceMotion || !s.autoplay) return;
+    s.autoplay.stop();
+    ready.current = false;
+
+    const tryStart = () => {
+      if (ready.current || !syncSpeed(s)) return;
+      ready.current = true;
+      if (!pausedRef.current) s.autoplay.start();
+    };
+    tryStart();
+
+    // re-measure whenever the row changes size (images laid out, page revealed, window resized)
+    const observer = new ResizeObserver(() => {
+      if (ready.current) syncSpeed(s);
+      else tryStart();
+    });
+    const slide = s.slides?.[0];
+    if (slide) observer.observe(slide);
+    observer.observe(s.el);
+    return () => observer.disconnect();
+  }, [syncSpeed, reduceMotion]);
+
+  // pause while the lightbox is open
+  useEffect(() => {
+    const s = swiperRef.current;
+    if (!s || reduceMotion || !s.autoplay || !ready.current) return;
     if (paused) s.autoplay.stop();
     else s.autoplay.start();
   }, [paused, reduceMotion]);
@@ -119,9 +151,8 @@ function TickerRow({
       }
       onSwiper={(s) => {
         swiperRef.current = s;
-        syncSpeed(s);
+        s.autoplay?.stop(); // started by the effect above once the speed is known
       }}
-      onResize={syncSpeed}
       className="w-full [&_.swiper-wrapper]:[transition-timing-function:linear!important]"
     >
       {Array.from({ length: COPIES }, (_, copy) => (
@@ -158,6 +189,8 @@ function Thumb({ image, onClick, focusable, label }: { image: GalleryImage; onCl
         alt=""
         fill
         sizes="(min-width: 1024px) 700px, 60vw"
+        // Drupal images load as they are: Next 16 refuses to optimize images from localhost
+        unoptimized={/^https?:\/\//.test(image.src)}
         className="object-cover transition-transform duration-500 group-hover:scale-105"
       />
       {/* hover overlay */}

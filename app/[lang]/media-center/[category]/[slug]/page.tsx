@@ -4,9 +4,13 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import PageBanner from "@/components/ui/PageBanner";
 import { formatDate, type Localized } from "@/lib/i18n/config";
 import { getI18n } from "@/lib/i18n/server";
+import { getMediaPost, type MediaPost } from "@/lib/mediaPosts";
+
+type Props = { params: Promise<{ category: string; slug: string }> };
 
 /* ------------------------------------------------------------------ */
-/*  Article data – swap for a CMS / lib/news.ts lookup later          */
+/*  Built-in article — shown when Drupal has no post for this          */
+/*  category/slug in this language (or Drupal can't be reached)        */
 /* ------------------------------------------------------------------ */
 type Article = { title: string; imageAlt: string; body: string[] };
 
@@ -50,17 +54,39 @@ const articles: Localized<Article> = {
   },
 };
 
-export async function generateMetadata(): Promise<Metadata> {
+/** The Drupal post for this URL, in the visitor's language (null → built-in article). */
+async function loadPost(params: Props["params"]): Promise<MediaPost | null> {
+  const { category, slug } = await params;
   const { locale } = await getI18n();
+  return getMediaPost(category, slug, locale);
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await getI18n();
+  const post = await loadPost(params);
+  if (post) return { title: post.title, description: post.excerpt || undefined };
   return { title: articles[locale].title, description: articles[locale].body[0] };
 }
 
 /* ------------------------------------------------------------------ */
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
-export default async function NewsDetail() {
+export default async function NewsDetail({ params }: Props) {
   const { locale, t } = await getI18n();
-  const article = { ...articleMeta, ...articles[locale] };
+  const post = await loadPost(params);
+  const builtIn = { ...articleMeta, ...articles[locale] };
+
+  // one shape for both sources
+  const article = post
+    ? {
+        title: post.title,
+        date: post.date,
+        image: post.image?.src ?? articleMeta.image,
+        imageAlt: post.image?.alt ?? post.title,
+        html: post.html,
+        gallery: post.gallery,
+      }
+    : { ...builtIn, html: "", gallery: [] as { src: string; alt: string }[] };
 
   return (
     <div className="w-full wrapper bg-white">
@@ -95,6 +121,8 @@ export default async function NewsDetail() {
                   alt={article.imageAlt}
                   fill
                   priority
+                  // Drupal images are used as they are (no Next.js optimizer / remotePatterns needed)
+                  unoptimized={/^https?:\/\//.test(article.image)}
                   sizes="(min-width: 1280px) 1280px, 100vw"
                   className="object-cover"
                 />
@@ -107,21 +135,49 @@ export default async function NewsDetail() {
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold leading-tight text-[#14989A]">
                   {article.title}
                 </h2>
-                <time
-                  dateTime={article.date}
-                  className="mt-2 block text-lg md:text-2xl text-[#14989A]"
-                >
-                  {formatDate(article.date, locale)}
-                </time>
+                {article.date && (
+                  <time
+                    dateTime={article.date}
+                    className="mt-2 block text-lg md:text-2xl text-[#14989A]"
+                  >
+                    {formatDate(article.date, locale)}
+                  </time>
+                )}
               </header>
 
-              <div className="space-y-5 md:space-y-6 text-base md:text-lg leading-relaxed text-[#1E1E1E]">
-                {article.body.map((para, i) => (
-                  <p key={i} className="whitespace-pre-line">
-                    {para}
-                  </p>
-                ))}
-              </div>
+              {post ? (
+                /* Drupal "Content" (HTML) — same text style as the built-in article */
+                <div
+                  className="drupal-content text-base md:text-lg leading-relaxed text-[#1E1E1E] [&>*+*]:mt-5 md:[&>*+*]:mt-6"
+                  dangerouslySetInnerHTML={{ __html: article.html }}
+                />
+              ) : (
+                <div className="space-y-5 md:space-y-6 text-base md:text-lg leading-relaxed text-[#1E1E1E]">
+                  {builtIn.body.map((para, i) => (
+                    <p key={i} className="whitespace-pre-line">
+                      {para}
+                    </p>
+                  ))}
+                </div>
+              )}
+
+              {/* Drupal "Gallery" photos, if the post has any */}
+              {article.gallery.length > 0 && (
+                <div className="mt-8 md:mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5">
+                  {article.gallery.map((img, i) => (
+                    <div key={img.src + i} className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+                      <Image
+                        src={img.src}
+                        alt={img.alt}
+                        fill
+                        sizes="(min-width: 768px) 33vw, 50vw"
+                        unoptimized={/^https?:\/\//.test(img.src)}
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </article>
 
