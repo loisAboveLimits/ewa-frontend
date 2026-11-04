@@ -1,11 +1,14 @@
 import Link from "@/components/i18n/Link";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import CareersCarousel from "@/components/Careers";
+import DrupalCareers from "@/components/DrupalCareers";
 import PageBanner from "@/components/ui/PageBanner";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
 import { assetBg } from "@/lib/assets";
+
+import DrupalContent from "@/components/drupal/DrupalContent";
+import DrupalSection from "@/components/drupal/DrupalSection";
 
 export const generateMetadata = () => pageMetadata("join");
 
@@ -36,60 +39,81 @@ export default async function Join() {
       </section>
 
       {/*<!--trainee-->*/}
-      <section id="trainee">
+        <DrupalContent
+          nid={7}
+          id="trainee"
+          fallback={
+            <section id="trainee">
 
-        <div className="spacer-40"></div>
+              <div className="spacer-40"></div>
 
-        <div className="container mx-auto px-4">
+              <div className="container mx-auto px-4">
 
-          <SectionTitle>{j.traineeTitle}</SectionTitle>
+                <SectionTitle>{j.traineeTitle}</SectionTitle>
 
-          <div className="spacer-20"></div>
+                <div className="spacer-20"></div>
 
-          <div
-            className="box box-orange p-6 sm:p-10 md:p-12 w-full bg-bottom-right rtl:bg-bottom-left bg-no-repeat"
-            style={{ backgroundImage: assetBg("footer-bg.png", locale) }}
-          >
-            <div className="md:w-[70%]">
-              <h2 className="font-bold text-[28px] md:text-[35px]">{j.whyJoinTitle}</h2>
-              <div className="spacer-20"></div>
-              <p>{j.whyJoinText}</p>
-            </div>
-          </div>
+                <div
+                  className="box box-orange p-6 sm:p-10 md:p-12 w-full bg-bottom-right rtl:bg-bottom-left bg-no-repeat"
+                  style={{ backgroundImage: assetBg("footer-bg.png", locale) }}
+                >
+                  <div className="md:w-[70%]">
+                    <h2 className="font-bold text-[28px] md:text-[35px]">{j.whyJoinTitle}</h2>
+                    <div className="spacer-20"></div>
+                    <p>{j.whyJoinText}</p>
+                  </div>
+                </div>
 
-        </div>
+              </div>
 
-        <div className="spacer-40"></div>
-      </section>
+              <div className="spacer-40"></div>
+            </section>
+          }
+        />
+
+
+
 
       {/*<!--requirements-->*/}
-      <section id="requirements">
-        <div className="spacer-40"></div>
+        <DrupalSection 
+          nid={71} 
+          id="requirements" 
+          showSubTitle={false} 
+          showTitle={false}
+          fallback={
+            <section id="requirements">
+              <div className="spacer-40"></div>
 
-        <div className="container mx-auto px-4">
+              <div className="container mx-auto px-4">
 
-          <h2 className="font-bold title fnt-green">{j.requirementsTitle}</h2>
+                <h2 className="font-bold title fnt-green">{j.requirementsTitle}</h2>
 
-          <div className="spacer-40"></div>
+                <div className="spacer-40"></div>
 
-          <div className="mx-auto grid max-w-4xl grid-cols-2 items-start gap-6 md:grid-cols-4">
-            {requirements.map((r) => (
-              <div key={r.icon} className="text-center">
-                <Image src={`/imgs/icons/${r.icon}.svg`} alt="" width={150} height={150} className="mx-auto h-auto w-24 md:w-auto"/>
-                <p className="fnt-green font-bold">{r.label}</p>
+                <div className="mx-auto grid max-w-4xl grid-cols-2 items-start gap-6 md:grid-cols-4">
+                  {requirements.map((r) => (
+                    <div key={r.icon} className="text-center">
+                      <Image src={`/imgs/icons/${r.icon}.svg`} alt="" width={150} height={150} className="mx-auto h-auto w-24 md:w-auto"/>
+                      <p className="fnt-green font-bold">{r.label}</p>
+                    </div>
+                  ))}
+
+                  <Link href="#" className="text-center">
+                    <Image src="/imgs/icons/plus.svg" alt="" width={150} height={150} className="mx-auto h-auto w-24 md:w-auto"/>
+                    <p className="fnt-green font-bold">{t.common.more}</p>
+                  </Link>
+                </div>
+
               </div>
-            ))}
 
-            <Link href="#" className="text-center">
-              <Image src="/imgs/icons/plus.svg" alt="" width={150} height={150} className="mx-auto h-auto w-24 md:w-auto"/>
-              <p className="fnt-green font-bold">{t.common.more}</p>
-            </Link>
-          </div>
+              <div className="spacer-40"></div>
+            </section>
+          }
 
-        </div>
+         />
 
-        <div className="spacer-40"></div>
-      </section>
+
+
 
 
       {/*<!--careers-->*/}
@@ -102,7 +126,8 @@ export default async function Join() {
 
           <div className="spacer-40"></div>
 
-          <CareersCarousel />
+          {/* careers from Drupal (content type "careers"), built-in jobs if none */}
+          <DrupalCareers />
 
           <div className="spacer-80"></div>
         </div>

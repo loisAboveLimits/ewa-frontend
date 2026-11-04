@@ -1,31 +1,48 @@
 "use client";
 
+import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Navigation,
-  Pagination,
-  Autoplay,
-} from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
+import { Autoplay } from "swiper/modules";
 
 import ArrowLink from "@/components/ui/ArrowLink";
 import { useI18n } from "@/components/i18n/I18nProvider";
+import { builtInCareers, type CareerJob } from "@/lib/careerJobs";
 
 import "swiper/css";
-import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-// Images + links per job — text (date, title, location) comes from the dictionary (join.careers)
-const jobs = [
-  { id: 1, link: "#", image: "/imgs/slides/media1.jpg" },
-  { id: 2, link: "#", image: "/imgs/slides/media2.jpg" },
-  { id: 3, link: "#", image: "/imgs/slides/media3.jpg" },
-  { id: 4, link: "#", image: "/imgs/slides/media4.jpg" },
-  { id: 5, link: "#", image: "/imgs/slides/media5.jpg" },
-];
-
-export default function CareersCarousel() {
+/**
+ * Careers carousel (Join page, #careers). With `jobs` (Drupal content type "careers" — see
+ * DrupalCareers) each card shows the date, job title, location and an Apply link to the
+ * career's inner page (/career/[slug]).
+ */
+export default function CareersCarousel({ jobs }: { jobs?: CareerJob[] }) {
   const { t } = useI18n();
-  const slides = jobs.map((job, i) => ({ ...job, ...t.join.careers[i] }));
+
+  // Drupal careers, else the built-in jobs (dictionary join.careers) — each links to /career/{slug}
+  const cards: CareerJob[] = jobs?.length ? jobs : builtInCareers(t);
+
+  // up to 3 cards show at once — the loop needs plenty of slides, so repeat short lists
+  const n = cards.length;
+  const slides = n >= 8 ? cards : Array.from({ length: Math.ceil(8 / Math.max(n, 1)) }, () => cards).flat();
+
+  // own pagination: one dot per real job (Swiper's would also count the repeated copies)
+  const [swiper, setSwiper] = useState<SwiperType | null>(null);
+  const [active, setActive] = useState(0);
+  const sync = (s: SwiperType) => setActive(s.realIndex % n);
+
+  /* go to job i the shortest way round; copies repeat every `n` slides */
+  const goTo = (i: number) => {
+    if (!swiper) return;
+    let step = (i - (swiper.realIndex % n)) % n;
+    if (step > n / 2) step -= n;
+    if (step < -n / 2) step += n;
+    let target = swiper.activeIndex + step;
+    while (target < 0) target += n;
+    while (target > swiper.slides.length - 1) target -= n;
+    swiper.slideTo(target);
+  };
 
   return (
     <section className="w-full py-6 md:py-12">
@@ -33,67 +50,83 @@ export default function CareersCarousel() {
       <div className="relative">
 
         <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
+          modules={[Autoplay]}
           slidesPerView={1}
           centeredSlides={true}
           loop={true}
           spaceBetween={0}
-          navigation={false}
-          pagination={{
-            clickable: true,
-          }}
-          // autoplay={{
-          //   delay: 3000,
-          //   disableOnInteraction: false,
-          // }}
           breakpoints={{
-            640: {
-              slidesPerView: 2,
-            },
-            1024: {
-              slidesPerView: 3,
-            },
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
           }}
+          onSwiper={setSwiper}
+          onSlideChange={sync}
+          onInit={sync}
           className="tripleSwiper centeredSwiper noNav"
         >
 
-          {slides.map((slide) => (
+          {slides.map((job, i) => {
+            const copy = i >= n; // repeated copy for the loop: hide from screen readers
+            return (
+              <SwiperSlide key={`${job.id}-${i}`} aria-hidden={copy || undefined}>
 
-            <SwiperSlide key={slide.id}>
+                <article className="box relative overflow-hidden aspect-[67/33] bg-[#13999C]">
 
-              <div className="box relative overflow-hidden ">
+                  {job.image && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={job.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                  )}
 
-                <div className="overlayed"></div>
+                  <div className="overlayed"></div>
 
-                <img
-                  src={slide.image}
-                  alt={slide.title}
-                  className="w-full h-auto object-cover"
-                />
+                  <div className="absolute bottom-0 start-0 w-full p-6">
 
-                <div className="absolute bottom-0 start-0 w-full p-6">
+                    {job.date && (
+                      <p className="font-light text-[12px]! sm:text-[10px]!">
+                        <i className="fa-regular fa-calendar-days mar-right-5" aria-hidden></i>{" "}
+                        {job.dateTime ? <time dateTime={job.dateTime}>{job.date}</time> : job.date}
+                      </p>
+                    )}
+                    <h3 className="text-white text-[18px]! sm:text-[16px]! font-bold line-clamp-1">
+                      {job.title}
+                    </h3>
+                    <div className="spacer-5"></div>
 
-                  <p className="font-light text-[12px]! sm:text-[10px]!"><i className="fa-regular fa-calendar-days mar-right-5"></i> {slide.date}</p>
-                  <h3 className="text-white text-[18px]! sm:text-[16px]! font-bold">
-                    {slide.title}
-                  </h3>
-                  <div className="spacer-5"></div>
+                    <div className="flex items-center justify-between gap-3">
+                      {job.location ? (
+                        <p className="text-[12px]! sm:text-[11px]! box box-green text-center py-1 px-4 truncate min-w-0">{job.location}</p>
+                      ) : (
+                        <span />
+                      )}
 
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="text-[12px]! sm:text-[11px]! box box-green text-center py-1 px-4">{slide.location}</p>
+                      <ArrowLink href={job.href} color="orange" iconSize={26} className="text-[14px]! shrink-0">
+                        {t.common.apply}
+                      </ArrowLink>
+                    </div>
 
-                    <ArrowLink href={slide.link} color="orange" iconSize={26} className="text-[14px]!">
-                      {t.common.apply}
-                    </ArrowLink>
                   </div>
 
-                </div>
+                </article>
 
-              </div>
+              </SwiperSlide>
+            );
+          })}
 
-            </SwiperSlide>
-
-          ))}
+          {/* dots — same classes as Swiper's pagination, so the existing styles apply */}
+          {n > 1 && (
+            <div slot="container-end" className="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal">
+              {cards.map((job, i) => (
+                <button
+                  key={job.id}
+                  type="button"
+                  className={`swiper-pagination-bullet${i === active ? " swiper-pagination-bullet-active" : ""}`}
+                  aria-label={job.title || `${i + 1} / ${n}`}
+                  aria-current={i === active || undefined}
+                  onClick={() => goTo(i)}
+                />
+              ))}
+            </div>
+          )}
 
         </Swiper>
 

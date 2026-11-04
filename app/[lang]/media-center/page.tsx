@@ -2,7 +2,7 @@ import DrupalStories from "@/components/stories/DrupalStories";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CategoryTabs from "@/components/media/CategoryTabs";
 import GalleryTicker from "@/components/media/GalleryTicker";
-import GraduateCarousel from "@/components/media/Graduate";
+import DrupalGraduate from "@/components/media/DrupalGraduate";
 import NewsSection from "@/components/media/NewsSection";
 import PageBanner from "@/components/ui/PageBanner";
 import SectionTitle from "@/components/ui/SectionTitle";
@@ -89,7 +89,8 @@ export default async function MediaCenter() {
 
         <div className="spacer-40"></div>
 
-        <GraduateCarousel />
+        {/* newest 5 Graduate Projects posts from Drupal (built-in slides if none) */}
+        <DrupalGraduate />
 
          <div className="spacer-80"></div>
       </section>

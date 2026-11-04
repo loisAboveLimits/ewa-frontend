@@ -5,15 +5,21 @@ import { useLocalePathname } from "@/components/i18n/navigation";
 import { buildPages } from "@/lib/pages";
 import { useI18n } from "@/components/i18n/I18nProvider";
 
-/** `currentTitle` overrides the last crumb (e.g. an article title instead of its URL slug). */
-export default function Breadcrumbs({ currentTitle }: { currentTitle?: string } = {}) {
+export type Crumb = { title: string; path: string };
+
+/**
+ * `currentTitle` overrides the last crumb (e.g. an article title instead of its URL slug).
+ * `trail` replaces the crumbs worked out from the URL (Home is always first), e.g. for
+ * /career/[slug]: [{ title: "Join", path: "/join" }, { title: "Careers", path: "/join#careers" }, …].
+ */
+export default function Breadcrumbs({ currentTitle, trail }: { currentTitle?: string; trail?: Crumb[] } = {}) {
   const pathname = useLocalePathname();
   const { t } = useI18n();
   const pages = buildPages(t.pages);
 
   const segments = pathname.split("/").filter(Boolean);
 
-  const breadcrumbs = segments.map((segment, index) => {
+  const fromUrl = segments.map((segment, index) => {
     const path = "/" + segments.slice(0, index + 1).join("/");
 
     const page = Object.values(pages).find(
@@ -26,6 +32,10 @@ export default function Breadcrumbs({ currentTitle }: { currentTitle?: string } 
       path,
     };
   });
+
+  const breadcrumbs = trail?.length
+    ? trail.map((c, i) => (i === trail.length - 1 && currentTitle ? { ...c, title: currentTitle } : c))
+    : fromUrl;
 
   return (
 
