@@ -172,7 +172,7 @@ function StackImage({
 /* ------------------------------------------------------------------ */
 
 export default function Awards() {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const [active, setActive] = useState(0);
 

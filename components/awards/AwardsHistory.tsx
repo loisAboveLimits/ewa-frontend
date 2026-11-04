@@ -34,7 +34,7 @@ export default function AwardsHistory() {
 /* ---------------- Desktop / tablet: pinned scroll section ---------------- */
 
 function PinnedHistory({ awards, label, skipLabel }: { awards: Award[]; label: string; skipLabel: string }) {
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const last = awards.length - 1;
 

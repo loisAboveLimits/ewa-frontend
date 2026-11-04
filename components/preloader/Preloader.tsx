@@ -174,7 +174,7 @@ export default function Preloader() {
   }, [phase]);
 
   // …and if the loader is ever removed while showing
-  useEffect(() => () => document.documentElement.style.removeProperty("overflow"), []);
+  useEffect(() => () => { document.documentElement.style.removeProperty("overflow"); }, []);
 
   // Page fade-in: while the loader is up, <html data-loading> keeps the page transparent
   // (see "Page reveal" in app/custom.css). Removing it as the loader starts leaving makes
@@ -184,7 +184,7 @@ export default function Preloader() {
     if (phase === "visible") html.setAttribute("data-loading", "true");
     else html.removeAttribute("data-loading");
   }, [phase]);
-  useEffect(() => () => document.documentElement.removeAttribute("data-loading"), []);
+  useEffect(() => () => { document.documentElement.removeAttribute("data-loading"); }, []);
 
   if (phase === "gone") return null;
 

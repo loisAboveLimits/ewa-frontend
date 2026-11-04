@@ -14,7 +14,6 @@ export default function StoriesCarousel() {
         effect={'coverflow'}
         grabCursor={true}
         centeredSlides={true}     
-        spaceBetween={30}
         pagination={{
           clickable: true,
         }}

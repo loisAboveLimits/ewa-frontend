@@ -7,6 +7,9 @@ import { Pagination, Autoplay, EffectCoverflow } from "swiper/modules";
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
+import type { ReactNode } from "react";
+
+type Facility = { title: string; images: string[]; body: ReactNode };
 
 const facilities: Facility[] = [
   {

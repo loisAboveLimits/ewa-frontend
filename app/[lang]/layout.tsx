@@ -43,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const { locale, t } = await getI18n();
   // Drupal "front" menu → header links (Header falls back to its built-in list if this is empty)
   const menu = await getNavMenu(MENUS.header, locale);

@@ -115,7 +115,7 @@ export default function CourseSelectionStep({ data, errors, update, onBack, subm
                       (field === f ? "bg-[#EE7A52] text-white" : "bg-white/70 text-[#13999C] hover:bg-white")
                     }
                   >
-                    {f === "all" ? c.allFields : c.fields[f]}
+                    {f === "all" ? c.allFields : c.fields[f as (typeof courseFields)[number]]}
                   </button>
                 ))}
               </div>
