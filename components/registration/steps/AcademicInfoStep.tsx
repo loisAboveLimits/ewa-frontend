@@ -15,7 +15,7 @@ export default function AcademicInfoStep({ data, errors, update, onBack }: StepP
     <>
       <PanelHeading title={r.heading} subtitle={r.subheading} />
 
-      <div className="grid gap-4 md:gap-5">
+      <div className="grid grid-cols-1 gap-4 md:gap-5 [&>*]:min-w-0">
         <SelectInput
           label={f.qualification}
           value={data.qualification}

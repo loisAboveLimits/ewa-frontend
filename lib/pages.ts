@@ -21,6 +21,9 @@ export const pagePaths = {
   stories: "/media-center/success-stories",
   graduate: "/media-center/graduate-projects",
   gallery: "/media-center/gallery",
+  privacy: "/privacy-policy",
+  terms: "/terms-conditions",
+  accessibility: "/accessibility",
 } as const;
 
 export type PageKey = keyof typeof pagePaths;

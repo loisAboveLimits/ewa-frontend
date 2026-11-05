@@ -17,7 +17,7 @@ export default function PersonalInfoStep({ data, errors, update }: StepProps) {
     <>
       <PanelHeading title={r.heading} subtitle={r.subheading} />
 
-      <div className="grid gap-4 md:gap-5">
+      <div className="grid grid-cols-1 gap-4 md:gap-5 [&>*]:min-w-0">
         <TextInput
           label={f.nationalId}
           inputMode="numeric"

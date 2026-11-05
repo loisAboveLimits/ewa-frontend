@@ -3,10 +3,16 @@ import type { Locale, Localized } from "@/lib/i18n/config";
 
 export type Award = {
   id: string;
+  /** shown date, e.g. "May 2025" */
   date: string;
+  /** ISO date (Drupal awards) for <time dateTime> */
+  dateTime?: string;
   title: string;
   image: string;
+  /** built-in awards: JSX text */
   body: ReactNode;
+  /** Drupal awards: the Content field as HTML (used instead of body) */
+  html?: string;
 };
 
 type AwardCopy = Pick<Award, "date" | "title" | "body">;
@@ -129,3 +135,6 @@ const copy: Localized<Record<AwardId, AwardCopy>> = {
 };
 
 export const getAwards = (locale: Locale): Award[] => base.map((a) => ({ ...a, ...copy[locale][a.id] }));
+
+/** Built-in photos, used for Drupal awards that have no image. */
+export const awardImages = base.map((a) => a.image);

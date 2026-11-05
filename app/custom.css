@@ -141,7 +141,7 @@ body{
 
 #main-navigation{
 	position: fixed;
-	top: 2em;
+	top: 1rem;
 }
 
 .desktop-nav a {
@@ -549,7 +549,9 @@ section .box-mixed{
     overflow: hidden;
 }
 
-
+.awards-body p, .awards-body span{
+  font-size: 15px;
+}
 
 
 
@@ -633,7 +635,7 @@ html[data-loading="true"] body > :not(header):not(.ewa-preloader):not(script) {
   transform: translateY(18px);
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:reduce) {
   html:not([data-loading]) body > :not(header):not(.ewa-preloader):not(script) {
     transition: opacity 0.4s ease;
   }
@@ -641,6 +643,8 @@ html[data-loading="true"] body > :not(header):not(.ewa-preloader):not(script) {
     transform: none;
   }
 }
+
+
 
 /* ---------- body text coming from Drupal (CKEditor) ----------
    Tailwind resets lists, headings and links — give the editor's HTML readable defaults. */

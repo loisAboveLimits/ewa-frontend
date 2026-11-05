@@ -4,6 +4,8 @@ import { getI18n } from "@/lib/i18n/server";
 import { assetBg } from "@/lib/assets";
 import { getNavMenu, MENUS, type NavItem } from "@/lib/menus";
 
+import DrupalSection from "@/components/drupal/DrupalSection";
+
 /*
  * Footer link columns come from the Drupal menu "frontend-footer":
  *   top-level items = column headings, their child items = the links.
@@ -33,9 +35,9 @@ const hrefs = {
   },
   support: {
     rules: "/rules-regulations",
-    privacy: "#",
-    terms: "#",
-    accessibility: "#",
+    privacy: "/privacy-policy",
+    terms: "/terms-conditions",
+    accessibility: "/accessibility",
     contact: "/contact",
   },
 } as const;
@@ -78,41 +80,61 @@ export default async function Footer() {
 
             <div className="spacer-20"></div>
 
-            <div className="contact">
-              <ul className="list-none">
-                <li>
-                  <a className="flex items-center icons-contact hover:text-gray-300" href="tel:+966124222322">
-                    <Image src="/imgs/icons/phone.svg" alt="" width={30} height={30} />
-                    <span className="ltr-text">{f.phone}</span>
-                  </a>
-                </li>
-                <li>
-                  <a className="flex items-center icons-contact hover:text-gray-300" href={`mailto:${f.email}`}>
-                    <Image src="/imgs/icons/mail.svg" alt="" width={30} height={30} />
-                    <span className="ltr-text">{f.email}</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="flex items-center icons-contact hover:text-gray-300"
-                    href="https://maps.google.com/?q=Energy%20and%20Water%20Academy%20Rabigh"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Image src="/imgs/icons/droppin.svg" alt="" width={30} height={30} />
-                    <span>{f.address}</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
+            <DrupalSection 
+              nid={77} 
+              id="footer-contact" 
+              showSubTitle={false} 
+              showTitle={false}
+              fallback={
+                <div className="contact">
+                  <ul className="list-none">
+                    <li>
+                      <a className="flex items-center icons-contact hover:text-gray-300" href="tel:+966124222322">
+                        <Image src="/imgs/icons/phone.svg" alt="" width={30} height={30} />
+                        <span className="ltr-text">{f.phone}</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a className="flex items-center icons-contact hover:text-gray-300" href={`mailto:${f.email}`}>
+                        <Image src="/imgs/icons/mail.svg" alt="" width={30} height={30} />
+                        <span className="ltr-text">{f.email}</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="flex items-center icons-contact hover:text-gray-300"
+                        href="https://maps.google.com/?q=Energy%20and%20Water%20Academy%20Rabigh"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Image src="/imgs/icons/droppin.svg" alt="" width={30} height={30} />
+                        <span>{f.address}</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              }
+
+             />
 
             <div className="spacer-20"></div>
 
-            <div className="flex flex-nowrap social-media" aria-label={f.social}>
-              <a className="hover:text-gray-300" href="#" aria-label="X"><i className="fa-brands fa-x-twitter"></i></a>
-              <a className="hover:text-gray-300" href="#" aria-label="Instagram"><i className="fa-brands fa-instagram"></i></a>
-              <a className="hover:text-gray-300" href="#" aria-label="LinkedIn"><i className="fa-brands fa-square-linkedin"></i></a>
-            </div>
+            <DrupalSection 
+              nid={78} 
+              id="footer-social-media" 
+              showSubTitle={false} 
+              showTitle={false}
+              fallback={
+                <div className="flex flex-nowrap social-media" aria-label={f.social}>
+                  <a className="hover:text-gray-300" href="#" aria-label="X"><i className="fa-brands fa-x-twitter"></i></a>
+                  <a className="hover:text-gray-300" href="#" aria-label="Instagram"><i className="fa-brands fa-instagram"></i></a>
+                  <a className="hover:text-gray-300" href="#" aria-label="LinkedIn"><i className="fa-brands fa-square-linkedin"></i></a>
+                </div>
+              }
+
+             />
+
+
           </div>
 
           {/* Link columns: 2 per row on phones, 4 from tablets up */}
@@ -142,9 +164,19 @@ export default async function Footer() {
 
         </div>
 
-        <p className="mt-10 border-t border-white/25 pt-6 text-center text-sm! text-white/85">
-          © {new Date().getFullYear()} {t.meta.siteName}. {f.rights}
-        </p>
+          <DrupalSection 
+            nid={79} 
+            id="footer-copyright" 
+            showSubTitle={false} 
+            showTitle={false}
+            fallback={
+              <p className="mt-10 border-t border-white/25 pt-6 text-center text-sm! text-white/85">
+                © {new Date().getFullYear()} {t.meta.siteName}. {f.rights}
+              </p>
+            }
+
+           />        
+
       </div>
 
       <div className="spacer-40"></div>

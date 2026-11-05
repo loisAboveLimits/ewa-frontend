@@ -3,11 +3,14 @@ import AwardsHistory from "@/components/awards/AwardsHistory";
 import SmoothScroll from "@/components/awards/SmoothScroll";
 import PageBanner from "@/components/ui/PageBanner";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
+import { getDrupalAwards } from "@/lib/awardsApi";
 
 export const generateMetadata = () => pageMetadata("awards");
 
 export default async function Awards() {
-  const { t } = await getI18n();
+  const { locale, t } = await getI18n();
+  // Drupal awards (content type "awards"), newest date first; null → built-in awards
+  const awards = await getDrupalAwards(locale);
 
   return (
 
@@ -28,11 +31,9 @@ export default async function Awards() {
       {/*<!--awards-->*/}
       <section id="awards">
 
-        <div className="spacer-40"></div>
-
         <div className="container mx-auto px-4">
           <SmoothScroll>
-            <AwardsHistory />
+            <AwardsHistory awards={awards ?? undefined} />
           </SmoothScroll>
         </div>
 

@@ -119,6 +119,9 @@ export const en = {
     stories: { title: "Success Stories", desc: "Explore the moments, milestones and those behind them." },
     graduate: { title: "Graduate Projects", desc: "Explore the moments, milestones and those behind them." },
     gallery: { title: "Gallery", desc: "Explore the moments, milestones and those behind them." },
+    privacy: { title: "Privacy Policy", desc: "How We Protect Your Personal Data" },
+    terms: { title: "Terms & Conditions", desc: "Using the EWA Website" },
+    accessibility: { title: "Accessibility", desc: "A Website for Everyone" },
   },
 
   sections: {

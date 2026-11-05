@@ -15,7 +15,7 @@ export default function EligibilityStep({ data, errors, update, onBack, signInHr
     <>
       <PanelHeading title={r.heading} subtitle={r.subheading} />
 
-      <div className="grid gap-4 md:gap-5">
+      <div className="grid grid-cols-1 gap-4 md:gap-5 [&>*]:min-w-0">
         <SelectInput
           label={f.employed}
           value={data.employed}

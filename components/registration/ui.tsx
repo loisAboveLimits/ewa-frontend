@@ -8,8 +8,10 @@ import { useI18n } from "@/components/i18n/I18nProvider";
 // teal text  #13999C | panel #C8EAE8 | field #94D3D1 | bubble #CDF3F3
 // stepper    #7AC4C4 | orange #EE7A52 | soft orange #F2A285
 
+// min-w-0 / max-w-full: a field may never be wider than its column (mobile date inputs
+// have a wide built-in minimum width that used to push every field off the panel)
 const fieldBase =
-  "peer w-full h-14 md:h-[68px] rounded-2xl md:rounded-[20px] bg-[#94D3D1] px-6 md:px-12 " +
+  "peer block w-full min-w-0 max-w-full h-14 md:h-[68px] rounded-2xl md:rounded-[20px] bg-[#94D3D1] px-6 md:px-12 " +
   "text-base md:text-xl text-white placeholder:text-white/90 outline-none " +
   "shadow-[0_4px_12px_rgba(19,153,156,0.08)] transition " +
   "focus:bg-[#8ACECC] focus:ring-2 focus:ring-[#EE7A52]/50";
@@ -195,7 +197,9 @@ export function DateInput({
           onChange={(e) => onChange(e.target.value)}
           aria-invalid={!!error}
           className={
-            `${fieldBase} ${error ? errorRing : ""} pe-14 [color-scheme:light] ` +
+            `${fieldBase} ${error ? errorRing : ""} pe-14 [color-scheme:light] appearance-none ` +
+            // phones (Android / iOS) centre the date and add their own arrow: keep it like the other fields
+            `[&::-webkit-date-and-time-value]:text-start [&::-webkit-date-and-time-value]:m-0 [&::-webkit-inner-spin-button]:hidden ` +
             `[&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:hidden ` +
             `${value ? "text-white" : "text-transparent"}`
           }

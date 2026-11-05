@@ -18,11 +18,20 @@ const IMG_H = 46; // height of one photo
 const GAP = 7; // space between photos
 const STEP = IMG_H + GAP;
 
+/* The pinned area: one photo + a gap above and below. It pins in the middle of the screen,
+   so before pinning it sits right under the breadcrumbs (no empty half-screen above it). */
+const PIN_H = IMG_H + GAP * 2;
+const PIN_TOP = (100 - PIN_H) / 2; // vh from the top of the screen while pinned
+
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export default function AwardsHistory() {
+/**
+ * Awards history. `awards` = Drupal awards (content type "awards", newest first — see
+ * lib/awardsApi.ts); without them the built-in list from lib/awards.tsx is shown.
+ */
+export default function AwardsHistory({ awards: fromDrupal }: { awards?: Award[] }) {
   const { locale, t } = useI18n();
-  const awards = useMemo(() => getAwards(locale), [locale]);
+  const awards = useMemo(() => (fromDrupal?.length ? fromDrupal : getAwards(locale)), [fromDrupal, locale]);
   return (
     <>
       <PinnedHistory awards={awards} label={t.awards.historyAria} skipLabel={t.awards.skip} />
@@ -38,9 +47,10 @@ function PinnedHistory({ awards, label, skipLabel }: { awards: Award[]; label: s
   const [active, setActive] = useState(0);
   const last = awards.length - 1;
 
+  // 0 when the pinned area reaches its pinned spot, 1 when it lets go
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "end end"],
+    offset: [`start ${PIN_TOP / 100}`, `end ${(PIN_TOP + PIN_H) / 100}`],
   });
 
   // Spring smoothing gives the soft, weighted glide from the reference
@@ -66,10 +76,12 @@ function PinnedHistory({ awards, label, skipLabel }: { awards: Award[]; label: s
     <div
       ref={sectionRef}
       className="relative hidden bg-white md:block"
-      style={{ height: `${awards.length * 100}vh` }}
+      // same scroll distance per award as before (100vh), without the empty space
+      style={{ height: `${last * 100 + PIN_H}vh` }}
       aria-label={label}
     >
-      <div className="sticky top-0 h-screen overflow-hidden">
+      {/* clipped left/right only: the photos above and below stay visible like before */}
+      <div className="sticky overflow-x-clip" style={{ top: `${PIN_TOP}vh`, height: `${PIN_H}vh` }}>
         <div className="grid h-full max-w-7xl grid-cols-[1fr_minmax(0,60vh)_1fr] items-center gap-10 px-8 lg:gap-10">
           {/* Left: date + title */}
           <div className="relative h-40 w-full text-start">
@@ -80,7 +92,7 @@ function PinnedHistory({ awards, label, skipLabel }: { awards: Award[]; label: s
               >
                 <Reveal delay={0}>
                   <span className="block text-sm font-medium fnt-orange lg:text-base">
-                    {item.date}
+                    {item.dateTime ? <time dateTime={item.dateTime}>{item.date}</time> : item.date}
                   </span>
                 </Reveal>
                 <Reveal delay={0.06}>
@@ -114,7 +126,11 @@ function PinnedHistory({ awards, label, skipLabel }: { awards: Award[]; label: s
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, delay: 0.12, ease } }}
                 exit={{ opacity: 0, y: -24, filter: "blur(6px)", transition: { duration: 0.4, ease } }}
               >
-                <div>{item.body}</div>
+                {item.html ? (
+                  <div className={drupalBody} dangerouslySetInnerHTML={{ __html: item.html }} />
+                ) : (
+                  <div>{item.body}</div>
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -203,6 +219,11 @@ function Reveal({ children, delay }: { children: ReactNode; delay: number }) {
   );
 }
 
+/** Drupal "Content" HTML: same green text and bold as the built-in awards */
+const drupalBody =
+  "space-y-3 [&_p]:text-[#5FAFAF]! [&_li]:text-[#5FAFAF]! [&_b]:font-semibold [&_strong]:font-semibold " +
+  "[&_b]:text-[#5FAFAF]! [&_strong]:text-[#5FAFAF]! [&_ul]:list-disc [&_ul]:ps-5 awards-body";
+
 /* ---------------- Mobile: stacked list with scroll-in reveals ---------------- */
 
 function StackedHistory({ awards, label }: { awards: Award[]; label: string }) {
@@ -216,14 +237,18 @@ function StackedHistory({ awards, label }: { awards: Award[]; label: string }) {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, ease }}
         >
-          <span className="text-sm font-medium fnt-orange">{a.date}</span>
+          <span className="text-sm font-medium fnt-orange">
+            {a.dateTime ? <time dateTime={a.dateTime}>{a.date}</time> : a.date}
+          </span>
           <h3 className="text-2xl font-extrabold uppercase leading-tight fnt-green">
             {a.title}
           </h3>
           <img src={a.image} alt={a.title} className="mb-4 aspect-[3/4] w-full object-cover box" />
-          <div className="fnt-green">
-            {a.body}
-          </div>
+          {a.html ? (
+            <div className={`fnt-green ${drupalBody}`} dangerouslySetInnerHTML={{ __html: a.html }} />
+          ) : (
+            <div className="fnt-green">{a.body}</div>
+          )}
         </motion.article>
       ))}
     </div>
