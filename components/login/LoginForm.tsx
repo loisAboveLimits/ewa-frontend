@@ -11,12 +11,12 @@ type LoginErrors = Partial<Record<"identifier" | "password" | "form", string>>;
 
 /**
  * Sign-in form — same panel, fields and buttons as the registration flow.
- * Connect `submitLogin` to the real backend (e.g. Drupal: POST /user/login?_format=json).
+ * Signs in with Drupal through this site's /api/auth/login (username or e-mail + password).
  */
 export default function LoginForm({
   registerHref = "/join/registration",
-  forgotHref = "#",
-  redirectTo = "/",
+  forgotHref = "/forgot-password",
+  redirectTo = "/users/dashboard",
 }: {
   registerHref?: string;
   forgotHref?: string;
@@ -50,10 +50,11 @@ export default function LoginForm({
     setSubmitting(true);
     try {
       await submitLogin(data);
+      // full page load so the header and the signed-in pages see the new session
       window.location.assign(localizeHref(redirectTo, locale));
-    } catch {
-      setErrors({ form: l.errors.failed });
-    } finally {
+    } catch (error) {
+      const code = error instanceof Error ? error.message : "";
+      setErrors({ form: code === "too_many" ? l.errors.tooMany : code === "unavailable" ? l.errors.unavailable : l.errors.failed });
       setSubmitting(false);
     }
   };
@@ -115,14 +116,19 @@ export default function LoginForm({
   );
 }
 
-/* Replace with your real API call (route handler, server action, Drupal…) */
+/** Signs in with Drupal via app/api/auth/login/route.ts; throws "failed" | "too_many" | "unavailable". */
 async function submitLogin(data: LoginData) {
-  // const res = await fetch("/api/login", {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify({ name: data.identifier, pass: data.password }),
-  // });
-  // if (!res.ok) throw new Error("Login failed");
-  await new Promise((r) => setTimeout(r, 800));
-  console.info("Login submitted", { identifier: data.identifier, remember: data.remember });
+  let res: Response;
+  try {
+    res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier: data.identifier.trim(), password: data.password, remember: data.remember }),
+    });
+  } catch {
+    throw new Error("unavailable");
+  }
+  if (res.ok) return;
+  const { error } = await res.json().catch(() => ({ error: "failed" }));
+  throw new Error(error === "too_many" || error === "unavailable" ? error : "failed");
 }

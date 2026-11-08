@@ -5,6 +5,7 @@ import { useLocalePathname } from "@/components/i18n/navigation";
 import { useEffect, useState } from "react";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+import { DASHBOARD_PATH, USER_COOKIE } from "@/lib/authCookies";
 
 const navHrefs = [
   { key: "about", href: "/about" },
@@ -29,8 +30,37 @@ export default function Header({ menu = [] }: { menu?: NavItem[] }) {
     : navHrefs.map((item) => ({ key: item.key, href: item.href, label: t.header.nav[item.key] }));
   const onLogin = isActiveLogin(pathname);
 
-  /* "Welcome, Sign in" tab that hangs under the logo bar (start side: left in EN, right in AR) */
-  const loginTab = (
+  // Signed-in visitor's name (cookie set by /api/auth/login) — read after mount, so the
+  // server-rendered header stays the same for everyone.
+  const [userName, setUserName] = useState("");
+  useEffect(() => {
+    const match = document.cookie.match(new RegExp(`(?:^|; )${USER_COOKIE}=([^;]*)`));
+    let name = match?.[1] ?? "";
+    // set with encodeURIComponent, and cookie values may be encoded once more on the way
+    for (let i = 0; i < 2 && /%[0-9a-f]{2}/i.test(name); i++) {
+      try {
+        name = decodeURIComponent(name);
+      } catch {
+        break;
+      }
+    }
+    setUserName(name);
+  }, [pathname]);
+
+  /* "Welcome, Sign in" tab that hangs under the logo bar (start side: left in EN, right in AR).
+     Signed in: "Hello, {name}" linking to the Trainee Dashboard. */
+  const loginTab = userName ? (
+    <Link
+      href={DASHBOARD_PATH}
+      className="login-tab"
+      aria-current={pathname === DASHBOARD_PATH ? "page" : undefined}
+      onClick={() => setMenuOpen(false)}
+    >
+      <UserIcon />
+      <span>{t.header.hello}</span>
+      <span className="login-tab-link">{userName}</span>
+    </Link>
+  ) : (
     <Link href="/login" className="login-tab" aria-current={onLogin ? "page" : undefined} onClick={() => setMenuOpen(false)}>
       <UserIcon />
       <span>{t.header.welcome}</span>

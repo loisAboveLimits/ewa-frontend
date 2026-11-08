@@ -48,6 +48,7 @@ export const en = {
     switchLabel: "Switch to Arabic",
     welcome: "Welcome,",
     signIn: "Sign in",
+    hello: "Hello,",
   },
 
   footer: {
@@ -122,6 +123,13 @@ export const en = {
     privacy: { title: "Privacy Policy", desc: "How We Protect Your Personal Data" },
     terms: { title: "Terms & Conditions", desc: "Using the EWA Website" },
     accessibility: { title: "Accessibility", desc: "A Website for Everyone" },
+    dashboard: { title: "Trainee Dashboard", desc: "Your EWA journey in one place" },
+    myClasses: { title: "My Classes", desc: "Your EWA journey in one place" },
+    teachers: { title: "Teachers", desc: "Your EWA journey in one place" },
+    schedule: { title: "Schedule", desc: "Your EWA journey in one place" },
+    myProfile: { title: "My Profile", desc: "Your EWA journey in one place" },
+    forgot: { title: "Forgot Password", desc: "We'll help you get back in" },
+    reset: { title: "Reset Password", desc: "Choose a new password for your account" },
   },
 
   sections: {
@@ -378,6 +386,8 @@ export const en = {
       identifier: "Enter your National ID / Iqama or e-mail.",
       password: "Enter your password.",
       failed: "We couldn't sign you in. Check your details and try again.",
+      tooMany: "Too many failed attempts. Please wait a while and try again.",
+      unavailable: "Sign-in is not available right now. Please try again later.",
     },
   },
 

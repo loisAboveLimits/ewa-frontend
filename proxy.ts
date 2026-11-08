@@ -3,7 +3,8 @@
 //   /ar/about   → Arabic
 //   /en/about   → redirected to /about when "en" is the default, so each page has one URL
 import { NextResponse, type NextRequest } from "next/server";
-import { defaultLocale, LOCALE_HEADER, splitLocale } from "@/lib/i18n/config";
+import { defaultLocale, LOCALE_HEADER, localizeHref, splitLocale } from "@/lib/i18n/config";
+import { DASHBOARD_PATH, SESSION_COOKIE, isProtectedPath, safeNext } from "@/lib/authCookies";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -15,6 +16,22 @@ export function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = path;
     return NextResponse.redirect(url, 307);
+  }
+
+  // Signed-in pages (Trainee Dashboard): no sign-in cookie → sign-in page, coming back here after.
+  // (The page itself checks the session with Drupal; this only saves a round trip.)
+  const signedIn = request.cookies.has(SESSION_COOKIE);
+  const lang = locale ?? defaultLocale;
+  if (!signedIn && isProtectedPath(path)) {
+    const url = request.nextUrl.clone();
+    url.pathname = localizeHref("/login", lang);
+    url.search = `?next=${encodeURIComponent(path + request.nextUrl.search)}`;
+    return NextResponse.redirect(url, 307);
+  }
+  // Already signed in → the sign-in page goes straight to the dashboard (or ?next=)
+  if (signedIn && (path === "/login" || path.startsWith("/login/"))) {
+    const next = safeNext(request.nextUrl.searchParams.get("next"), DASHBOARD_PATH);
+    return NextResponse.redirect(new URL(localizeHref(next, lang), request.url), 307);
   }
 
   const headers = new Headers(request.headers);

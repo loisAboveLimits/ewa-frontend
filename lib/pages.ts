@@ -24,6 +24,13 @@ export const pagePaths = {
   privacy: "/privacy-policy",
   terms: "/terms-conditions",
   accessibility: "/accessibility",
+  dashboard: "/users/dashboard",
+  myClasses: "/users/dashboard/classes",
+  teachers: "/users/dashboard/teachers",
+  schedule: "/users/dashboard/schedule",
+  myProfile: "/users/dashboard/profile",
+  forgot: "/forgot-password",
+  reset: "/reset-password",
 } as const;
 
 export type PageKey = keyof typeof pagePaths;
