@@ -43,20 +43,29 @@ export async function POST(request: NextRequest) {
   if (!res.ok) return NextResponse.json({ error: "failed" }, { status: 401 });
 
   const session = drupalSessionFrom(res);
-  const user: { display_name?: string; name?: string; logout_token?: string } = await res.json().catch(() => ({}));
+  const user: { display_name?: string; name?: string; first_name?: string; logout_token?: string } = await res.json().catch(() => ({}));
   if (!session) {
     console.error("Drupal login returned no session cookie");
     return NextResponse.json({ error: "unavailable" }, { status: 503 });
   }
 
-  const response = NextResponse.json({ ok: true, name: user.display_name || user.name || "" });
-  const secure = process.env.NODE_ENV === "production";
+  const response = NextResponse.json({ ok: true, name: user.first_name || user.display_name || user.name || "" });
+  // "Secure" cookies are only kept by browsers on https. Decide from the actual request
+  // (or a proxy's X-Forwarded-Proto), not from production mode — a production build served
+  // over plain http (e.g. http://<server-ip>:3000) would otherwise lose the sign-in cookie
+  // and every sign-in would land back on /login. AUTH_COOKIE_SECURE=true|false overrides.
+  const forced = process.env.AUTH_COOKIE_SECURE;
+  const secure =
+    forced === "true" ||
+    (forced !== "false" &&
+      (request.nextUrl.protocol === "https:" || request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() === "https"));
   // "remember me" → keep for 30 days, otherwise until the browser closes
   const maxAge = body.remember ? 60 * 60 * 24 * 30 : undefined;
   const base_ = { path: "/", sameSite: "lax" as const, secure, maxAge };
 
   response.cookies.set(SESSION_COOKIE, session, { ...base_, httpOnly: true });
   if (user.logout_token) response.cookies.set(LOGOUT_COOKIE, user.logout_token, { ...base_, httpOnly: true });
-  response.cookies.set(USER_COOKIE, encodeURIComponent(user.display_name || user.name || ""), { ...base_, httpOnly: false });
+  // header greeting: the first name from registration, else the Drupal display name
+  response.cookies.set(USER_COOKIE, encodeURIComponent(user.first_name || user.display_name || user.name || ""), { ...base_, httpOnly: false });
   return response;
 }

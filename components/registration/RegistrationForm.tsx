@@ -51,8 +51,10 @@ export type StepProps = {
 const STORAGE_KEY = "ewa-registration-draft";
 
 export default function RegistrationForm({ signInHref = "/login", homeHref = "/" }: { signInHref?: string; homeHref?: string }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [step, setStep] = useState<StepKey>("personal");
+  /** Drupal account state after submitting: active (can sign in) or pending (admin approval) */
+  const [accountStatus, setAccountStatus] = useState<"active" | "pending" | undefined>(undefined);
   const [data, setData] = useState<RegistrationData>(initialData);
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -63,12 +65,14 @@ export default function RegistrationForm({ signInHref = "/login", homeHref = "/"
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);
-      if (raw) setData({ ...initialData, ...JSON.parse(raw) });
+      // passwords are never kept in the draft
+      if (raw) setData({ ...initialData, ...JSON.parse(raw), password: "", passwordConfirm: "" });
     } catch {}
   }, []);
   useEffect(() => {
     try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      const { password: _p, passwordConfirm: _c, ...draft } = data;
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
     } catch {}
   }, [data]);
 
@@ -111,12 +115,37 @@ export default function RegistrationForm({ signInHref = "/login", homeHref = "/"
 
     if (step === "courses") {
       setSubmitting(true);
+      const m = t.registration.errors;
       try {
-        await submitApplication(data);
-        sessionStorage.removeItem(STORAGE_KEY);
-        setStep("done");
+        const result = await submitApplication(data, locale);
+        if (result.ok) {
+          sessionStorage.removeItem(STORAGE_KEY);
+          setData(initialData);
+          setAccountStatus(result.status);
+          setStep("done");
+          return;
+        }
+        // problems with the account details → back to step 1 with the message on the field
+        const personal: Errors = {};
+        if (result.error === "nationalId_taken") personal.nationalId = m.nationalIdTaken;
+        else if (result.error === "email_taken") personal.email = m.emailTaken;
+        else if (result.error === "invalid") {
+          const f = result.fields ?? {};
+          if (f.nationalId) personal.nationalId = m.nationalId;
+          if (f.email) personal.email = m.email;
+          if (f.password) personal.password = m.password;
+          if (f.firstName) personal.firstName = m.firstName;
+          if (f.lastName) personal.lastName = m.lastName;
+        }
+        if (Object.keys(personal).length) {
+          setErrors(personal);
+          setStep("personal");
+          requestAnimationFrame(() => topRef.current?.querySelector<HTMLElement>("[aria-invalid='true']")?.focus());
+          return;
+        }
+        setErrors({ courses: result.error === "closed" ? m.closed : result.error === "too_many" ? m.tooMany : m.submit });
       } catch {
-        setErrors({ courses: t.registration.errors.submit });
+        setErrors({ courses: m.submit });
       } finally {
         setSubmitting(false);
       }
@@ -140,7 +169,7 @@ export default function RegistrationForm({ signInHref = "/login", homeHref = "/"
       <Stepper current={PHASE[step]} className="mb-10 md:mb-14" />
 
       {step === "done" ? (
-        <ConfirmationStep homeHref={homeHref} />
+        <ConfirmationStep homeHref={homeHref} status={accountStatus} signInHref={signInHref} />
       ) : (
         <form noValidate onSubmit={handleSubmit}>
           {step === "courses" ? (
@@ -158,14 +187,19 @@ export default function RegistrationForm({ signInHref = "/login", homeHref = "/"
   );
 }
 
-/* Replace with your real API call (route handler, server action, external API…) */
-async function submitApplication(data: RegistrationData) {
-  // const res = await fetch("/api/register", {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify(data),
-  // });
-  // if (!res.ok) throw new Error("Request failed");
-  await new Promise((r) => setTimeout(r, 800));
-  console.info("Registration submitted", data);
+type SubmitResult =
+  | { ok: true; status: "active" | "pending" }
+  | { ok: false; error: string; fields?: Partial<Record<keyof RegistrationData, string>> };
+
+/** Creates the trainee's Drupal account (app/api/auth/register/route.ts → Drupal ewa_content_api). */
+async function submitApplication(data: RegistrationData, lang: string): Promise<SubmitResult> {
+  const { passwordConfirm: _c, ...payload } = data;
+  const res = await fetch("/api/auth/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...payload, lang }),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (res.ok) return { ok: true, status: body.status === "active" ? "active" : "pending" };
+  return { ok: false, error: String(body.error ?? "unavailable"), fields: body.fields };
 }

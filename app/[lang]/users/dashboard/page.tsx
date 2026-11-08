@@ -15,6 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
 const copy: Localized<{
   welcome: string;
   intro: string;
+  myPrograms: string;
+  viewProfile: string;
   portals: string;
   portalsIntro: string;
   visit: string;
@@ -26,6 +28,8 @@ const copy: Localized<{
 }> = {
   en: {
     welcome: "Welcome back,",
+    myPrograms: "Your selected programs",
+    viewProfile: "View my profile",
     intro: "Here you can reach your EWA portals, keep up with the latest news and find the information you need during your training.",
     portals: "Your Portals",
     portalsIntro: "Quick access to the EWA systems you use every day.",
@@ -43,6 +47,8 @@ const copy: Localized<{
   },
   ar: {
     welcome: "مرحبًا بعودتك،",
+    myPrograms: "البرامج التي اخترتها",
+    viewProfile: "عرض ملفي الشخصي",
     intro: "من هنا يمكنك الوصول إلى بوابات الأكاديمية، ومتابعة آخر الأخبار، والعثور على المعلومات التي تحتاجها خلال تدريبك.",
     portals: "بواباتك",
     portalsIntro: "وصول سريع إلى أنظمة الأكاديمية التي تستخدمها يوميًا.",
@@ -67,7 +73,8 @@ export default async function TraineeDashboard() {
   if (!user) return null; // Drupal unreachable — the layout shows the notice
 
   const c = copy[locale];
-  const name = user.display_name || user.name;
+  const p = user.profile ?? {};
+  const name = [p.firstName, p.lastName].filter(Boolean).join(" ") || user.display_name || user.name;
   const news = ((await getMediaSection("latest", "all", locale, 3)) ?? []).slice(0, 3);
 
   return (
@@ -78,6 +85,23 @@ export default async function TraineeDashboard() {
         <p className="text-lg md:text-2xl text-[#14989A]">{c.welcome}</p>
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold leading-tight text-[#14989A] break-words">{name}</h2>
         <p className="mt-4 max-w-[46rem] text-base md:text-lg leading-relaxed text-[#14989A]">{c.intro}</p>
+
+        {/* programs chosen at registration (Drupal field_programs) */}
+        {!!p.programs?.length && (
+          <div className="mt-6">
+            <h3 className="text-lg md:text-xl font-bold text-[#14989A]">{c.myPrograms}</h3>
+            <ul className="mt-3 flex flex-wrap gap-2.5">
+              {p.programs.map((pr) => (
+                <li key={pr.tid} className="rounded-full bg-[#14989A] px-4 py-1.5 text-sm md:text-base font-semibold text-white">
+                  {pr.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <Link href="/users/dashboard/profile" className="mt-6 inline-block text-base font-bold text-[#EE7A52] underline underline-offset-4 hover:text-[#E5683D]">
+          {c.viewProfile}
+        </Link>
       </TraineeCard>
 
       {/* portals */}

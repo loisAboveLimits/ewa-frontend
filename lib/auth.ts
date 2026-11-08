@@ -3,6 +3,39 @@ import { cache } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { LOGOUT_COOKIE, SESSION_COOKIE, USER_COOKIE } from "@/lib/authCookies";
+import { getLocale } from "@/lib/i18n/server";
+
+/** Registration values saved on the account (Drupal module ewa_trainee_fields); null = empty. */
+export type TraineeProfile = {
+  nationalId?: string | null;
+  firstName?: string | null;
+  fatherName?: string | null;
+  grandfatherName?: string | null;
+  lastName?: string | null;
+  gender?: string | null;
+  dob?: string | null;
+  height?: number | null;
+  weight?: number | null;
+  mobile?: string | null;
+  altMobile?: string | null;
+  relation?: string | null;
+  healthDeclaration?: boolean | null;
+  qualification?: string | null;
+  major?: string | null;
+  graduationYear?: number | null;
+  englishLevel?: string | null;
+  stepGrade?: number | null;
+  gpa?: number | null;
+  university?: string | null;
+  employed?: "yes" | "no" | null;
+  socialInsurance?: "yes" | "no" | null;
+  qiwa?: "yes" | "no" | null;
+  commercialReg?: "yes" | "no" | null;
+  hrdf?: "yes" | "no" | null;
+  referral?: string | null;
+  dataConfirm?: boolean | null;
+  programs?: { tid: number; name: string; slug: string }[];
+};
 
 /** A signed-in Drupal user (GET /api/auth/me of the ewa_content_api module). */
 export type DrupalUser = {
@@ -15,6 +48,8 @@ export type DrupalUser = {
   created?: string | null;
   access?: string | null;
   login?: string | null;
+  /** registration fields (empty object when the trainee fields module isn't installed) */
+  profile?: TraineeProfile;
 };
 
 const base = () => process.env.DRUPAL_BASE_URL;
@@ -34,7 +69,8 @@ export const getSession = cache(async (): Promise<
   if (!session) return { user: null, reason: "signed_out" };
   if (!base()) return { user: null, reason: "unavailable" };
   try {
-    const res = await fetch(`${base()}/api/auth/me?_format=json`, {
+    const lang = await getLocale();
+    const res = await fetch(`${base()}/api/auth/me?_format=json&lang=${lang}`, {
       headers: { Cookie: session, Accept: "application/json" },
       cache: "no-store",
     });

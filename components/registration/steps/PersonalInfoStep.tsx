@@ -4,7 +4,7 @@ import type { StepProps } from "../RegistrationForm";
 import { getOptions } from "@/lib/registration";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import { fmt } from "@/lib/i18n/config";
-import { Checkbox, DateInput, NextButton, PanelHeading, PhoneInput, SelectInput, TextInput } from "../ui";
+import { Checkbox, DateInput, NextButton, PanelHeading, PasswordInput, PhoneInput, SelectInput, TextInput } from "../ui";
 
 export default function PersonalInfoStep({ data, errors, update }: StepProps) {
   const { t } = useI18n();
@@ -109,6 +109,25 @@ export default function PersonalInfoStep({ data, errors, update }: StepProps) {
           value={data.email}
           onChange={(e) => update("email", e.target.value)}
           error={errors.email}
+        />
+        {/* account password — trainees sign in with their National ID or e-mail */}
+        <PasswordInput
+          label={f.password}
+          autoComplete="new-password"
+          value={data.password}
+          onChange={(v) => update("password", v)}
+          error={errors.password}
+          showLabel={t.login.showPassword}
+          hideLabel={t.login.hidePassword}
+        />
+        <PasswordInput
+          label={f.passwordConfirm}
+          autoComplete="new-password"
+          value={data.passwordConfirm}
+          onChange={(v) => update("passwordConfirm", v)}
+          error={errors.passwordConfirm}
+          showLabel={t.login.showPassword}
+          hideLabel={t.login.hidePassword}
         />
       </div>
 

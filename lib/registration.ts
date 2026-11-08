@@ -19,6 +19,9 @@ export type RegistrationData = {
   altMobile: string;
   relation: string;
   email: string;
+  /** account password (never saved in the browser draft) */
+  password: string;
+  passwordConfirm: string;
   healthDeclaration: boolean;
 
   // Step 2 – academic info
@@ -59,6 +62,8 @@ export const initialData: RegistrationData = {
   altMobile: "",
   relation: "",
   email: "",
+  password: "",
+  passwordConfirm: "",
   healthDeclaration: false,
   qualification: "",
   major: "",
@@ -130,6 +135,8 @@ export function validatePersonal(d: RegistrationData, m: ErrorCopy): Errors {
   if (d.altMobile && !isSaudiMobile(d.altMobile)) e.altMobile = m.altMobile;
   if (d.altMobile && !required(d.relation)) e.relation = m.relation;
   if (!isEmail(d.email)) e.email = m.email;
+  if (d.password.length < 8) e.password = m.password;
+  else if (d.password !== d.passwordConfirm) e.passwordConfirm = m.passwordMatch;
   if (!d.healthDeclaration) e.healthDeclaration = m.healthDeclaration;
   return e;
 }

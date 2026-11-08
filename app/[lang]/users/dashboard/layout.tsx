@@ -44,7 +44,7 @@ export default async function TraineeLayout({ children }: { children: ReactNode 
           {user ? (
             <div className="flex flex-col gap-6 lg:flex-row lg:gap-0">
               <div className="lg:w-[30%] lg:p-8 lg:ps-0 flex flex-col min-w-0">
-                <TraineeSidebar name={user.display_name || user.name} />
+                <TraineeSidebar name={user.profile?.firstName || user.display_name || user.name} />
               </div>
               <div className="lg:w-[70%] lg:p-8 lg:pe-0 flex flex-col min-w-0">{children}</div>
             </div>

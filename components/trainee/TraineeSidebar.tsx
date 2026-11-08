@@ -8,14 +8,12 @@ import { traineeCopy, traineeNav, type TraineeNavKey } from "@/lib/traineeNav";
 /**
  * Trainee menu — same box as the programs page filter (teal border, light teal background).
  * Left column in English, right in Arabic (it is the first column of a row, so RTL flips it).
- * Phones / tablets: the links sit in a grid; large screens: a list with My Profile at the bottom.
+ * Phones / tablets: the links sit in a grid; large screens: one list (My Profile and Sign out last).
  */
 export default function TraineeSidebar({ name }: { name: string }) {
   const { locale } = useI18n();
   const c = traineeCopy[locale];
   const pathname = useLocalePathname();
-  const main = traineeNav.filter((i) => i.key !== "profile");
-  const profile = traineeNav.find((i) => i.key === "profile")!;
 
   const item = (i: (typeof traineeNav)[number]) => {
     const active = pathname === i.href;
@@ -36,35 +34,31 @@ export default function TraineeSidebar({ name }: { name: string }) {
   };
 
   return (
-    <aside className="box filter-box flex h-full flex-col overflow-hidden rounded-[1.75rem]">
+    <aside className="box filter-box overflow-hidden rounded-[1.75rem] lg:sticky lg:top-32">
       <div className="filter-box-header px-6 py-4">
         <h2 className="fnt-green text-[22px]! md:text-[26px]! font-bold break-words">{c.welcome(name)}</h2>
       </div>
 
-      <nav aria-label={c.menu} className="flex flex-1 flex-col px-4 py-4 md:px-5 lg:py-6">
-        <ul className="grid grid-cols-2 gap-1 sm:grid-cols-4 lg:grid-cols-1 lg:gap-2">
-          {main.map((i) => (
+      <nav aria-label={c.menu} className="px-4 py-4 md:px-5">
+        {/* every link + Sign out in one list, so the menu is only as tall as its items */}
+        <ul className="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-1 lg:gap-1.5">
+          {traineeNav.map((i) => (
             <li key={i.key} className="min-w-0">
               {item(i)}
             </li>
           ))}
-          {/* phones / tablets: My Profile with the others */}
-          <li className="min-w-0 lg:hidden">{item(profile)}</li>
+          <li className="col-span-full mt-2">
+            <form action="/api/auth/logout" method="post">
+              <input type="hidden" name="lang" value={locale} />
+              <button
+                type="submit"
+                className="w-full rounded-full bg-[#EE7A52] px-5 py-3 text-center text-base md:text-lg font-bold text-white transition-colors hover:bg-[#E5683D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE7A52] focus-visible:ring-offset-2 cursor-pointer"
+              >
+                {c.signOut}
+              </button>
+            </form>
+          </li>
         </ul>
-
-        {/* large screens: My Profile at the bottom, like the design */}
-        <div className="hidden lg:block lg:mt-auto lg:pt-16">{item(profile)}</div>
-
-        {/* Sign out: full-width orange button */}
-        <form action="/api/auth/logout" method="post" className="mt-4 lg:mt-5">
-          <input type="hidden" name="lang" value={locale} />
-          <button
-            type="submit"
-            className="w-full rounded-full bg-[#EE7A52] px-5 py-3 text-center text-base md:text-lg font-bold text-white transition-colors hover:bg-[#E5683D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE7A52] focus-visible:ring-offset-2 cursor-pointer"
-          >
-            {c.signOut}
-          </button>
-        </form>
       </nav>
     </aside>
   );
