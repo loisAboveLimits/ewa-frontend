@@ -90,12 +90,44 @@ function ProgramCard({ program }: { program: Program }) {
 type ProgramsSliderProps = {
   /** Pass a filtered list (e.g. from the sidebar filters); defaults to all programs */
   items?: Program[];
+  /** Search text from a ProgramSearch placed outside the slider; the slider then shows no search box of its own */
+  query?: string;
 };
 
-export default function ProgramsSlider({ items: itemsProp }: ProgramsSliderProps) {
+/** Search box for the programs list (used inside the slider, or on its own by ProgramsBrowser). */
+export function ProgramSearch({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const { t } = useI18n();
+  return (
+    <form role="search" onSubmit={(e) => e.preventDefault()} className="flex w-full items-stretch">
+      <label htmlFor="program-search" className="sr-only">{t.programs.searchLabel}</label>
+      <input
+        id="program-search"
+        type="search"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={t.programs.searchPlaceholder}
+        className="h-[40px] md:h-[34px] min-w-0 flex-1 rounded-s-full border border-e-0 border-[#9fcfcf] bg-[#eaf4f4] px-3 text-[15px]! text-neutral-800 outline-none placeholder:text-neutral-700 focus:border-[#139a9d] focus:bg-white"
+      />
+      <button
+        type="submit"
+        aria-label={t.programs.search}
+        className="grid w-[42px] md:w-[38px] shrink-0 place-items-center rounded-e-lg bg-[#139a9d] text-white transition hover:bg-[#0f8487]"
+      >
+        <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5" />
+          <path d="m20 20-4.2-4.2" />
+        </svg>
+      </button>
+    </form>
+  );
+}
+
+export default function ProgramsSlider({ items: itemsProp, query: queryProp }: ProgramsSliderProps) {
   const { locale, t } = useI18n();
   const items = useMemo(() => itemsProp ?? getPrograms(locale), [itemsProp, locale]);
-  const [query, setQuery] = useState("");
+  const [ownQuery, setQuery] = useState("");
+  const controlled = queryProp !== undefined;
+  const query = controlled ? queryProp : ownQuery;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLocaleLowerCase(locale);
@@ -103,36 +135,19 @@ export default function ProgramsSlider({ items: itemsProp }: ProgramsSliderProps
     return items.filter((p) =>
       [p.title, p.category, p.description].some((field) => field.toLocaleLowerCase(locale).includes(q))
     );
-  }, [items, query]);
+  }, [items, query, locale]);
 
   const pages = useMemo(() => chunk(filtered, PER_SLIDE), [filtered]);
 
   return (
     <div className="w-full">
-      {/* Search */}
-      <form role="search" onSubmit={(e) => e.preventDefault()} className="flex w-full items-stretch">
-        <label htmlFor="program-search" className="sr-only">{t.programs.searchLabel}</label>
-        <input
-          id="program-search"
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={t.programs.searchPlaceholder}
-          className="h-[40px] md:h-[34px] min-w-0 flex-1 rounded-s-full border border-e-0 border-[#9fcfcf] bg-[#eaf4f4] px-3 text-[15px]! text-neutral-800 outline-none placeholder:text-neutral-700 focus:border-[#139a9d] focus:bg-white"
-        />
-        <button
-          type="submit"
-          aria-label={t.programs.search}
-          className="grid w-[42px] md:w-[38px] shrink-0 place-items-center rounded-e-lg bg-[#139a9d] text-white transition hover:bg-[#0f8487]"
-        >
-          <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="6.5" />
-            <path d="m20 20-4.2-4.2" />
-          </svg>
-        </button>
-      </form>
-
-      <div className="h-7" />
+      {/* the search box sits here unless the page places it elsewhere (see ProgramsBrowser) */}
+      {controlled ? null : (
+        <>
+          <ProgramSearch value={query} onChange={setQuery} />
+          <div className="h-7" />
+        </>
+      )}
 
       {pages.length === 0 ? (
         <div className="rounded-xl bg-[#eaf4f4] px-6 py-12 text-center text-[15px]! text-[#139a9d]" role="status">

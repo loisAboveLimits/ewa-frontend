@@ -1,7 +1,6 @@
 import Breadcrumbs from "@/components/Breadcrumbs";
 import PageBanner from "@/components/ui/PageBanner";
-import FilterPrograms from "@/components/filter/Filter";
-import ProgramsSlider from "@/components/filter/ProgramsSlider";
+import ProgramsBrowser from "@/components/filter/ProgramsBrowser";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
 
 export const generateMetadata = () => pageMetadata("programs");
@@ -32,18 +31,8 @@ export default async function Programs() {
 
         <div className="container mx-auto px-4">
 
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-0">
-
-            {/* slider first on phones so the programs are visible straight away */}
-            <div className="order-2 lg:order-1 lg:w-[30%] lg:p-8 flex flex-col">
-              <FilterPrograms />
-            </div>
-
-            <div className="order-1 lg:order-2 lg:w-[70%] lg:p-8 flex flex-col min-w-0">
-              <ProgramsSlider />
-            </div>
-
-          </div>
+          {/* search, filter (collapsible on small screens) and the programs slider */}
+          <ProgramsBrowser />
 
         </div>
 

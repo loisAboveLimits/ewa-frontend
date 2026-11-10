@@ -8,7 +8,7 @@ import { traineeCopy, traineeNav, type TraineeNavKey } from "@/lib/traineeNav";
 /**
  * Trainee menu — same box as the programs page filter (teal border, light teal background).
  * Left column in English, right in Arabic (it is the first column of a row, so RTL flips it).
- * Phones / tablets: the links sit in a grid; large screens: one list (My Profile and Sign out last).
+ * Phones: one full-width item per row; tablets: 3 per row; large screens: one list (My Profile and Sign out last).
  */
 export default function TraineeSidebar({ name }: { name: string }) {
   const { locale } = useI18n();
@@ -41,7 +41,7 @@ export default function TraineeSidebar({ name }: { name: string }) {
 
       <nav aria-label={c.menu} className="px-4 py-4 md:px-5">
         {/* every link + Sign out in one list, so the menu is only as tall as its items */}
-        <ul className="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-1 lg:gap-1.5">
+        <ul className="grid grid-cols-1 gap-1.5 sm:grid-cols-3 sm:gap-1 lg:grid-cols-1 lg:gap-1.5">
           {traineeNav.map((i) => (
             <li key={i.key} className="min-w-0">
               {item(i)}
