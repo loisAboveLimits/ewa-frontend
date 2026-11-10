@@ -1,6 +1,7 @@
 "use client";
 
-import { useId, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import { usePathname } from "next/navigation";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import type { Locale, Localized } from "@/lib/i18n/config";
 import { Checkbox, Panel, PanelHeading, PhoneInput, PrimaryButton, SelectInput, TextInput } from "@/components/registration/ui";
@@ -14,7 +15,7 @@ const fieldBase =
 const errorRing = "ring-2 ring-[#EE7A52]";
 
 const MAX_CV_MB = 5;
-const CV_TYPES = ".pdf,.doc,.docx";
+const CV_EXTENSIONS = ["pdf", "doc", "docx"];
 
 type ApplicationData = {
   name: string;
@@ -28,9 +29,13 @@ type ApplicationData = {
 type Field = keyof ApplicationData;
 type Errors = Partial<Record<Field | "form", string>>;
 
+/** Upload rules of the webform's "cv" element; null = the webform has no CV field. */
+type CvRules = { extensions: string[]; max_mb: number } | null;
+
 const copy: Localized<{
   heading: string;
   subheading: string;
+  subheadingNoCv: string;
   name: string;
   email: string;
   phone: string;
@@ -45,11 +50,12 @@ const copy: Localized<{
   submitting: string;
   successTitle: string;
   successText: string;
-  errors: Record<Field | "failed" | "cvSize" | "cvType", string>;
+  errors: Record<Field | "failed" | "cvSize" | "cvType" | "careerId" | "invalid" | "closed" | "tooMany", string>;
 }> = {
   en: {
     heading: "Apply for this position",
     subheading: "Fill in your details and attach your CV",
+    subheadingNoCv: "Fill in your details below",
     name: "Full name",
     email: "Email address",
     phone: "Mobile number",
@@ -80,12 +86,17 @@ const copy: Localized<{
       cvType: "Please attach a PDF or Word file.",
       message: "",
       consent: "Please confirm that your information is correct.",
-      failed: "Your application could not be sent. Please try again.",
+      failed: "Your application could not be sent. Please try again later.",
+      careerId: "This position is no longer available.",
+      invalid: "Please check the highlighted fields.",
+      closed: "Applications are closed at the moment.",
+      tooMany: "You've sent several applications already. Please wait a while and try again.",
     },
   },
   ar: {
     heading: "قدّم على هذه الوظيفة",
     subheading: "أدخل بياناتك وأرفق سيرتك الذاتية",
+    subheadingNoCv: "أدخل بياناتك أدناه",
     name: "الاسم الكامل",
     email: "البريد الإلكتروني",
     phone: "رقم الجوال",
@@ -116,23 +127,53 @@ const copy: Localized<{
       cvType: "يرجى إرفاق ملف PDF أو Word.",
       message: "",
       consent: "يرجى تأكيد صحة المعلومات.",
-      failed: "تعذّر إرسال طلبك. يرجى المحاولة مرة أخرى.",
+      failed: "تعذّر إرسال طلبك. يرجى المحاولة لاحقًا.",
+      careerId: "هذه الوظيفة لم تعد متاحة.",
+      invalid: "يرجى مراجعة الحقول المحددة.",
+      closed: "التقديم مغلق حاليًا.",
+      tooMany: "لقد أرسلت عدة طلبات بالفعل. يرجى الانتظار قليلًا ثم المحاولة مرة أخرى.",
     },
   },
 };
 
 /**
  * Job application form on /career/[slug] — same panel, fields and buttons as the
- * login and registration forms. Connect `submitApplication` to the real backend.
+ * login and registration forms. Sends to /api/careers/apply → Drupal webform "ewa_careers"
+ * (career_id = the career's node id; Drupal fills in the position from its Main Title).
+ * The CV field is shown only when the webform has a file element (e.g. keyed "cv" or "resume").
  */
-export default function CareerApplicationForm({ careerId, careerTitle }: { careerId: string; careerTitle: string }) {
+export default function CareerApplicationForm({ careerId }: { careerId: string; careerTitle?: string }) {
   const { locale } = useI18n();
   const c = copy[locale as Locale];
   const [data, setData] = useState<ApplicationData>({ name: "", email: "", phone: "", experience: "", cv: null, message: "", consent: false });
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+  const pathname = usePathname();
+
+  // years-of-experience options and CV rules from the webform (built-in options until loaded)
+  const [experienceOptions, setExperienceOptions] = useState(c.experienceOptions);
+  const [cvRules, setCvRules] = useState<CvRules>(null);
+  useEffect(() => {
+    let alive = true;
+    setExperienceOptions(copy[locale as Locale].experienceOptions);
+    fetch(`/api/careers/apply?lang=${locale}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!alive || !d) return;
+        const list = d.options?.years_of_experience;
+        if (Array.isArray(list) && list.length) setExperienceOptions(list);
+        setCvRules(d.cv ?? null);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [locale]);
+  const cvExtensions = cvRules?.extensions?.length ? cvRules.extensions : CV_EXTENSIONS;
+  const cvMaxMb = Math.min(cvRules?.max_mb || MAX_CV_MB, MAX_CV_MB);
 
   const update = <K extends Field>(key: K, value: ApplicationData[K]) => {
     setData((d) => ({ ...d, [key]: value }));
@@ -145,9 +186,12 @@ export default function CareerApplicationForm({ careerId, careerTitle }: { caree
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) found.email = c.errors.email;
     if (!/^5\d{8}$/.test(data.phone)) found.phone = c.errors.phone;
     if (!data.experience) found.experience = c.errors.experience;
-    if (!data.cv) found.cv = c.errors.cv;
-    else if (!/\.(pdf|docx?)$/i.test(data.cv.name)) found.cv = c.errors.cvType;
-    else if (data.cv.size > MAX_CV_MB * 1024 * 1024) found.cv = c.errors.cvSize;
+    if (cvRules) {
+      const ext = data.cv?.name.split(".").pop()?.toLowerCase() ?? "";
+      if (!data.cv) found.cv = c.errors.cv;
+      else if (!cvExtensions.includes(ext)) found.cv = c.errors.cvType;
+      else if (data.cv.size > cvMaxMb * 1024 * 1024) found.cv = c.errors.cvSize;
+    }
     if (!data.consent) found.consent = c.errors.consent;
     return found;
   };
@@ -162,8 +206,33 @@ export default function CareerApplicationForm({ careerId, careerTitle }: { caree
     }
     setSubmitting(true);
     try {
-      await submitApplication({ ...data, careerId, careerTitle });
-      setSent(true);
+      const body = new FormData();
+      body.append("careerId", careerId);
+      body.append("name", data.name.trim());
+      body.append("email", data.email.trim());
+      body.append("phone", data.phone);
+      body.append("experience", data.experience);
+      body.append("message", data.message.trim());
+      if (cvRules && data.cv) body.append("cv", data.cv);
+      body.append("lang", locale);
+      body.append("page", pathname);
+      body.append("website", honeypot);
+      const res = await fetch("/api/careers/apply", { method: "POST", body });
+      if (res.ok) return setSent(true);
+      const result: { error?: string; fields?: Record<string, string> } = await res.json().catch(() => ({}));
+      if (result.error === "invalid" && result.fields) {
+        // our own wording for each field; Drupal's message when we have none
+        const found: Errors = { form: c.errors.invalid };
+        for (const [key, message] of Object.entries(result.fields)) {
+          if (key === "careerId") found.form = c.errors.careerId;
+          else if (key === "cv") found.cv = message === "size" ? c.errors.cvSize : message === "type" ? c.errors.cvType : message || c.errors.cvType;
+          else if (key in data) found[key as Field] = c.errors[key as Field] || message;
+        }
+        setErrors(found);
+        requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']")?.focus());
+        return;
+      }
+      setErrors({ form: res.status === 429 ? c.errors.tooMany : res.status === 403 ? c.errors.closed : c.errors.failed });
     } catch {
       setErrors({ form: c.errors.failed });
     } finally {
@@ -186,16 +255,33 @@ export default function CareerApplicationForm({ careerId, careerTitle }: { caree
 
   return (
     <div className="mx-auto w-full max-w-[860px]">
-      <form ref={formRef} noValidate onSubmit={handleSubmit}>
+      <form ref={formRef} noValidate onSubmit={handleSubmit} className="relative">
+        {/* spam trap — hidden from people, bots fill it in */}
+        <div className="absolute -start-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+          <label>
+            Website
+            <input type="text" name="website" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+          </label>
+        </div>
         <Panel bubbles="bottom">
-          <PanelHeading title={c.heading} subtitle={c.subheading} />
+          <PanelHeading title={c.heading} subtitle={cvRules ? c.subheading : c.subheadingNoCv} />
 
           <div className="grid gap-4 md:gap-5">
             <TextInput label={c.name} autoComplete="name" value={data.name} onChange={(e) => update("name", e.target.value)} error={errors.name} />
             <TextInput label={c.email} type="email" autoComplete="email" inputMode="email" value={data.email} onChange={(e) => update("email", e.target.value)} error={errors.email} />
             <PhoneInput label={c.phone} value={data.phone} onChange={(v) => update("phone", v)} error={errors.phone} />
-            <SelectInput label={c.experience} value={data.experience} onChange={(v) => update("experience", v)} options={c.experienceOptions} error={errors.experience} />
-            <FileInput label={c.cv} hint={c.cvHint} choose={c.cvChoose} file={data.cv} onChange={(f) => update("cv", f)} error={errors.cv} />
+            <SelectInput label={c.experience} value={data.experience} onChange={(v) => update("experience", v)} options={experienceOptions} error={errors.experience} />
+            {cvRules && (
+              <FileInput
+                label={c.cv}
+                hint={c.cvHint.replace(String(MAX_CV_MB), String(cvMaxMb))}
+                choose={c.cvChoose}
+                accept={cvExtensions.map((x) => `.${x}`).join(",")}
+                file={data.cv}
+                onChange={(f) => update("cv", f)}
+                error={errors.cv}
+              />
+            )}
             <TextArea label={c.message} value={data.message} onChange={(v) => update("message", v)} />
           </div>
 
@@ -225,6 +311,7 @@ function FileInput({
   label,
   hint,
   choose,
+  accept,
   file,
   onChange,
   error,
@@ -232,6 +319,7 @@ function FileInput({
   label: string;
   hint: string;
   choose: string;
+  accept: string;
   file: File | null;
   onChange: (f: File | null) => void;
   error?: string;
@@ -254,7 +342,7 @@ function FileInput({
         <input
           id={id}
           type="file"
-          accept={CV_TYPES}
+          accept={accept}
           className="sr-only"
           aria-invalid={!!error}
           aria-describedby={`${id}-hint${error ? ` ${id}-err` : ""}`}
@@ -289,14 +377,4 @@ function TextArea({ label, value, onChange }: { label: string; value: string; on
       />
     </div>
   );
-}
-
-/* Replace with your real API call (route handler, server action, Drupal webform…) */
-async function submitApplication(data: ApplicationData & { careerId: string; careerTitle: string }) {
-  // const body = new FormData(); — e.g. POST to /api/careers/apply
-  // body.append("career", data.careerId); body.append("cv", data.cv!); …
-  // const res = await fetch("/api/careers/apply", { method: "POST", body });
-  // if (!res.ok) throw new Error("Application failed");
-  await new Promise((r) => setTimeout(r, 800));
-  console.info("Career application submitted", { career: data.careerId, title: data.careerTitle, name: data.name, email: data.email });
 }
