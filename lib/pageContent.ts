@@ -1,4 +1,4 @@
-import { absoluteUrl, fetchView } from "@/lib/drupal";
+import { absoluteUrl, fetchView, proxyDrupalFiles } from "@/lib/drupal";
 
 /** One row of the "REST API - Pages (Contents)" display (GET /api/page/content/{nid}/{lang}). */
 type PageContentRow = { nid: string; field_content?: string };
@@ -71,5 +71,6 @@ export function normalizeContentHtml(html: string): string {
   // relative Drupal files → absolute
   out = out.replace(/(src|href)="(\/[^"]*\/sites\/[^"]*|\/sites\/[^"]*)"/g, (_, attr, path) => `${attr}="${absoluteUrl(path)}"`);
 
-  return out;
+  // full Drupal file addresses typed into the content → /drupal-files/… on Vercel
+  return proxyDrupalFiles(out);
 }

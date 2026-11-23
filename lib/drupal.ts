@@ -75,6 +75,17 @@ export const absoluteUrl = (path?: string) => {
   return path.startsWith("http") ? path : `${ORIGIN}${path}`;
 };
 
+/**
+ * Drupal content sometimes has full file addresses typed in (http://drupal-host/sites/default/files/…,
+ * in src, href or style="background-image:url(…)"). With the files proxy on, these become
+ * /drupal-files/… too; otherwise the HTML is returned unchanged.
+ */
+export function proxyDrupalFiles(html: string): string {
+  if (!FILES_PROXY || !ORIGIN) return html;
+  const origin = ORIGIN.replace(/\/+$/, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return html.replace(new RegExp(`${origin}(?:/[^"'\\s)]*?)?/sites/default/files/`, "g"), "/drupal-files/");
+}
+
 /* ------------------------------------------------------------------ */
 /* Any Views "REST export" display                                     */
 /* ------------------------------------------------------------------ */
@@ -121,7 +132,9 @@ export async function fetchView<T = Record<string, string>>({
  * file / image links (/ewa/sites/default/files/…) become absolute so they load from Drupal.
  */
 export function drupalHtml(html?: string): string {
-  return (html ?? "").replace(/(src|href)="(\/[^"\/][^"]*\/sites\/[^"]*|\/sites\/[^"]*)"/g, (_, attr, path) => `${attr}="${absoluteUrl(path)}"`);
+  return proxyDrupalFiles(
+    (html ?? "").replace(/(src|href)="(\/[^"\/][^"]*\/sites\/[^"]*|\/sites\/[^"]*)"/g, (_, attr, path) => `${attr}="${absoluteUrl(path)}"`)
+  );
 }
 
 /** Removes the <p> wrapper Drupal puts around short text fields (titles), keeping inline markup. */
