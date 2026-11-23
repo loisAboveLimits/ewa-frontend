@@ -17,7 +17,7 @@ const navHrefs = [
 ] as const;
 
 /** One header link. Comes from the Drupal "front" menu (see app/layout.tsx). */
-export type NavItem = { key: string; label: string; href: string; external?: boolean };
+export type NavItem = { key: string; label: string; href: string; external?: boolean; children?: NavItem[] };
 
 export default function Header({ menu = [] }: { menu?: NavItem[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -70,6 +70,12 @@ export default function Header({ menu = [] }: { menu?: NavItem[] }) {
   const isActive = (href: string) =>
     href.startsWith("/") && (pathname === href || (href !== "/" && pathname.startsWith(href + "/")));
   const close = () => setMenuOpen(false);
+
+  // phones / tablets: which item's sub-menu is open (one at a time)
+  const [openSub, setOpenSub] = useState<string | null>(null);
+  useEffect(() => {
+    if (!menuOpen) setOpenSub(null);
+  }, [menuOpen]);
 
   // Desktop: after scrolling 200px the bar gets smaller and sits at the very top
   // (".is-scrolled" — the styles only apply from 1024px up, see app/header.css).
@@ -142,17 +148,44 @@ export default function Header({ menu = [] }: { menu?: NavItem[] }) {
             <div className="flex flex-col justify-center md:w-3/4 bar-nav">
 
                 <nav className="flex w-full items-center justify-between desktop-nav" aria-label={t.header.mainNav}>
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.key}
-                      href={item.href}
-                      {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                      className={isActive(item.href) ? "active" : undefined}
-                      aria-current={isActive(item.href) ? "page" : undefined}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
+                  {navItems.map((item) => {
+                    const link = (
+                      <Link
+                        key={item.key}
+                        href={item.href}
+                        {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        className={isActive(item.href) ? "active" : undefined}
+                        aria-current={isActive(item.href) ? "page" : undefined}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                    if (!item.children?.length) return link;
+
+                    // item with sub-links (Drupal "front" menu children): dropdown on hover / keyboard focus
+                    return (
+                      <div key={item.key} className="nav-item has-dropdown">
+                        {/* .nav-anchor is as wide as the link text, so the panel lines up with it */}
+                        <div className="nav-anchor">
+                        {link}
+                        <div className="nav-dropdown">
+                          <ul className="nav-dropdown-panel">
+                            {item.children.map((child) => (
+                              <li key={child.key}>
+                                <Link
+                                  href={child.href}
+                                  {...(child.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                >
+                                  {child.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </nav>
 
             </div>
@@ -197,18 +230,58 @@ export default function Header({ menu = [] }: { menu?: NavItem[] }) {
 
           <div id="mobile-menu" className="mobile-nav" aria-hidden={!menuOpen} inert={!menuOpen}>
             <nav aria-label={t.header.mobileNav}>
-              {navItems.map((item) => (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  onClick={close}
-                  className={isActive(item.href) ? "active" : undefined}
-                  aria-current={isActive(item.href) ? "page" : undefined}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                const link = (
+                  <Link
+                    key={item.key}
+                    href={item.href}
+                    {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    onClick={close}
+                    className={isActive(item.href) ? "active" : undefined}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                  >
+                    {item.label}
+                  </Link>
+                );
+                if (!item.children?.length) return link;
+
+                const open = openSub === item.key;
+                const subId = `mobile-sub-${item.key.replace(/[^\w-]/g, "")}`;
+                return (
+                  <div key={item.key} className={`mobile-nav-group ${open ? "open" : ""}`}>
+                    <div className="mobile-nav-row">
+                      {link}
+                      <button
+                        type="button"
+                        className="mobile-sub-toggle"
+                        aria-expanded={open}
+                        aria-controls={subId}
+                        aria-label={item.label}
+                        onClick={() => setOpenSub(open ? null : item.key)}
+                      >
+                        <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="m6 9 6 6 6-6" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div id={subId} className="mobile-sub" inert={!open}>
+                      <ul>
+                        {item.children.map((child) => (
+                          <li key={child.key}>
+                            <Link
+                              href={child.href}
+                              {...(child.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                              onClick={close}
+                            >
+                              {child.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                );
+              })}
 
               <div className="mobile-lang">
                 <LanguageSwitcher variant="long" onSwitch={close} />

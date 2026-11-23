@@ -41,10 +41,12 @@ export async function getNavMenu(menu: string, locale: Locale): Promise<NavItem[
     const convert = (items: DrupalMenuItem[]): NavItem[] =>
       items.map((item) => {
         const target = enById.get(item.id) ?? item;
+        // Drupal's "path" has no #fragment (e.g. /about#values) — take it from the full url
+        const hash = target.url?.includes("#") ? target.url.slice(target.url.indexOf("#")) : "";
         return {
           key: item.id,
           label: item.title,
-          href: target.external ? target.url : target.path || "#",
+          href: target.external ? target.url : (target.path || "#") + hash,
           external: target.external,
           children: convert(item.children),
         };

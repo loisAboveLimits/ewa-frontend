@@ -383,3 +383,220 @@
     transition: none !important;
   }
 }
+
+/* =====================================================================
+   Dropdown menus (children of the Drupal "front" menu) — Header.tsx
+   ===================================================================== */
+
+/* Desktop: panel under the item, same teal glass as the bar; opens on hover or keyboard focus */
+@media (min-width: 1024px) {
+  .desktop-nav .nav-item {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* shrink-to-fit box around the link text: the panel's start edge lines up with the text
+     (left in English, right in Arabic), like the design */
+  .desktop-nav .nav-anchor {
+    position: relative;
+    display: inline-flex;
+  }
+  .desktop-nav .nav-anchor > a {
+    width: auto;
+  }
+
+  .nav-dropdown {
+    position: absolute;
+    top: 100%;
+    inset-inline-start: 0;
+    z-index: 5;
+    /* gap from the link down to just under the bar (also a hover bridge) */
+    padding-top: 2.6rem;
+    min-width: 230px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    translate: 0 -10px;
+    scale: 0.97;
+    transform-origin: top left;
+    transition: opacity 0.22s ease, translate 0.28s cubic-bezier(0.22, 1, 0.36, 1), scale 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 0s linear 0.28s;
+  }
+  [dir="rtl"] .nav-dropdown {
+    transform-origin: top right;
+  }
+
+  .nav-item.has-dropdown:hover .nav-dropdown,
+  .nav-item.has-dropdown:focus-within .nav-dropdown {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    translate: 0 0;
+    scale: 1;
+    transition-delay: 0s;
+  }
+  .nav-dropdown-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 1.5rem 1.75rem;
+    list-style: none;
+    background: rgba(19, 154, 157, 0.55);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 0.5px solid rgba(255, 255, 255, 0.7);
+    border-radius: 2rem;
+    box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.35);
+  }
+
+  /* links inside the panel: left-aligned (right in Arabic), smaller than the bar links */
+  .desktop-nav .nav-dropdown a {
+    display: block;
+    width: auto;
+    padding: 0.3rem 0;
+    font-size: 17px !important;
+    font-weight: 400;
+    text-align: start;
+    white-space: nowrap;
+    color: #fff;
+    transition: color 0.2s ease, translate 0.2s ease;
+  }
+  .desktop-nav .nav-dropdown a:hover,
+  .desktop-nav .nav-dropdown a:focus-visible {
+    opacity: 1;
+    color: rgba(239, 89, 33, 1);
+    translate: 4px 0;
+  }
+  [dir="rtl"] .desktop-nav .nav-dropdown a:hover,
+  [dir="rtl"] .desktop-nav .nav-dropdown a:focus-visible {
+    translate: -4px 0;
+  }
+
+  /* smaller bar after scrolling: the panel sits closer */
+  #main-navigation.is-scrolled .nav-dropdown {
+    padding-top: 1.3rem;
+  }
+}
+
+/* small laptops: the bar is shorter */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .nav-dropdown {
+    padding-top: 2rem;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .nav-dropdown,
+  .desktop-nav .nav-dropdown a {
+    transition: none !important;
+  }
+}
+
+/* Phones / tablets: item + arrow button; the sub-list slides open */
+/* the open menu can get taller than a small phone with a sub-list open: let it scroll */
+.nav-mobile.open .mobile-nav nav {
+  max-height: calc(100svh - 110px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.mobile-nav-group {
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.mobile-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-nav .mobile-nav-row > a {
+  flex: 1;
+  padding: 14px 4px;
+  border: 0;
+  color: #fff;
+  font-size: 18px !important;
+  font-weight: 500;
+}
+
+.mobile-nav .mobile-nav-row > a.active {
+  font-weight: 700;
+}
+
+.mobile-sub-toggle {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.mobile-sub-toggle svg {
+  width: 22px;
+  height: 22px;
+  transition: rotate 0.3s ease;
+}
+
+.mobile-nav-group.open .mobile-sub-toggle svg {
+  rotate: 180deg;
+}
+
+.mobile-sub-toggle:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.mobile-sub {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.32s ease, opacity 0.25s ease;
+}
+
+.mobile-nav-group.open .mobile-sub {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.mobile-sub ul {
+  min-height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0 0 0 0;
+  padding-inline-start: 14px;
+  list-style: none;
+}
+
+.mobile-nav-group.open .mobile-sub ul {
+  padding-bottom: 10px;
+}
+
+/* .mobile-nav prefix: responsive.css has a generic .mobile-nav a rule (dark text, borders) */
+.mobile-nav .mobile-sub a {
+  display: block;
+  padding: 9px 4px;
+  border: 0;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 16px !important;
+}
+
+.mobile-nav .mobile-sub a:hover,
+.mobile-nav .mobile-sub a:focus-visible {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-sub,
+  .mobile-sub-toggle svg {
+    transition: none;
+  }
+}
