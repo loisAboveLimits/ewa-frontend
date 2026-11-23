@@ -18,7 +18,8 @@ type Props = {
 };
 
 /**
- * Hero banner used at the top of every page.
+ * Hero banner used at the top of every page: full screen on the home page (align="center"),
+ * half the screen on all other pages.
  * Has a real height on every screen size (the old markup collapsed to 0px on phones
  * because the caption was absolutely positioned inside an `height: auto` section).
  */
@@ -29,7 +30,16 @@ export default async function PageBanner({ page, align = "bottom", titleClassNam
   const subtitle = drupal.subtitle ?? fallback.subtitle;
 
   return (
-    <section className="banner relative w-full h-[62svh] min-h-[400px] md:h-[80vh] lg:h-screen lg:min-h-[640px]">
+    <section
+      className={
+        "banner relative w-full " +
+        (align === "center"
+          ? // home: full screen
+            "h-[62svh] min-h-[400px] md:h-[80vh] lg:h-screen lg:min-h-[640px]"
+          : // every other page: half the screen (with a floor so the header and title still fit)
+            "h-[50svh] min-h-[340px] md:min-h-[400px] lg:min-h-[460px]")
+      }
+    >
       {/* background on its own layer so it can be mirrored in Arabic without flipping the text */}
       <div
         aria-hidden
@@ -39,7 +49,7 @@ export default async function PageBanner({ page, align = "bottom", titleClassNam
       <div
         className={
           "banner-caption absolute inset-x-0 " +
-          (align === "center" ? "top-[45%] md:top-[40%] -translate-y-1/2" : "bottom-[16%] md:bottom-[24%]")
+          (align === "center" ? "top-[45%] md:top-[40%] -translate-y-1/2" : "bottom-[14%] md:bottom-[16%]")
         }
       >
         <div className="container mx-auto px-4">
