@@ -17,6 +17,7 @@ export default async function LogoTicker({
   logos = [],
   alt,
   speed = 3000,
+  scale = 1,
 }: {
   /** Node id of the Partners & Accreditations content whose gallery to show. */
   nid?: string | number;
@@ -26,6 +27,8 @@ export default async function LogoTicker({
   alt: string;
   /** Milliseconds for one logo to pass — higher = slower. */
   speed?: number;
+  /** Logo size compared with the normal size, e.g. 0.97 = 3% smaller. */
+  scale?: number;
 }) {
   const drupal = nid != null ? await getGallery(await getLocale(), nid) : [];
 
@@ -34,5 +37,5 @@ export default async function LogoTicker({
     : logos.map((n) => ({ src: `/imgs/partners/partner${n}.svg`, alt }));
 
   if (!images.length) return null;
-  return <LogoTickerSlider images={images} label={alt} speed={speed} />;
+  return <LogoTickerSlider images={images} label={alt} speed={speed} scale={scale} />;
 }

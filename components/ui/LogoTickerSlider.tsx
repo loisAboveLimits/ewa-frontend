@@ -17,10 +17,13 @@ export default function LogoTickerSlider({
   images,
   label,
   speed = 3000,
+  scale = 1,
 }: {
   images: GalleryImage[];
   label: string;
   speed?: number;
+  /** Logo size compared with the normal size, e.g. 0.97 = 3% smaller. */
+  scale?: number;
 }) {
   const [reduceMotion, setReduceMotion] = useState(false);
 
@@ -63,7 +66,8 @@ export default function LogoTickerSlider({
                 // Drupal files are served as they are (no Next.js image optimizer / remotePatterns needed)
                 unoptimized={/^(https?:\/\/|\/drupal-files\/)/.test(image.src)}
                 // logos keep their orientation on Arabic pages (see app/rtl.css)
-                className="no-flip h-auto w-full"
+                className="no-flip h-auto w-full mx-auto"
+                style={scale !== 1 ? { width: `${scale * 100}%` } : undefined}
               />
             </div>
           </SwiperSlide>

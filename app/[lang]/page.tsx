@@ -56,7 +56,7 @@ export default async function Home() {
       <section id="partners">
         {/* partner logos — ticker: right → left in English, left → right in Arabic */}
         {/*<LogoTicker logos={[1, 2, 3, 4, 5, 6]} alt={t.common.partner} />*/}
-        <LogoTicker nid={21}  alt={t.common.partner} />
+        <LogoTicker nid={21} alt={t.common.partner} scale={0.9} />
         <div className="spacer-80"></div>
       </section>
 

@@ -58,37 +58,39 @@ export default async function Contact() {
 
           <div className="spacer-40"></div>
 
-          {/* Help card — floats over the banner on desktop, stacks on mobile */}
-          <aside className={styles.helpCard} aria-label={c.helpAria}>
-            <h3 className={styles.helpTitle}>{c.helpTitle}</h3>
-            <div className={styles.helpList}>
-              {contactItems.map((item) => (
-                <a
-                  key={item.key}
-                  href={item.href}
-                  className={styles.helpItem}
-                  {...(item.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  <span className={styles.helpIcon}>{item.icon}</span>
-                  <span>
-                    <span className={styles.helpLabel}>{item.label}</span>
-                    <span className={`${styles.helpValue} ltr-text`}>{item.value}</span>
-                  </span>
-                </a>
-              ))}
+          <div className="flex flex-col">
+
+            {/* Help card — floats over the banner on desktop; below the form on phones and tablets */}
+            <aside className={`${styles.helpCard} order-last mt-10 mb-6 lg:order-none lg:my-0`} aria-label={c.helpAria}>
+              <h3 className={styles.helpTitle}>{c.helpTitle}</h3>
+              <div className={styles.helpList}>
+                {contactItems.map((item) => (
+                  <a
+                    key={item.key}
+                    href={item.href}
+                    className={styles.helpItem}
+                    {...(item.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  >
+                    <span className={styles.helpIcon}>{item.icon}</span>
+                    <span>
+                      <span className={styles.helpLabel}>{item.label}</span>
+                      <span className={`${styles.helpValue} ltr-text`}>{item.value}</span>
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </aside>
+
+            {/* Send us a message */}
+            <div className={styles.panel}>
+              <div className={styles.panelHead}>
+                <h3 className={styles.panelTitle}>{c.messageTitle}</h3>
+                <p className={styles.panelLead}>{c.messageLead}</p>
+              </div>
+
+              <ContactForm narrowSelect />
             </div>
-          </aside>
 
-          <div className="h-10 lg:hidden" aria-hidden="true"></div>
-
-          {/* Send us a message */}
-          <div className={styles.panel}>
-            <div className={styles.panelHead}>
-              <h3 className={styles.panelTitle}>{c.messageTitle}</h3>
-              <p className={styles.panelLead}>{c.messageLead}</p>
-            </div>
-
-            <ContactForm narrowSelect />
           </div>
 
           <div className="spacer-40"></div>
