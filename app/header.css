@@ -299,7 +299,33 @@
   #main-navigation .lang-switcher a,
   #main-navigation .lang-switcher button,
   #main-navigation .login-tab {
-    transition: padding 0.35s ease, font-size 0.35s ease, min-height 0.35s ease, background-color 0.2s ease;
+    transition: padding 0.35s ease, font-size 0.35s ease, min-height 0.35s ease, border-radius 0.35s ease,
+      background-color 0.2s ease;
+  }
+
+  /* room above the bar for the language tab */
+  #main-navigation .nav-desktop {
+    --lang-tab-h: 32px;
+    padding-top: var(--lang-tab-h);
+    transition: padding-top 0.35s ease;
+  }
+  /* the language tab is positioned against the bar: above it normally, below it when scrolled.
+     It sits behind the bar while it slides from one side to the other. */
+  #main-navigation .nav-bar-row {
+    position: relative;
+    isolation: isolate;
+  }
+  #main-navigation .nav-bar-row > .lang-switcher {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    z-index: -1;
+    transform: translateY(-100%);
+    pointer-events: none;
+    transition: top 0.35s ease, transform 0.35s ease;
+  }
+  #main-navigation .nav-bar-row > .lang-switcher > * {
+    pointer-events: auto;
   }
 
   /* scrolled */
@@ -320,10 +346,22 @@
   #main-navigation.is-scrolled .desktop-nav a {
     font-size: 16px !important;
   }
+  /* the bar goes to the very top; the language tab hangs under it on the inline-end side,
+     like the sign-in tab on the other side */
+  #main-navigation.is-scrolled .nav-desktop {
+    padding-top: 0;
+  }
+  #main-navigation.is-scrolled .nav-bar-row > .lang-switcher {
+    top: 100%;
+    transform: translateY(0);
+  }
   #main-navigation.is-scrolled .lang-switcher a,
   #main-navigation.is-scrolled .lang-switcher button {
-    padding: 0.25rem 0.85rem 0;
+    min-height: 26px;
+    padding: 0.15rem 0.95rem 0.25rem;
     font-size: 13px;
+    border-radius: 0 0 1.25rem 1.25rem;
+    box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.35);
   }
   #main-navigation.is-scrolled .login-tab {
     min-height: 26px;

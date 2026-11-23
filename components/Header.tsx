@@ -116,12 +116,14 @@ export default function Header({ menu = [] }: { menu?: NavItem[] }) {
         {/* Desktop (≥1024px) */}
         <div className="hidden lg:block nav-desktop">
 
-          {/* language tab — inline-end side (right in English, left in Arabic) */}
-          <div className="lang-switcher">
-            <LanguageSwitcher />
-          </div>
+          <div className="flex w-full nav-bar-row">
 
-          <div className="flex w-full">
+            {/* language tab — inline-end side (right in English, left in Arabic). Sits above the
+                bar; when the bar shrinks it slides under it (app/header.css). */}
+            <div className="lang-switcher">
+              <LanguageSwitcher />
+            </div>
+
             <div className="flex flex-col item-center justify-center md:w-1/4 bar-logo">
 
                 <Link href="/" className="logo" onClick={close}>
