@@ -2,6 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import StoriesCarousel from "@/components/stories/Stories";
 import ContactForm from "@/components/Contact";
+import ContactBanner from "@/components/home/ContactBanner";
 import DrupalTestimonials from "@/components/orbit/DrupalTestimonials";
 import { getOrbitActions, getTeam } from "@/components/orbit/team";
 import DrupalProgramsRoulette from "@/components/roulette/DrupalProgramsRoulette";
@@ -114,7 +115,7 @@ export default async function Home() {
       </section>
 
 
-      {/*<!--contact-->*/}
+      {/*<!--contact-->
       <section id="contact">
         <div className="spacer-20"></div>
 
@@ -131,6 +132,16 @@ export default async function Home() {
         </div>
 
          <div className="spacer-80"></div>
+      </section>
+      */}
+
+      {/*<!--contact banner: "Contact Us — stay connected" → Contact page-->*/}
+      <section id="contact-banner">
+        <div className="container mx-auto px-4">
+          <ContactBanner locale={locale} />
+        </div>
+
+        <div className="spacer-80"></div>
       </section>
 
     </div>
