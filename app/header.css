@@ -413,7 +413,7 @@
     inset-inline-start: 0;
     z-index: 5;
     /* gap from the link down to just under the bar (also a hover bridge) */
-    padding-top: 2.6rem;
+    padding-top: 3.35rem;
     min-width: 230px;
     opacity: 0;
     visibility: hidden;
@@ -476,14 +476,14 @@
 
   /* smaller bar after scrolling: the panel sits closer */
   #main-navigation.is-scrolled .nav-dropdown {
-    padding-top: 1.3rem;
+    padding-top: 2.05rem;
   }
 }
 
 /* small laptops: the bar is shorter */
 @media (min-width: 1024px) and (max-width: 1279px) {
   .nav-dropdown {
-    padding-top: 2rem;
+    padding-top: 2.75rem;
   }
 }
 
