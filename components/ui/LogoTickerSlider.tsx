@@ -61,7 +61,7 @@ export default function LogoTickerSlider({
                 width={150}
                 height={60}
                 // Drupal files are served as they are (no Next.js image optimizer / remotePatterns needed)
-                unoptimized={/^https?:\/\//.test(image.src)}
+                unoptimized={/^(https?:\/\/|\/drupal-files\/)/.test(image.src)}
                 // logos keep their orientation on Arabic pages (see app/rtl.css)
                 className="no-flip h-auto w-full"
               />

@@ -97,7 +97,7 @@ export default function ProgramsRoulette({ programs: items }: { programs?: Roule
               fill
               sizes="(max-width: 1400px) 100vw, 1200px"
               // Drupal files are used as they are (no Next.js optimizer / remotePatterns needed)
-              unoptimized={/^https?:\/\//.test(p.image)}
+              unoptimized={/^(https?:\/\/|\/drupal-files\/)/.test(p.image)}
               className="object-cover"
             />
             {p.tint && <div className={styles.tint} />}

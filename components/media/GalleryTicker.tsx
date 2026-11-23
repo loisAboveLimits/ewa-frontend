@@ -190,7 +190,7 @@ function Thumb({ image, onClick, focusable, label }: { image: GalleryImage; onCl
         fill
         sizes="(min-width: 1024px) 700px, 60vw"
         // Drupal images load as they are: Next 16 refuses to optimize images from localhost
-        unoptimized={/^https?:\/\//.test(image.src)}
+        unoptimized={/^(https?:\/\/|\/drupal-files\/)/.test(image.src)}
         className="object-cover transition-transform duration-500 group-hover:scale-105"
       />
       {/* hover overlay */}

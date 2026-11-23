@@ -205,7 +205,7 @@ export default function OrbitShowcase({
                         }}
                         onBlur={close}
                       >
-                        <Image src={m.image} alt={m.name} fill sizes="(max-width: 640px) 64px, 96px" unoptimized={/^https?:\/\//.test(m.image)} className={styles.avatarImg} />
+                        <Image src={m.image} alt={m.name} fill sizes="(max-width: 640px) 64px, 96px" unoptimized={/^(https?:\/\/|\/drupal-files\/)/.test(m.image)} className={styles.avatarImg} />
                       </button>
 
                       <div

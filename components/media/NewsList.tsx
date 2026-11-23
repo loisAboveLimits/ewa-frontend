@@ -106,7 +106,7 @@ function NewsRow({ item, locale }: { item: NewsItem; locale: Locale }) {
         <Image
           src={item.image}
         // Drupal images load as they are: Next 16 refuses to optimize images from localhost
-        unoptimized={/^https?:\/\//.test(item.image)}
+        unoptimized={/^(https?:\/\/|\/drupal-files\/)/.test(item.image)}
           alt=""
           fill
           sizes="(min-width: 768px) 180px, (min-width: 640px) 160px, 110px"

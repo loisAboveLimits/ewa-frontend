@@ -54,9 +54,26 @@ export async function getMenu(menu = "main", lang = "en"): Promise<DrupalMenuIte
   return res.json();
 }
 
+/**
+ * Serve Drupal files through this site (/drupal-files/…, see the rewrite in next.config.ts)?
+ * Needed when the site is on https but Drupal only on http — browsers block such images.
+ * DRUPAL_FILES_PROXY=true / false decides; by default on when running on Vercel with an http Drupal.
+ */
+const FILES_PROXY =
+  process.env.DRUPAL_FILES_PROXY === "true" ||
+  (process.env.DRUPAL_FILES_PROXY !== "false" && !!process.env.VERCEL && ORIGIN?.startsWith("http:"));
+
 // "URL to image" gives a relative path, so make it absolute
-export const absoluteUrl = (path?: string) =>
-  path ? (path.startsWith("http") ? path : `${ORIGIN}${path}`) : "";
+export const absoluteUrl = (path?: string) => {
+  if (!path) return "";
+  if (FILES_PROXY) {
+    // /sites/default/files/x.jpg, /ewa/sites/default/files/x.jpg or http://drupal/…/sites/default/files/x.jpg
+    const local = !path.startsWith("http") || (ORIGIN && path.startsWith(ORIGIN));
+    const file = path.match(/\/sites\/default\/files\/(.*)$/);
+    if (local && file) return `/drupal-files/${file[1]}`;
+  }
+  return path.startsWith("http") ? path : `${ORIGIN}${path}`;
+};
 
 /* ------------------------------------------------------------------ */
 /* Any Views "REST export" display                                     */

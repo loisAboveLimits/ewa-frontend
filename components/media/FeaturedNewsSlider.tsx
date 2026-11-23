@@ -84,7 +84,7 @@ function FeaturedSlide({ item, priority, readMore }: { item: NewsItem; priority:
       <Image
         src={item.image}
         // Drupal images load as they are: Next 16 refuses to optimize images from localhost
-        unoptimized={/^https?:\/\//.test(item.image)}
+        unoptimized={/^(https?:\/\/|\/drupal-files\/)/.test(item.image)}
         alt=""
         fill
         priority={priority}
