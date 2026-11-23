@@ -71,6 +71,23 @@ export default function Header({ menu = [] }: { menu?: NavItem[] }) {
     href.startsWith("/") && (pathname === href || (href !== "/" && pathname.startsWith(href + "/")));
   const close = () => setMenuOpen(false);
 
+  // Desktop: after scrolling 200px the bar gets smaller and sits at the very top
+  // (".is-scrolled" — the styles only apply from 1024px up, see app/header.css).
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => setScrolled(window.scrollY >= SHRINK_AFTER));
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", update);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
   // Lock page scroll while the mobile menu is open; close on Escape or when
   // the viewport grows to the desktop layout.
   useEffect(() => {
@@ -94,7 +111,7 @@ export default function Header({ menu = [] }: { menu?: NavItem[] }) {
   return (
     <header className="header">
 
-      <div id="main-navigation" className="w-full" >
+      <div id="main-navigation" className={`w-full ${scrolled ? "is-scrolled" : ""}`}>
 
         {/* Desktop (≥1024px) */}
         <div className="hidden lg:block nav-desktop">
@@ -213,6 +230,9 @@ export default function Header({ menu = [] }: { menu?: NavItem[] }) {
     </header>
   );
 }
+
+/** Scroll distance (px) after which the desktop bar shrinks. */
+const SHRINK_AFTER = 200;
 
 const isActiveLogin = (pathname: string) => pathname === "/login" || pathname.startsWith("/login/");
 

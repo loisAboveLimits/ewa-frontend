@@ -276,3 +276,72 @@
     height: 15px;
   }
 }
+
+/* =====================================================================
+   Desktop (≥1024px): smaller bar stuck to the top after 200px of scroll
+   (Header.tsx adds ".is-scrolled" to #main-navigation). Phones and
+   tablets keep their own bar unchanged.
+   ===================================================================== */
+@media (min-width: 1024px) {
+  #main-navigation {
+    transition: top 0.35s ease;
+  }
+  #main-navigation .bar-logo,
+  #main-navigation .bar-nav {
+    transition: padding 0.35s ease, background-color 0.35s ease;
+  }
+  #main-navigation .ewa-logo {
+    transition: max-width 0.35s ease;
+  }
+  #main-navigation .desktop-nav a {
+    transition: font-size 0.35s ease, opacity 0.2s ease;
+  }
+  #main-navigation .lang-switcher a,
+  #main-navigation .lang-switcher button,
+  #main-navigation .login-tab {
+    transition: padding 0.35s ease, font-size 0.35s ease, min-height 0.35s ease, background-color 0.2s ease;
+  }
+
+  /* scrolled */
+  #main-navigation.is-scrolled {
+    top: 0;
+  }
+  #main-navigation.is-scrolled .bar-logo,
+  #main-navigation.is-scrolled .bar-nav {
+    padding-block: 0.3em;
+    /* stronger colour so the links stay readable over the page content */
+    background-color: rgba(19, 154, 157, 0.92);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  #main-navigation.is-scrolled .ewa-logo {
+    max-width: 42%;
+  }
+  #main-navigation.is-scrolled .desktop-nav a {
+    font-size: 16px !important;
+  }
+  #main-navigation.is-scrolled .lang-switcher a,
+  #main-navigation.is-scrolled .lang-switcher button {
+    padding: 0.25rem 0.85rem 0;
+    font-size: 13px;
+  }
+  #main-navigation.is-scrolled .login-tab {
+    min-height: 26px;
+    padding-block: 0.15rem 0.25rem;
+    font-size: 12px !important;
+  }
+}
+
+/* small laptops already use 15px links — keep the scrolled size a bit smaller */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  #main-navigation.is-scrolled .desktop-nav a {
+    font-size: 14px !important;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  #main-navigation,
+  #main-navigation * {
+    transition: none !important;
+  }
+}
