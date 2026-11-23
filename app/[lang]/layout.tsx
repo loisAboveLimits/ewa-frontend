@@ -11,6 +11,7 @@ import "../rtl.css";
 
 import Preloader from "@/components/preloader/Preloader";
 import CountUp from "@/components/ui/CountUp";
+import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import { I18nProvider } from "@/components/i18n/I18nProvider";
 import { dirOf } from "@/lib/i18n/config";
 import { getI18n } from "@/lib/i18n/server";
@@ -93,6 +94,8 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
 
           {/* counts numbers up when they scroll into view (.counter, [data-counter], #glance h4) */}
           <CountUp />
+          {/* boxes slide + fade in on scroll (home #about boxes, [data-reveal]) */}
+          <RevealOnScroll />
         </I18nProvider>
       </body>
     </html>

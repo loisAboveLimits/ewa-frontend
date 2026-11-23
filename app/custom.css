@@ -671,3 +671,42 @@ html[data-loading="true"] body > :not(header):not(.ewa-preloader):not(script) {
    display: contents lets the Drupal markup take part in the parent's layout (flex/grid gaps),
    exactly as if it were written in the page. */
 .drpl-view-section { display: contents; }
+
+/* ---------- slide + fade in on scroll (components/ui/RevealOnScroll.tsx) ----------
+   from the left in English, from the right in Arabic; one after another via --reveal-delay */
+.reveal {
+  opacity: 0;
+  translate: -64px 0;
+  transition:
+    opacity 0.32s ease-out var(--reveal-delay, 0ms),
+    translate 0.36s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+  will-change: opacity, translate;
+}
+[dir="rtl"] .reveal {
+  translate: 64px 0;
+}
+/* boxes start outside their place: hide that part so the page never scrolls sideways */
+section:has(> .container .reveal),
+section:has(.reveal) {
+  overflow-x: clip;
+}
+/* from the right in English, from the left in Arabic */
+.reveal.reveal-end {
+  translate: 64px 0;
+}
+[dir="rtl"] .reveal.reveal-end {
+  translate: -64px 0;
+}
+.reveal.is-revealed,
+[dir="rtl"] .reveal.is-revealed {
+  opacity: 1;
+  translate: 0 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  [dir="rtl"] .reveal {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+}
