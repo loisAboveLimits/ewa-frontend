@@ -41,7 +41,7 @@ export default function ContactBanner({ locale }: { locale: Locale }) {
       <div className="mt-6 flex justify-center">
         <Link
           href={pagePaths.contact}
-          className="inline-flex items-center gap-3 rounded-full px-4 py-2 text-[17px]! md:text-[19px]! font-bold text-white transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="inline-flex items-center gap-3 rounded-full px-4 py-2 text-[17px]! md:text-[19px]! font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
           {c.button}
           <ArrowIcon size={28} />
