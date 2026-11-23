@@ -24,8 +24,27 @@ export type DrupalMenuItem = {
 const BASE = process.env.DRUPAL_BASE_URL!;
 const ORIGIN = process.env.DRUPAL_ORIGIN!;
 
+/**
+ * fetch() for Drupal that tries again when the request fails or Drupal answers with a server
+ * error (5xx / 429). On Vercel the site and Drupal are far apart, and one dropped request used to
+ * make a whole section disappear for that visit. Waits 0.4s, then 1.2s between attempts.
+ */
+export async function drupalFetch(url: string, init?: RequestInit & { next?: { revalidate?: number; tags?: string[] } }, attempts = 3): Promise<Response> {
+  let lastError: unknown;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      const res = await fetch(url, { ...init, signal: AbortSignal.timeout(10_000) });
+      if (res.ok || (res.status < 500 && res.status !== 429) || i === attempts - 1) return res;
+    } catch (error) {
+      lastError = error;
+      if (i === attempts - 1) throw error;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 400 * 3 ** i));
+  }
+  throw lastError;
+}
 export async function getPage(nid: string, lang = "en"): Promise<DrupalPage | null> {
-  const res = await fetch(`${BASE}/api/page/${nid}/${lang}?_format=json`, {
+  const res = await drupalFetch(`${BASE}/api/page/${nid}/${lang}?_format=json`, {
     next: { revalidate: 60 }, // re-fetch from Drupal at most once a minute
   });
   if (!res.ok) throw new Error(`Drupal API error ${res.status}`);
@@ -34,7 +53,7 @@ export async function getPage(nid: string, lang = "en"): Promise<DrupalPage | nu
 }
 
 export async function getSection(nid: string, lang = "en"): Promise<DrupalPage | null> {
-  const res = await fetch(`${BASE}/api/section/${nid}/${lang}?_format=json`, {
+  const res = await drupalFetch(`${BASE}/api/section/${nid}/${lang}?_format=json`, {
     next: { revalidate: 60 }, // re-fetch from Drupal at most once a minute
   });
   if (!res.ok) throw new Error(`Drupal API error ${res.status}`);
@@ -47,7 +66,7 @@ export async function getSection(nid: string, lang = "en"): Promise<DrupalPage |
  * getMenu("main", "ar") → GET {DRUPAL_BASE_URL}/api/menu/main/ar
  */
 export async function getMenu(menu = "main", lang = "en"): Promise<DrupalMenuItem[]> {
-  const res = await fetch(`${BASE}/api/menu/${menu}/${lang}`, {
+  const res = await drupalFetch(`${BASE}/api/menu/${menu}/${lang}`, {
     next: { revalidate: 60, tags: [`menu:${menu}`] }, // re-fetch from Drupal at most once a minute
   });
   if (!res.ok) throw new Error(`Drupal menu API error ${res.status}`);
@@ -121,7 +140,7 @@ export async function fetchView<T = Record<string, string>>({
   const query = new URLSearchParams({ _format: "json", ...Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)])) });
   const url = `${BASE}/api/${segments}?${query}`;
 
-  const res = await fetch(url, { next: { revalidate, tags: [`view:${path}`] } });
+  const res = await drupalFetch(url, { next: { revalidate, tags: [`view:${path}`] } });
   if (!res.ok) throw new Error(`Drupal view error ${res.status} — ${url}`);
   const data = await res.json();
   return Array.isArray(data) ? data : [];
