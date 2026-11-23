@@ -15,6 +15,8 @@ type Props = {
    * Drupal page mapped in lib/banners.ts — the props above are the fallback.
    */
   page?: PageKey;
+  /** Buttons under the title / subtitle (e.g. the home page call-to-action pills). */
+  actions?: ReactNode;
 };
 
 /**
@@ -23,7 +25,7 @@ type Props = {
  * Has a real height on every screen size (the old markup collapsed to 0px on phones
  * because the caption was absolutely positioned inside an `height: auto` section).
  */
-export default async function PageBanner({ page, align = "bottom", titleClassName = "", ...fallback }: Props) {
+export default async function PageBanner({ page, align = "bottom", titleClassName = "", actions, ...fallback }: Props) {
   const drupal = page ? await getBanner(page, await getLocale()) : {};
   const image = drupal.image || fallback.image;
   const title = drupal.title ?? fallback.title;
@@ -49,7 +51,7 @@ export default async function PageBanner({ page, align = "bottom", titleClassNam
       <div
         className={
           "banner-caption absolute inset-x-0 " +
-          (align === "center" ? "top-[45%] md:top-[40%] -translate-y-1/2" : "bottom-[14%] md:bottom-[16%]")
+          (align === "center" ? "top-1/2 -translate-y-1/2" : "bottom-[14%] md:bottom-[16%]")
         }
       >
         <div className="container mx-auto px-4">
@@ -60,6 +62,7 @@ export default async function PageBanner({ page, align = "bottom", titleClassNam
               <p className="banner-subtitle">{subtitle}</p>
             </>
           )}
+          {actions && <div className="mt-6 md:mt-8">{actions}</div>}
         </div>
       </div>
     </section>

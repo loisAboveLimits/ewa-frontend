@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import StoriesCarousel from "@/components/stories/Stories";
 import ContactForm from "@/components/Contact";
 import ContactBanner from "@/components/home/ContactBanner";
+import BannerActions from "@/components/home/BannerActions";
 import DrupalTestimonials from "@/components/orbit/DrupalTestimonials";
 import { getOrbitActions, getTeam } from "@/components/orbit/team";
 import DrupalProgramsRoulette from "@/components/roulette/DrupalProgramsRoulette";
@@ -47,6 +48,7 @@ export default async function Home() {
         align="center"
         titleClassName="fnt-orange"
         title={<>{t.home.bannerLine1}<br />{t.home.bannerLine2}</>}
+        actions={<BannerActions locale={locale} />}
       />
 
 
