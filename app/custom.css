@@ -213,15 +213,32 @@ body{
 .desktop-nav a{font-size: 19px;}
 
 footer{
-    border-top-left-radius: 10rem;
-    border-top-right-radius: 10rem;
+    border-top-left-radius: 5rem;
+    border-top-right-radius: 5rem;
     overflow: hidden;
     background-color: rgba(19, 154, 157, 1);
+    /* logo width; the contact lines and social icons start under the logo's text (Figma) */
+    --footer-logo-w: clamp(210px, 21vw, 300px);
 }
-@media (max-width: 1023px){ footer{ border-top-left-radius: 5rem; border-top-right-radius: 5rem; } }
+@media (max-width: 1023px){ footer{ border-top-left-radius: 4rem; border-top-right-radius: 4rem; } }
 @media (max-width: 639px){ footer{ border-top-left-radius: 2.5rem; border-top-right-radius: 2.5rem; } }
 
 footer .contact{
+}
+
+footer .footer-logo{
+  width: var(--footer-logo-w);
+  max-width: 100%;
+}
+/* contact lines + social icons line up with the logo's text, not its round mark */
+footer .contact,
+footer .social-media{
+  padding-inline-start: calc(var(--footer-logo-w) * 0.27);
+}
+/* Arabic: the mark sits on the far side of the logo, so start at the edge */
+[dir="rtl"] footer .contact,
+[dir="rtl"] footer .social-media{
+  padding-inline-start: 0;
 }
 
 footer .footer-column li{
@@ -229,12 +246,20 @@ footer .footer-column li{
 }
 footer .footer-column a{
   font-size: 15px;
+  line-height: 1.3;
+}
+/* last link of the last column ("Contact Us") stands a little apart, like the design */
+footer .footer-column:last-child li:last-child{
+  margin-top: 1rem;
 }
 
 footer .contact .icons-contact{
-  margin-bottom: 0.5rem;
-  /*margin-left: 2rem;*/
-  font-size: 15px;
+  margin-bottom: 0.85rem;
+  font-size: 14px;
+}
+footer .contact a[href^="mailto:"] span{
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 footer .contact .icons-contact img{
     max-width: 20px;
@@ -271,7 +296,10 @@ section .box{
 section .box-green{
   background-color: rgba(19, 154, 157, 1);
 }
+section .box-light-green{
+  background: var(--PANTONE-7467C---3, rgba(120, 196, 196, 1));
 
+}
 section .box-orange{
   background-color: rgba(238, 123, 82, 1);
 }

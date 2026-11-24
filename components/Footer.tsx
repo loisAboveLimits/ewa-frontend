@@ -72,11 +72,12 @@ export default async function Footer() {
       <div className="spacer-80"></div>
 
       <div className="container mx-auto px-6 lg:px-4">
-        <div className="grid gap-10 lg:grid-cols-4 lg:gap-6">
+        {/* brand block about a third wide, the 4 link columns share the rest (Figma) */}
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,34%)_minmax(0,1fr)] lg:gap-6">
 
           {/* Brand + contact */}
           <div className="lg:p-8">
-            <Image src="/imgs/logos/logo.svg" alt="EWA" width={150} height={60} className="h-auto w-37.5" />
+            <Image src="/imgs/logos/logo.svg" alt="EWA" width={300} height={120} className="footer-logo h-auto" />
 
             <div className="spacer-20"></div>
 
@@ -138,10 +139,10 @@ export default async function Footer() {
           </div>
 
           {/* Link columns: 2 per row on phones, 4 from tablets up */}
-          <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:col-span-3 lg:p-8">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:py-8">
             {columns.map((col) => (
               <div key={col.key} className="footer-column">
-                <h3 className="mb-5 text-lg font-semibold">
+                <h3 className="mb-3 text-[18px]! xl:text-[20px]! font-semibold leading-tight! xl:whitespace-nowrap">
                   {/* a heading that points somewhere real becomes a link */}
                   {col.href && col.href !== "#" && col.children.length === 0 ? (
                     <FooterLink item={col} />
@@ -150,7 +151,7 @@ export default async function Footer() {
                   )}
                 </h3>
                 {col.children.length > 0 && (
-                  <ul className="space-y-3">
+                  <ul className="space-y-0.5">
                     {col.children.map((link) => (
                       <li key={link.key}>
                         <FooterLink item={link} />
