@@ -3,6 +3,9 @@ import PageBanner from "@/components/ui/PageBanner";
 import { getI18n, pageMetadata } from "@/lib/i18n/server";
 import { assetBg } from "@/lib/assets";
 
+import DrupalContent from "@/components/drupal/DrupalContent";
+import DrupalSection from "@/components/drupal/DrupalSection";
+
 export const generateMetadata = () => pageMetadata("users");
 
 /*
@@ -37,21 +40,33 @@ export default async function Users() {
 
         <div className="container mx-auto px-4">
 
-          <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:gap-x-8 lg:gap-y-7">
-            {t.users.map((portal, i) => (
-              <li key={portal.link}>
-                <PortalCard
-                  icon={icons[i] ?? "building"}
-                  title={portal.cardTitle}
-                  text={portal.cardText}
-                  href={portal.link}
-                  cta={t.common.visitPortal}
-                  bubbles={assetBg("box-user-bg.svg", locale)}
-                />
-              </li>
-            ))}
-          </ul>
+        <DrupalSection 
+          nid={83} 
+          id="values" 
+          showSubTitle={false} 
+          showTitle={false}
+          fallback={
+            <div>
+              <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:gap-x-8 lg:gap-y-7">
+                {t.users.map((portal, i) => (
+                  <li key={portal.link}>
+                    <PortalCard
+                      icon={icons[i] ?? "building"}
+                      title={portal.cardTitle}
+                      text={portal.cardText}
+                      href={portal.link}
+                      cta={t.common.visitPortal}
+                      bubbles={assetBg("box-user-bg.svg", locale)}
+                    />
+                  </li>
+                ))}
+              </ul>
+             </div>
+          }
 
+         />          
+
+    
         </div>
 
         <div className="spacer-80"></div>
@@ -82,12 +97,13 @@ function PortalCard({
   bubbles: string;
 }) {
   return (
-    <div className="relative isolate flex h-full min-h-47.5 flex-col overflow-hidden rounded-[1.75rem] border-2 border-[#F6A181] bg-white px-5 pt-5 pb-5 sm:px-6 md:min-h-52.5">
+    <div className="@container relative isolate flex h-full min-h-47.5 flex-col overflow-hidden rounded-[1.75rem] border-2 border-[#F6A181] bg-white px-5 pt-5 pb-5 sm:px-6 md:min-h-52.5">
 
-      {/* peach bubbles in the bottom start corner — the Arabic file is already mirrored */}
+      {/* peach bubbles in the bottom start corner, at most their real size (561px wide) so wide cards
+          don't blow them up, and set below the edge (10px on narrow cards, 40px on cards 448px+ wide) so only the lower bubbles show (cut by the border) — the Arabic file is already mirrored */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[60%] bg-no-repeat bg-bottom-left bg-size-[100%_auto]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[60%] bg-no-repeat bg-[position:left_bottom_-10px] rtl:bg-[position:right_bottom_-10px] bg-size-[min(100%,561px)_auto]"
         style={{ backgroundImage: bubbles }}
       />
 
