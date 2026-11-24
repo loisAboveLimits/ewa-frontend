@@ -29,7 +29,8 @@ const PHASE: Record<StepKey, number> = {
   academic: 0,
   eligibility: 0,
   courses: 1,
-  done: 2,
+  // past the last phase → Register, Apply and Confirmation all show as finished
+  done: 3,
 };
 
 const VALIDATORS: Partial<Record<StepKey, (d: RegistrationData, m: Dictionary["registration"]["errors"]) => Errors>> = {
