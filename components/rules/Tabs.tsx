@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import Image from "next/image";
 import { useI18n } from "@/components/i18n/I18nProvider";
+import { hashTarget, scrollToElementSettled, watchHash } from "@/lib/hashScroll";
 import type { PolicyTab } from "@/lib/rules";
 
 const FADE_MS = 250;
@@ -19,6 +20,29 @@ export default function Tabs({ tabs }: { tabs: PolicyTab[] }) {
   useEffect(() => () => {
     if (fadeTimer.current) clearTimeout(fadeTimer.current);
   }, []);
+
+  // #hash pointing inside a panel (e.g. #traineeRequirements): open that tab, then scroll to it
+  const [scrollTo, setScrollTo] = useState<HTMLElement | null>(null);
+  useEffect(
+    () =>
+      watchHash(() => {
+        const target = hashTarget();
+        if (!target) return;
+        const tab = tabs.find((t) => t.id === target.id.replace(/^(tab|panel)-/, "") || document.getElementById(`panel-${t.id}`)?.contains(target));
+        if (!tab) return;
+        if (fadeTimer.current) clearTimeout(fadeTimer.current);
+        setActiveTab(tab.id);
+        setShownTab(tab.id);
+        setVisible(true);
+        setScrollTo(target);
+      }),
+    [tabs]
+  );
+  useEffect(() => {
+    if (!scrollTo) return;
+    requestAnimationFrame(() => scrollToElementSettled(scrollTo));
+    setScrollTo(null);
+  }, [scrollTo]);
 
   // Fade the current panel out, swap content, then fade the new one in
   const selectTab = (id: string) => {

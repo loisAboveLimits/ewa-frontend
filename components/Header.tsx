@@ -71,6 +71,14 @@ export default function Header({ menu = [] }: { menu?: NavItem[] }) {
     href.startsWith("/") && (pathname === href || (href !== "/" && pathname.startsWith(href + "/")));
   const close = () => setMenuOpen(false);
 
+  // desktop: a dropdown whose link was just clicked stays shut until the mouse leaves it
+  // (otherwise hover / keyboard focus keep it open on the page it just opened)
+  const [closedDropdown, setClosedDropdown] = useState<string | null>(null);
+  const closeDropdown = (key: string) => {
+    setClosedDropdown(key);
+    (document.activeElement as HTMLElement | null)?.blur();
+  };
+
   // phones / tablets: which item's sub-menu is open (one at a time)
   const [openSub, setOpenSub] = useState<string | null>(null);
   useEffect(() => {
@@ -164,11 +172,18 @@ export default function Header({ menu = [] }: { menu?: NavItem[] }) {
 
                     // item with sub-links (Drupal "front" menu children): dropdown on hover / keyboard focus
                     return (
-                      <div key={item.key} className="nav-item has-dropdown">
+                      <div
+                        key={item.key}
+                        className={`nav-item has-dropdown ${closedDropdown === item.key ? "is-closed" : ""}`}
+                        onMouseLeave={() => setClosedDropdown(null)}
+                        onClick={(e) => (e.target as HTMLElement).closest("a") && closeDropdown(item.key)}
+                      >
                         {/* .nav-anchor is as wide as the link text, so the panel lines up with it */}
                         <div className="nav-anchor">
                         {link}
-                        <div className="nav-dropdown">
+                        {/* display:none keeps it shut until the stylesheet has loaded; header.css then takes
+                            over (display !important) and shows it only on hover / keyboard focus */}
+                        <div className="nav-dropdown" style={{ display: "none" }}>
                           <ul className="nav-dropdown-panel">
                             {item.children.map((child) => (
                               <li key={child.key}>

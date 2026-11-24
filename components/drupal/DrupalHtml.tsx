@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { hashTarget, scrollToElementSettled, watchHash } from "@/lib/hashScroll";
 
 const FADE_MS = 250;
 
@@ -10,6 +11,8 @@ const FADE_MS = 250;
  * switches panels on click / arrow keys, like components/rules/Tabs.tsx. The "selected" and
  * "not selected" looks are read from the markup itself (classes the selected tab has and the
  * others don't), so any tab design pasted into Drupal keeps working.
+ * Anchors: a #hash pointing inside a hidden tab panel (e.g. #traineeRequirements) opens that
+ * tab first and then scrolls to it — on page load, on hash changes and on same-page links.
  */
 export default function DrupalHtml({
   html,
@@ -27,8 +30,20 @@ export default function DrupalHtml({
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
-    const cleanups = Array.from(root.querySelectorAll<HTMLElement>('[role="tablist"]')).map(enableTabs);
-    return () => cleanups.forEach((fn) => fn());
+    const tablists = Array.from(root.querySelectorAll<HTMLElement>('[role="tablist"]')).map(enableTabs);
+
+    // #hash inside this content: open its tab, then scroll to it
+    const stopWatching = watchHash(() => {
+      const target = hashTarget();
+      if (!target || !root.contains(target)) return;
+      tablists.forEach((t) => t.reveal(target));
+      requestAnimationFrame(() => scrollToElementSettled(target));
+    });
+
+    return () => {
+      stopWatching();
+      tablists.forEach((t) => t.cleanup());
+    };
   }, [html]);
 
   return <Tag ref={ref as never} id={id} className={className} dangerouslySetInnerHTML={{ __html: html }} />;
@@ -39,9 +54,15 @@ export default function DrupalHtml({
 const classes = (el: Element | null | undefined) => new Set(el ? Array.from(el.classList) : []);
 const minus = (a: Set<string>, b: Set<string>) => [...a].filter((c) => !b.has(c));
 
-function enableTabs(list: HTMLElement): () => void {
+type Tablist = {
+  cleanup: () => void;
+  /** Opens (without fading) the tab whose panel holds `el` — or that is `el` itself. */
+  reveal: (el: HTMLElement) => void;
+};
+
+function enableTabs(list: HTMLElement): Tablist {
   const tabs = Array.from(list.querySelectorAll<HTMLElement>('[role="tab"]'));
-  if (tabs.length < 2) return () => {};
+  if (tabs.length < 2) return { cleanup: () => {}, reveal: () => {} };
 
   const panelOf = (tab: HTMLElement) => {
     const id = tab.getAttribute("aria-controls");
@@ -126,9 +147,24 @@ function enableTabs(list: HTMLElement): () => void {
 
   list.addEventListener("click", onClick);
   list.addEventListener("keydown", onKey);
-  return () => {
+
+  const reveal = (el: HTMLElement) => {
+    const tab = tabs.find((t) => t === el || !!panelOf(t)?.contains(el));
+    if (!tab) return;
     clearTimeout(timer);
-    list.removeEventListener("click", onClick);
-    list.removeEventListener("keydown", onKey);
+    tabs.forEach((t) => paint(t, t === tab));
+    active = tab;
+    showPanel(tab);
+    wrapper?.classList.replace("opacity-0", "opacity-100");
+    wrapper?.classList.replace("translate-y-2", "translate-y-0");
+  };
+
+  return {
+    reveal,
+    cleanup: () => {
+      clearTimeout(timer);
+      list.removeEventListener("click", onClick);
+      list.removeEventListener("keydown", onKey);
+    },
   };
 }

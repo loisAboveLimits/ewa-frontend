@@ -428,8 +428,14 @@
     transform-origin: top right;
   }
 
-  .nav-item.has-dropdown:hover .nav-dropdown,
-  .nav-item.has-dropdown:focus-within .nav-dropdown {
+  /* the dropdown has an inline display:none (shut before this file loads); from here on the
+     opacity / visibility rules below decide */
+  .desktop-nav .nav-dropdown {
+    display: block !important;
+  }
+
+  .nav-item.has-dropdown:not(.is-closed):hover .nav-dropdown,
+  .nav-item.has-dropdown:not(.is-closed):focus-within .nav-dropdown {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;

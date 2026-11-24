@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/*
+ * Tailwind only builds classes it finds in this project's files. Classes typed into Drupal
+ * content (field_content, Sections, Pages) are never seen, so list the ones editors use here.
+ * Add more as needed, e.g. "p-{4,6,8}" or "{md:,}text-center".
+ */
+@source inline("{rtl:,ltr:,}bg-{top,bottom,center,left,right,top-left,top-right,bottom-left,bottom-right}");
+@source inline("{rtl:,}bg-{no-repeat,repeat,repeat-x,repeat-y,cover,contain,auto}");
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
