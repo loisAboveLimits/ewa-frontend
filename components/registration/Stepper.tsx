@@ -85,12 +85,12 @@ function StepRing({ progress = 0.5 }: { progress?: number }) {
     <svg
       aria-hidden
       viewBox="0 0 100 100"
-      className="pointer-events-none absolute -inset-[7px] md:-inset-[11px] h-[calc(100%+14px)] w-[calc(100%+14px)] md:h-[calc(100%+22px)] md:w-[calc(100%+22px)] -rotate-90 rtl:rotate-90 rtl:-scale-x-100"
+      className="pointer-events-none absolute -inset-[9px] md:-inset-[13px] h-[calc(100%+18px)] w-[calc(100%+18px)] md:h-[calc(100%+26px)] md:w-[calc(100%+26px)] -rotate-90 rtl:rotate-90 rtl:-scale-x-100"
       fill="none"
       strokeLinecap="round"
     >
       {/* faded dashes all the way round (the part still to do) */}
-      <circle cx="50" cy="50" r="45" pathLength={100} stroke="#EE7A52" strokeOpacity="0.45" strokeWidth="5" strokeDasharray="4 3.5" />
+      <circle cx="50" cy="50" r="45" pathLength={100} stroke="#EE7A52" strokeOpacity="0.45" strokeWidth="5.5" strokeDasharray="4.5 3.8" />
       {/* solid arc = how far through this step the user is; starts at the top, grows clockwise */}
       <circle
         cx="50"

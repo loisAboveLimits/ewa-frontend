@@ -6,12 +6,10 @@ import { Panel } from "./ui";
 import PersonalInfoStep from "./steps/PersonalInfoStep";
 import AcademicInfoStep from "./steps/AcademicInfoStep";
 import EligibilityStep from "./steps/EligibilityStep";
-import CourseSelectionStep from "./steps/CourseSelectionStep";
 import ConfirmationStep from "./steps/ConfirmationStep";
 import {
   initialData,
   validateAcademic,
-  validateCourses,
   validateEmployment,
   validatePersonal,
   type Errors,
@@ -20,16 +18,17 @@ import {
 import { useI18n } from "@/components/i18n/I18nProvider";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-/* The visual stepper has 3 phases; "Register" is split into 3 sub-steps. */
-const STEPS = ["personal", "academic", "eligibility", "courses", "done"] as const;
+/* Registration creates a new trainee account only (courses are applied for later, signed in,
+   from the Trainee Dashboard: /users/dashboard/apply). One screen per stepper step. */
+const STEPS = ["personal", "academic", "eligibility", "done"] as const;
 type StepKey = (typeof STEPS)[number];
 
 const PHASE: Record<StepKey, number> = {
-  personal: 0,
-  academic: 0,
-  eligibility: 0,
-  courses: 1,
-  // past the last phase → Register, Apply and Confirmation all show as finished
+  // current step = half ring, finished steps = full ring
+  personal: 0, // Register
+  academic: 1, // Apply
+  eligibility: 2, // Confirmation (last screen, sends the registration)
+  // registration completed: every step finished
   done: 3,
 };
 
@@ -37,7 +36,6 @@ const VALIDATORS: Partial<Record<StepKey, (d: RegistrationData, m: Dictionary["r
   personal: validatePersonal,
   academic: validateAcademic,
   eligibility: validateEmployment,
-  courses: validateCourses,
 };
 
 export type StepProps = {
@@ -46,6 +44,8 @@ export type StepProps = {
   update: <K extends keyof RegistrationData>(key: K, value: RegistrationData[K]) => void;
   onBack?: () => void;
   submitting?: boolean;
+  /** problem sending the registration (shown above the submit button) */
+  submitError?: string;
   signInHref?: string;
 };
 
@@ -59,8 +59,16 @@ export default function RegistrationForm({ signInHref = "/login", homeHref = "/"
   const [data, setData] = useState<RegistrationData>(initialData);
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | undefined>(undefined);
   const topRef = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
+
+  /* dev only: jump straight to a screen to check its look, e.g. /join/registration?step=eligibility */
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+    const s = new URLSearchParams(window.location.search).get("step") as StepKey | null;
+    if (s && STEPS.includes(s)) setStep(s);
+  }, []);
 
   /* restore / persist a draft so a refresh doesn't wipe the form */
   useEffect(() => {
@@ -114,7 +122,8 @@ export default function RegistrationForm({ signInHref = "/login", homeHref = "/"
     }
     setErrors({});
 
-    if (step === "courses") {
+    if (step === "eligibility") {
+      setSubmitError(undefined);
       setSubmitting(true);
       const m = t.registration.errors;
       try {
@@ -144,9 +153,9 @@ export default function RegistrationForm({ signInHref = "/login", homeHref = "/"
           requestAnimationFrame(() => topRef.current?.querySelector<HTMLElement>("[aria-invalid='true']")?.focus());
           return;
         }
-        setErrors({ courses: result.error === "closed" ? m.closed : result.error === "too_many" ? m.tooMany : m.submit });
+        setSubmitError(result.error === "closed" ? m.closed : result.error === "too_many" ? m.tooMany : m.submit);
       } catch {
-        setErrors({ courses: m.submit });
+        setSubmitError(m.submit);
       } finally {
         setSubmitting(false);
       }
@@ -162,6 +171,7 @@ export default function RegistrationForm({ signInHref = "/login", homeHref = "/"
     update,
     onBack: step === "personal" ? undefined : goBack,
     submitting,
+    submitError,
     signInHref,
   };
 
@@ -173,15 +183,11 @@ export default function RegistrationForm({ signInHref = "/login", homeHref = "/"
         <ConfirmationStep homeHref={homeHref} status={accountStatus} signInHref={signInHref} />
       ) : (
         <form noValidate onSubmit={handleSubmit}>
-          {step === "courses" ? (
-            <CourseSelectionStep {...stepProps} />
-          ) : (
-            <Panel bubbles="bottom">
-              {step === "personal" && <PersonalInfoStep {...stepProps} />}
-              {step === "academic" && <AcademicInfoStep {...stepProps} />}
-              {step === "eligibility" && <EligibilityStep {...stepProps} />}
-            </Panel>
-          )}
+          <Panel bubbles="bottom">
+            {step === "personal" && <PersonalInfoStep {...stepProps} />}
+            {step === "academic" && <AcademicInfoStep {...stepProps} />}
+            {step === "eligibility" && <EligibilityStep {...stepProps} />}
+          </Panel>
         </form>
       )}
     </div>
@@ -194,7 +200,8 @@ type SubmitResult =
 
 /** Creates the trainee's Drupal account (app/api/auth/register/route.ts → Drupal ewa_content_api). */
 async function submitApplication(data: RegistrationData, lang: string): Promise<SubmitResult> {
-  const { passwordConfirm: _c, ...payload } = data;
+  // courses are not part of registration any more (signed-in trainees apply from the dashboard)
+  const { passwordConfirm: _c, courses: _courses, ...payload } = data;
   const res = await fetch("/api/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

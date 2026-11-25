@@ -10,6 +10,10 @@ export const USER_COOKIE = "ewa_user";
 /** Pages that need a signed-in user (paths without the language prefix). */
 export const PROTECTED_PATHS = ["/users/dashboard"];
 export const DASHBOARD_PATH = "/users/dashboard";
+/** Apply for a course (signed in) — where registration sends trainees who already have an account. */
+export const APPLY_PATH = "/users/dashboard/apply";
+/** New-trainee registration (signed-out visitors only). */
+export const REGISTRATION_PATH = "/join/registration";
 
 export const isProtectedPath = (path: string) =>
   PROTECTED_PATHS.some((p) => path === p || path.startsWith(p + "/"));

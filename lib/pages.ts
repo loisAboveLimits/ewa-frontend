@@ -29,6 +29,7 @@ export const pagePaths = {
   teachers: "/users/dashboard/teachers",
   schedule: "/users/dashboard/schedule",
   myProfile: "/users/dashboard/profile",
+  applyCourse: "/users/dashboard/apply",
   forgot: "/forgot-password",
   reset: "/reset-password",
 } as const;

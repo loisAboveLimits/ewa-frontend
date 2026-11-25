@@ -80,6 +80,12 @@ function NavIcon({ name }: { name: TraineeNavKey }) {
     );
   }
   const paths: Record<Exclude<TraineeNavKey, "dashboard">, React.ReactNode> = {
+    apply: (
+      <g fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 3H6.5A2.5 2.5 0 0 0 4 5.5v13A2.5 2.5 0 0 0 6.5 21h11a2.5 2.5 0 0 0 2.5-2.5V9z" />
+        <path d="M14 3v6h6M12 12v6M9 15h6" />
+      </g>
+    ),
     classes: (
       <>
         <path d="M1.5 9 12 4l10.5 5L12 14 1.5 9Z" fill="currentColor" />

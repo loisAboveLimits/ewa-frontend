@@ -4,7 +4,7 @@
 //   /en/about   → redirected to /about when "en" is the default, so each page has one URL
 import { NextResponse, type NextRequest } from "next/server";
 import { defaultLocale, LOCALE_HEADER, localizeHref, splitLocale } from "@/lib/i18n/config";
-import { DASHBOARD_PATH, SESSION_COOKIE, isProtectedPath, safeNext } from "@/lib/authCookies";
+import { APPLY_PATH, DASHBOARD_PATH, REGISTRATION_PATH, SESSION_COOKIE, isProtectedPath, safeNext } from "@/lib/authCookies";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -32,6 +32,11 @@ export function proxy(request: NextRequest) {
   if (signedIn && (path === "/login" || path.startsWith("/login/"))) {
     const next = safeNext(request.nextUrl.searchParams.get("next"), DASHBOARD_PATH);
     return NextResponse.redirect(new URL(localizeHref(next, lang), request.url), 307);
+  }
+
+  // Registration is for new trainees only → signed-in trainees apply for courses from their dashboard
+  if (signedIn && (path === REGISTRATION_PATH || path.startsWith(REGISTRATION_PATH + "/"))) {
+    return NextResponse.redirect(new URL(localizeHref(APPLY_PATH, lang), request.url), 307);
   }
 
   const headers = new Headers(request.headers);

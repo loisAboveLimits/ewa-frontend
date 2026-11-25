@@ -6,7 +6,7 @@ import { getOptions, type YesNo } from "@/lib/registration";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import { BackButton, Checkbox, PanelHeading, PrimaryButton, SelectInput } from "../ui";
 
-export default function EligibilityStep({ data, errors, update, onBack, signInHref = "/login" }: StepProps) {
+export default function EligibilityStep({ data, errors, update, onBack, signInHref = "/login", submitting, submitError }: StepProps) {
   const { t } = useI18n();
   const r = t.registration;
   const f = r.fields;
@@ -67,7 +67,12 @@ export default function EligibilityStep({ data, errors, update, onBack, signInHr
       </div>
 
       <div className="mt-10 md:mt-14 flex flex-col items-center gap-5 md:gap-6">
-        <PrimaryButton>{r.confirmApplication}</PrimaryButton>
+        {submitError && (
+          <p role="alert" className="text-center text-sm md:text-base text-[#E2582B]">
+            {submitError}
+          </p>
+        )}
+        <PrimaryButton disabled={submitting}>{submitting ? r.courses.submitting : r.confirmApplication}</PrimaryButton>
         <p className="text-base md:text-2xl text-[#13999C] text-center">
           {r.alreadyRegistered}{" "}
           <Link href={signInHref} className="text-[#EE7A52] underline underline-offset-4 hover:text-[#E5683D]">

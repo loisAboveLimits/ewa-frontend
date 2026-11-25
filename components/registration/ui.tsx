@@ -201,11 +201,15 @@ export function DateInput({
             // phones (Android / iOS) centre the date and add their own arrow: keep it like the other fields
             `[&::-webkit-date-and-time-value]:text-start [&::-webkit-date-and-time-value]:m-0 [&::-webkit-inner-spin-button]:hidden ` +
             `[&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:hidden ` +
-            `${value ? "text-white" : "text-transparent"}`
+            // empty: hide the browser's own "dd/mm/yyyy" so it doesn't sit on top of the label;
+            // it comes back while the field is focused (typing a date by keyboard)
+            (value
+              ? "text-white"
+              : "text-transparent! focus:text-white! [&::-webkit-datetime-edit]:opacity-0 focus:[&::-webkit-datetime-edit]:opacity-100")
           }
         />
         {!value && (
-          <span className="pointer-events-none absolute start-6 md:start-12 top-1/2 -translate-y-1/2 text-base md:text-xl text-white/90">
+          <span className="pointer-events-none absolute start-6 md:start-12 top-1/2 -translate-y-1/2 text-base md:text-xl text-white/90 peer-focus:opacity-0">
             {label}
           </span>
         )}

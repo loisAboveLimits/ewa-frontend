@@ -97,3 +97,8 @@ const copy: Localized<Record<string, CourseCopy>> = {
 export const getCourses = (locale: Locale): Course[] => base.map((c) => ({ ...c, ...copy[locale][c.id] }));
 
 export const courseFields = ["Industrial", "Energy", "Safety"] as const;
+
+/** Slug of a Drupal program term ↔ course id: same, or one starts with the other
+ *  ("diesel-engine-operation" ↔ "diesel-engine-operation-technology") — as Drupal matches them. */
+export const courseMatchesProgram = (courseId: string, programSlug: string) =>
+  courseId === programSlug || courseId.startsWith(programSlug) || programSlug.startsWith(courseId);
