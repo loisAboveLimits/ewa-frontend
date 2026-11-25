@@ -12,14 +12,14 @@ export async function generateMetadata(): Promise<Metadata> {
 const copy: Localized<{ intro: string; emptyTitle: string; emptyText: string; back: string }> = {
   en: {
     intro: "The courses you are enrolled in this term.",
-    emptyTitle: "No classes to show yet",
-    emptyText: "Your classes will appear here once they have been added to your account.",
+    emptyTitle: "No courses to show yet",
+    emptyText: "Your courses will appear here once they have been added to your account.",
     back: "Back to Dashboard",
   },
   ar: {
-    intro: "الدورات المسجّل بها هذا الفصل.",
-    emptyTitle: "لا توجد فصول لعرضها بعد",
-    emptyText: "ستظهر فصولك هنا بمجرد إضافتها إلى حسابك.",
+    intro: "البرامج المسجّل بها هذا الفصل.",
+    emptyTitle: "لا توجد برامج لعرضها بعد",
+    emptyText: "ستظهر برامجك هنا بمجرد إضافتها إلى حسابك.",
     back: "العودة إلى لوحة التحكم",
   },
 };

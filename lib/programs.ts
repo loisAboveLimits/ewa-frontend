@@ -1,4 +1,4 @@
-// Programs listed on /why/programs. Replace with your CMS / API data.
+// Programs listed on /programs. Replace with your CMS / API data.
 import type { Locale, Localized } from "@/lib/i18n/config";
 
 export type Program = {
@@ -14,14 +14,14 @@ type ProgramBase = Pick<Program, "id" | "image" | "link">;
 type ProgramCopy = Pick<Program, "title" | "category" | "description">;
 
 const base: ProgramBase[] = [
-  { id: "ic-troubleshooting", image: "/imgs/bgs/campus-tech.png", link: "/why/programs/instrument-control-troubleshooting" },
-  { id: "electrical-maintenance", image: "/imgs/bgs/campus-simulation.png", link: "/why/programs/electrical-maintenance" },
-  { id: "mechanical-pumps", image: "/imgs/bgs/campus-spaces.png", link: "/why/programs/pumps-rotating-equipment" },
-  { id: "water-desalination", image: "/imgs/bgs/why-sec1.jpg", link: "/why/programs/desalination-plant-operations" },
-  { id: "power-plant-ops", image: "/imgs/bgs/home-courses.jpg", link: "/why/programs/power-plant-operations" },
-  { id: "hse-essentials", image: "/imgs/bgs/glance.jpg", link: "/why/programs/hse-essentials" },
-  { id: "solar-pv", image: "/imgs/bgs/about-sec1.jpg", link: "/why/programs/solar-pv" },
-  { id: "summer-stem", image: "/imgs/bgs/home-about-bg.jpg", link: "/why/programs/summer-stem" },
+  { id: "ic-troubleshooting", image: "/imgs/bgs/campus-tech.png", link: "/programs/instrument-control-troubleshooting" },
+  { id: "electrical-maintenance", image: "/imgs/bgs/campus-simulation.png", link: "/programs/electrical-maintenance" },
+  { id: "mechanical-pumps", image: "/imgs/bgs/campus-spaces.png", link: "/programs/pumps-rotating-equipment" },
+  { id: "water-desalination", image: "/imgs/bgs/why-sec1.jpg", link: "/programs/desalination-plant-operations" },
+  { id: "power-plant-ops", image: "/imgs/bgs/home-courses.jpg", link: "/programs/power-plant-operations" },
+  { id: "hse-essentials", image: "/imgs/bgs/glance.jpg", link: "/programs/hse-essentials" },
+  { id: "solar-pv", image: "/imgs/bgs/about-sec1.jpg", link: "/programs/solar-pv" },
+  { id: "summer-stem", image: "/imgs/bgs/home-about-bg.jpg", link: "/programs/summer-stem" },
 ];
 
 const copy: Localized<Record<string, ProgramCopy>> = {

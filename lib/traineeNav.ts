@@ -8,7 +8,6 @@ export const traineeNav: { key: TraineeNavKey; href: string }[] = [
   { key: "dashboard", href: "/users/dashboard" },
   { key: "apply", href: "/users/dashboard/apply" },
   { key: "classes", href: "/users/dashboard/classes" },
-  { key: "teachers", href: "/users/dashboard/teachers" },
   { key: "schedule", href: "/users/dashboard/schedule" },
   { key: "profile", href: "/users/dashboard/profile" },
 ];
@@ -23,12 +22,12 @@ export const traineeCopy: Localized<{
     welcome: (name) => `Welcome, ${name}!`,
     menu: "Trainee menu",
     signOut: "Sign out",
-    nav: { dashboard: "Dashboard", apply: "Apply for a course", classes: "My classes", teachers: "Teachers", schedule: "Schedule", profile: "My Profile" },
+    nav: { dashboard: "Dashboard", apply: "Apply for a course", classes: "My Courses", teachers: "Teachers", schedule: "Schedule", profile: "My Profile" },
   },
   ar: {
     welcome: (name) => `مرحبًا، ${name}!`,
     menu: "قائمة المتدرب",
     signOut: "تسجيل الخروج",
-    nav: { dashboard: "لوحة التحكم", apply: "التقديم على برنامج", classes: "فصولي", teachers: "المدربون", schedule: "الجدول", profile: "ملفي الشخصي" },
+    nav: { dashboard: "لوحة التحكم", apply: "التقديم على برنامج", classes: "برامجي", teachers: "المدربون", schedule: "الجدول", profile: "ملفي الشخصي" },
   },
 };

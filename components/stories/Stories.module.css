@@ -27,12 +27,108 @@
   will-change: transform;
 }
 
+.card { position: relative; }
+
 .img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   user-select: none;
+}
+
+/* ---------- hover panel: title, excerpt, Read More ---------- */
+/* Hover is read from the slide (a flat box), not the tilted 3D card, so the whole card area
+   reacts — the turned half of a side card sits "behind" the slide and would miss the pointer. */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: clamp(1rem, 7%, 1.75rem) clamp(1rem, 8%, 2rem) clamp(2.25rem, 16%, 3.5rem);
+  background: rgba(19, 153, 156, 0.82);
+  color: #fff;
+  text-align: start;
+  opacity: 0;
+  transform: translateY(14%);
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none; /* drag the photo through it; only Read More is clickable */
+}
+
+.overlayTitle {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(0.95rem, 1.15vw, 1.15rem) !important;
+  line-height: 1.25 !important;
+  color: #fff !important;
+  transform: translateY(10px);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.05s;
+}
+
+.overlayText {
+  margin: 0;
+  font-size: clamp(0.8rem, 0.95vw, 0.95rem) !important;
+  line-height: 1.4 !important;
+  color: #fff !important;
+  transform: translateY(10px);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+}
+
+.overlayMore {
+  white-space: nowrap;
+  /* same size as the excerpt (a global link style made it bigger), bold, orange */
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-weight: 700 !important;
+  color: #EE7A52 !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.overlayMore:hover { color: #fff !important; }
+.overlayMore:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 2px; }
+
+.slide:hover .overlay,
+.slide:focus-within .overlay {
+  opacity: 1;
+  transform: none;
+}
+.slide:hover .overlayTitle,
+.slide:hover .overlayText,
+.slide:focus-within .overlayTitle,
+.slide:focus-within .overlayText {
+  transform: none;
+}
+.slide:hover .overlayMore,
+.slide:focus-within .overlayMore {
+  pointer-events: auto;
+}
+
+/* photo zooms in a little behind the panel */
+.img { transition: transform 0.6s ease; }
+.slide:hover .img,
+.slide:focus-within .img { transform: scale(1.05); }
+
+/* while the strip is dragged: no panels, no zoom */
+.dragging .slide:hover .overlay { opacity: 0; transform: translateY(14%); }
+.dragging .slide:hover .overlayMore { pointer-events: none; }
+.dragging .slide:hover .img { transform: none; }
+
+/* phones / tablets (no hover): the panel is always shown */
+@media (hover: none) {
+  .overlay { opacity: 1; transform: none; }
+  .overlayTitle, .overlayText { transform: none; }
+  .overlayMore { pointer-events: auto; }
+}
+
+/* phones: small cards → title + Read More only, on a gradient so more of the photo shows */
+@media (max-width: 639px) {
+  .excerpt { display: none; }
+  .overlay {
+    padding: 1rem 1rem 1.75rem;
+    background: linear-gradient(to top, rgba(19, 153, 156, 0.95) 0%, rgba(19, 153, 156, 0.75) 45%, rgba(19, 153, 156, 0) 80%);
+  }
 }
 
 /* White ellipses that bow into the strip at the middle */
@@ -108,4 +204,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .card { transition: none !important; }
+  .overlay, .overlayTitle, .overlayText, .img { transition: opacity 0.2s ease !important; transform: none !important; }
 }

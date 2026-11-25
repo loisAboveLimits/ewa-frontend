@@ -5,7 +5,8 @@ import { MAX_SLIDER_POSTS } from "@/lib/news";
 
 /**
  * Stories carousel filled from a Media Center category in Drupal (default: Success Stories),
- * in the visitor's language: the main image of the newest 5 posts (images only, no links).
+ * in the visitor's language: the main image of the newest 5 posts, linking to each post;
+ * hovering a photo shows the post's title and excerpt.
  * Falls back to the built-in photos when Drupal has none or can't be reached.
  *
  *   <DrupalStories />
@@ -16,6 +17,6 @@ export default async function DrupalStories({ category = "success-stories" }: { 
   const stories: Story[] = (posts ?? [])
     .filter((p) => p.image && p.image !== PLACEHOLDER_IMAGE)
     .slice(0, MAX_SLIDER_POSTS) // newest 5
-    .map((p) => ({ src: p.image, alt: p.title }));
+    .map((p) => ({ src: p.image, alt: p.title, title: p.title, excerpt: p.excerpt, href: p.href }));
   return <StoriesCarousel stories={stories} />;
 }

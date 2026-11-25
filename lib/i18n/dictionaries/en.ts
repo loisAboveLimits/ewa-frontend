@@ -124,7 +124,7 @@ export const en = {
     terms: { title: "Terms & Conditions", desc: "Using the EWA Website" },
     accessibility: { title: "Accessibility", desc: "A Website for Everyone" },
     dashboard: { title: "Trainee Dashboard", desc: "Your EWA journey in one place" },
-    myClasses: { title: "My Classes", desc: "Your EWA journey in one place" },
+    myClasses: { title: "My Courses", desc: "Your EWA journey in one place" },
     teachers: { title: "Teachers", desc: "Your EWA journey in one place" },
     schedule: { title: "Schedule", desc: "Your EWA journey in one place" },
     myProfile: { title: "My Profile", desc: "Your EWA journey in one place" },

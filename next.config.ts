@@ -20,6 +20,16 @@ const nextConfig: NextConfig = {
       { protocol: "http", hostname: "localhost", pathname: "/ewa/sites/default/files/**" },
     ],
   },
+  // Programs moved from /why/programs to /programs: old links (Drupal menus, bookmarks, Google)
+  // go to the new address, in both languages.
+  async redirects() {
+    return [
+      { source: "/why/programs", destination: "/programs", permanent: true },
+      { source: "/why/programs/:path*", destination: "/programs/:path*", permanent: true },
+      { source: "/:lang(en|ar)/why/programs", destination: "/:lang/programs", permanent: true },
+      { source: "/:lang(en|ar)/why/programs/:path*", destination: "/:lang/programs/:path*", permanent: true },
+    ];
+  },
   async rewrites() {
     return drupalBase
       ? [{ source: "/drupal-files/:path*", destination: `${drupalBase}/sites/default/files/:path*` }]

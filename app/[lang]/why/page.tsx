@@ -83,7 +83,7 @@ export default async function Why() {
                   <div className="spacer-20"></div>
 
                   <div className="flex justify-end">
-                    <ArrowLink href="/why/programs" color="orange" className="fnt-orange text-[18px]!">
+                    <ArrowLink href="/programs" color="orange" className="fnt-orange text-[18px]!">
                       {t.common.viewPrograms}
                     </ArrowLink>
                   </div>

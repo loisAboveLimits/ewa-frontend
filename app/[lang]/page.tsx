@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import StoriesCarousel from "@/components/stories/Stories";
+import DrupalStories from "@/components/stories/DrupalStories";
 import ContactForm from "@/components/Contact";
 import ContactBanner from "@/components/home/ContactBanner";
 import BannerActions from "@/components/home/BannerActions";
@@ -85,7 +85,8 @@ export default async function Home() {
 
         <div className="spacer-40"></div>
 
-        <StoriesCarousel />
+        {/* Success Stories posts from Drupal (title + excerpt on hover), built-in photos if none */}
+        <DrupalStories />
 
          <div className="spacer-80"></div>
       </section>

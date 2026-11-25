@@ -123,7 +123,7 @@ export const ar: Dictionary = {
     terms: { title: "الشروط والأحكام", desc: "استخدام موقع الأكاديمية" },
     accessibility: { title: "سهولة الوصول", desc: "موقع للجميع" },
     dashboard: { title: "لوحة المتدرب", desc: "رحلتك في الأكاديمية في مكان واحد" },
-    myClasses: { title: "فصولي", desc: "رحلتك في الأكاديمية في مكان واحد" },
+    myClasses: { title: "برامجي", desc: "رحلتك في الأكاديمية في مكان واحد" },
     teachers: { title: "المدربون", desc: "رحلتك في الأكاديمية في مكان واحد" },
     schedule: { title: "الجدول", desc: "رحلتك في الأكاديمية في مكان واحد" },
     myProfile: { title: "ملفي الشخصي", desc: "رحلتك في الأكاديمية في مكان واحد" },

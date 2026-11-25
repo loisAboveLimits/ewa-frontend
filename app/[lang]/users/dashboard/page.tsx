@@ -6,6 +6,7 @@ import { getI18n, pageMetadata } from "@/lib/i18n/server";
 import { formatDate, type Localized } from "@/lib/i18n/config";
 import { getMediaSection } from "@/lib/mediaPosts";
 import { pagePaths } from "@/lib/pages";
+import { getPortals, portalsFor } from "@/lib/portals";
 
 // personal page: never indexed
 export async function generateMetadata(): Promise<Metadata> {
@@ -68,7 +69,7 @@ const copy: Localized<{
 
 /** Trainee Dashboard home (/users/dashboard). Banner, breadcrumbs and the trainee menu: layout.tsx. */
 export default async function TraineeDashboard() {
-  const { locale, t } = await getI18n();
+  const { locale } = await getI18n();
   const user = await requireTrainee(locale);
   if (!user) return null; // Drupal unreachable — the layout shows the notice
 
@@ -76,6 +77,8 @@ export default async function TraineeDashboard() {
   const p = user.profile ?? {};
   const name = [p.firstName, p.lastName].filter(Boolean).join(" ") || user.display_name || user.name;
   const news = ((await getMediaSection("latest", "all", locale, 3)) ?? []).slice(0, 3);
+  // Drupal node 82: administrators see every portal, trainees only Trainee / Alumni / Candidate
+  const portals = portalsFor(await getPortals(locale), user.roles);
 
   return (
     <div className="flex flex-col gap-12 md:gap-14">
@@ -109,16 +112,19 @@ export default async function TraineeDashboard() {
         <h2 id="portals-title" className="text-3xl md:text-4xl font-bold text-[#14989A]">{c.portals}</h2>
         <p className="mt-2 text-base md:text-lg text-[#14989A]">{c.portalsIntro}</p>
         <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-5">
-          {t.users.map((portal) => (
+          {portals.map((portal) => {
+            // site pages (Candidate Gate → /join/registration) open here; outside portals in a new tab
+            const internal = portal.link.startsWith("/");
+            const LinkTag = internal ? Link : "a";
+            return (
             <li key={portal.link} className="min-w-0">
-              <a
+              <LinkTag
                 href={portal.link}
-                target="_blank"
-                rel="noopener noreferrer"
+                {...(internal ? {} : { target: "_blank", rel: "noopener noreferrer" })}
                 className="group flex h-full flex-col rounded-[1.5rem] border-2 border-[#F6A181] bg-white p-5 transition hover:border-[#EE7A52] hover:shadow-[0_10px_30px_rgba(238,122,82,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE7A52]"
               >
-                <span className="text-lg md:text-xl font-bold text-[#14989A]">{portal.cardTitle}</span>
-                <span className="mt-1 text-sm md:text-base text-[#14989A]">{portal.cardText}</span>
+                <span className="text-lg md:text-xl font-bold text-[#14989A]">{portal.title}</span>
+                <span className="mt-1 text-sm md:text-base text-[#14989A]">{portal.text}</span>
                 <span className="mt-auto inline-flex items-center gap-2 pt-4 text-base font-bold text-[#EE7A52]">
                   {c.visit}
                   <span aria-hidden className="flex h-6 w-6 items-center justify-center rounded-full bg-[#EE7A52] text-white transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5">
@@ -127,9 +133,10 @@ export default async function TraineeDashboard() {
                     </svg>
                   </span>
                 </span>
-              </a>
+              </LinkTag>
             </li>
-          ))}
+            );
+          })}
         </ul>
       </section>
 

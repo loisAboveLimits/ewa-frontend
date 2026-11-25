@@ -28,10 +28,10 @@ const hrefs = {
     faq: "#",
   },
   programs: {
-    diploma: "/why/programs",
-    short: "/why/programs",
-    summer: "/why/programs",
-    qualification: "/why/programs",
+    diploma: "/programs",
+    short: "/programs",
+    summer: "/programs",
+    qualification: "/programs",
   },
   support: {
     rules: "/rules-regulations",

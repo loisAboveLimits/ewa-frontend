@@ -5,14 +5,21 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { Autoplay } from "swiper/modules";
 import Link from "@/components/i18n/Link";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import { paintPanorama, setPanoramaTransition } from "@/components/ui/panorama";
 
 import "swiper/css";
 import styles from "./Stories.module.css";
 import { MAX_SLIDER_POSTS } from "@/lib/news";
 
-/** One photo of the stories carousel (from Drupal — see DrupalStories — or the built-in list). */
-export type Story = { src: string; alt?: string; href?: string };
+/** One photo of the stories carousel (from Drupal — see DrupalStories — or the built-in list).
+ *  With a title, hovering the photo (or focusing its link) shows the title, excerpt and a
+ *  "Read More" link to the post — only that link opens the post, so the photo can be dragged. */
+export type Story = { src: string; alt?: string; href?: string; title?: string; excerpt?: string };
+
+/** Excerpt cut to about `max` characters at a word break. */
+const shorten = (text: string, max = 120) =>
+  text.length <= max ? text : text.slice(0, text.lastIndexOf(" ", max) > 60 ? text.lastIndexOf(" ", max) : max).replace(/[\s.,;:،]+$/, "");
 
 /* Built-in photos — used when no `stories` are passed (Drupal down…) */
 const builtIn: Story[] = [
@@ -23,6 +30,7 @@ const builtIn: Story[] = [
 ];
 
 export default function StoriesCarousel({ stories }: { stories?: Story[] }) {
+  const { t } = useI18n();
   const list = (stories?.length ? stories : builtIn).slice(0, MAX_SLIDER_POSTS); // 5 at most
   // loop mode needs more slides than the 4 visible on large screens — repeat the list
   const slides = Array.from({ length: Math.max(2, Math.ceil(8 / list.length)) }, () => list).flat();
@@ -63,6 +71,9 @@ export default function StoriesCarousel({ stories }: { stories?: Story[] }) {
         }}
         onSwiper={setSwiper}
         onSlideChange={sync}
+        // hide the hover panels while the strip is being dragged (no flicker as cards pass the cursor)
+        onSliderMove={(s) => s.el.classList.add(styles.dragging)}
+        onTouchEnd={(s) => s.el.classList.remove(styles.dragging)}
         onInit={(s) => { paintPanorama(s); sync(s); }}
         onResize={paintPanorama}
         onSetTranslate={paintPanorama}
@@ -75,16 +86,26 @@ export default function StoriesCarousel({ stories }: { stories?: Story[] }) {
             // eslint-disable-next-line @next/next/no-img-element
             <img src={story.src} alt={copy ? "" : story.alt ?? ""} className={styles.img} draggable={false} />
           );
+          // teal panel with title, excerpt and the Read More link — slides up on hover / keyboard focus
+          const overlay = story.title ? (
+            <div className={styles.overlay}>
+              <p className={styles.overlayTitle}>{story.title}</p>
+              <p className={styles.overlayText}>
+                {story.excerpt && <span className={styles.excerpt}>{`${shorten(story.excerpt, 100)} ... `}</span>}
+                {story.href && (
+                  <Link href={story.href} tabIndex={copy ? -1 : undefined} className={styles.overlayMore}>
+                    {t.common.readMore}
+                    {!copy && <span className="sr-only">: {story.title}</span>}
+                  </Link>
+                )}
+              </p>
+            </div>
+          ) : null;
           return (
             <SwiperSlide key={i} className={styles.slide} aria-hidden={copy || undefined}>
               <div className={styles.card}>
-                {story.href ? (
-                  <Link href={story.href} tabIndex={copy ? -1 : undefined} className="block h-full w-full">
-                    {img}
-                  </Link>
-                ) : (
-                  img
-                )}
+                {img}
+                {overlay}
               </div>
             </SwiperSlide>
           );

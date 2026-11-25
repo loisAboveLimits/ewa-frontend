@@ -5,7 +5,7 @@ export const pagePaths = {
   home: "/",
   about: "/about",
   why: "/why",
-  programs: "/why/programs",
+  programs: "/programs",
   community: "/community",
   users: "/users",
   join: "/join",
