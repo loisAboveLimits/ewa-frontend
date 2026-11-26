@@ -9,22 +9,17 @@
 }
 
 .swiper {
-  perspective: 1200px;
   overflow: visible !important;
 }
 
-.slide {
-  transform-style: preserve-3d;
-}
 
+/* flat cards: the curve is a clip-path on the frame (paintPanoramaFlat), the photo isn't stretched */
 .card {
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  transform-origin: center;
-  backface-visibility: hidden;
-  transition-property: transform;
+  transition-property: clip-path;
   transition-timing-function: ease;
-  will-change: transform;
+  will-change: clip-path;
 }
 
 .card { position: relative; }

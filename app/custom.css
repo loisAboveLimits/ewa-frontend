@@ -204,10 +204,12 @@ body{
 	font-size: clamp(32px, 5.5vw, 57px);
 	font-weight: bolder;
 	line-height: 1.05;
+  color: #ffff;
 }
 .banner-caption .banner-subtitle{
   font-size: clamp(18px, 3vw, 30px);
-  line-height: 1.15;
+  line-height: 1.15; 
+  color: #ffff;
 }
 
 .desktop-nav a{font-size: 19px;}

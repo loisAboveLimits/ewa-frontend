@@ -6,7 +6,7 @@ import type { Swiper as SwiperType } from "swiper";
 import { Autoplay } from "swiper/modules";
 import Link from "@/components/i18n/Link";
 import { useI18n } from "@/components/i18n/I18nProvider";
-import { paintPanorama, setPanoramaTransition } from "@/components/ui/panorama";
+import { paintPanoramaFlat, setPanoramaTransition } from "@/components/ui/panorama";
 
 import "swiper/css";
 import styles from "./Stories.module.css";
@@ -74,9 +74,9 @@ export default function StoriesCarousel({ stories }: { stories?: Story[] }) {
         // hide the hover panels while the strip is being dragged (no flicker as cards pass the cursor)
         onSliderMove={(s) => s.el.classList.add(styles.dragging)}
         onTouchEnd={(s) => s.el.classList.remove(styles.dragging)}
-        onInit={(s) => { paintPanorama(s); sync(s); }}
-        onResize={paintPanorama}
-        onSetTranslate={paintPanorama}
+        onInit={(s) => { paintPanoramaFlat(s); sync(s); }}
+        onResize={paintPanoramaFlat}
+        onSetTranslate={paintPanoramaFlat}
         onSetTransition={setPanoramaTransition}
         className={styles.swiper}
       >

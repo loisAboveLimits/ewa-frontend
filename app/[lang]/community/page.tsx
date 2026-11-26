@@ -3,7 +3,7 @@ import DrupalStories from "@/components/stories/DrupalStories";
 import MediaCarousel from "@/components/Media";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import DrupalTestimonials from "@/components/orbit/DrupalTestimonials";
-import { getOrbitActions, getTeam } from "@/components/orbit/team";
+import { getTeam } from "@/components/orbit/team";
 import PageBanner from "@/components/ui/PageBanner";
 import SectionTitle from "@/components/ui/SectionTitle";
 import ArrowLink from "@/components/ui/ArrowLink";
@@ -106,7 +106,6 @@ export default async function Community() {
         {/* testimonies from Drupal by language (built-in team if Drupal has none) */}
         <DrupalTestimonials
           fallback={getTeam(locale)}
-          actions={getOrbitActions(t)}
           label={s.testimonialsA}
           center={
             <Image src="/imgs/logos/logo-circle-white.svg" alt="EWA" width={344} height={306} priority className="h-auto w-full" />
